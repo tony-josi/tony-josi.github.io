@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <link rel="shortcut icon" type="image/png" href="../fav.png" />
+
+    <meta charset="UTF-8">
+    <title>C NOTES</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div style="padding-left: 60px; padding-right: 60px;">
+
+        <h1 id="c-notes-3">C NOTES 3</h1>
+        <hr />
+        <h2 id="concurrency-vs-parallelism">Concurrency vs parallelism</h2>
+        <p>Concurrency is the ability of parts of a program to work correctly when executed out of order.</p>
+        <p>Concurrent execution, on the other hand, alternates doing a little of each task until both are all complete.
+        </p>
+        <p>Concurrency allows a program to make progress even when certain parts are blocked.</p>
+        <p>When tasks don’t just interleave, but run at the same time, that’s called parallelism. Multiple CPU cores can
+            run instructions simultaneously.</p>
+        <p>When a program – even without hardware parallelism – switches rapidly enough from one task to another, it can
+            feel to the user that tasks are executing at the same time. You could say it provides the “illusion of
+            parallelism.” However, true parallelism has the potential for greater processor throughput for problems that
+            can be broken into independent subtasks. Some ways of dealing with concurrency, such as multi-threaded
+            programming, can exploit hardware parallelism automatically when available.</p>
+
+
+    </div>
+
+</body>
+
+</html>

@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" type="image/png" href="../fav.png" />
+
+    <meta charset="UTF-8">
+    <title>ASSEMBLY NOTES</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+    <style>
+        .task-list-item {
+            list-style-type: none;
+        }
+
+        .task-list-item-checkbox {
+            margin-left: -20px;
+            vertical-align: middle;
+        }
+    </style>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe WPC', 'Segoe UI', 'Ubuntu', 'Droid Sans', sans-serif;
+            font-size: 14px;
+            line-height: 1.6;
+        }
+    </style>
+
+
+</head>
+
+<body>
+    <div style="padding-left: 60px; padding-right: 60px;">
+
+        <h1 id="x86-isa-notes">x86 ISA Notes</h1>
+        <p><strong>References:</strong></p>
+        <ol>
+            <li>Programming from the ground up - Book by Jonathan Bartlett</li>
+            <li><a href="https://c9x.me/x86/">https://c9x.me/x86/</a></li>
+        </ol>
+        <h2 id="sal-sar-shl-shr">SAL/SAR/SHL/SHR</h2>
+        <p><a href="https://c9x.me/x86/html/file_module_x86_id_285.html">more</a></p>
+        <p>Shifts the bits in the first operand (destination operand) to the left or right by the number of bits
+            specified
+            in
+            the second operand (count operand). Bits shifted beyond the destination operand boundary are first shifted
+            into
+            the
+            CF flag, then discarded. At the end of the shift operation, the CF flag contains the last bit shifted out of
+            the
+            destination operand.</p>
+        <p>The destination operand can be a register or a memory location. The count operand can be an immediate value
+            or
+            register CL. The count is masked to 5 bits, which limits the count range to 0 to 31. A special opcode
+            encoding
+            is
+            provided for a count of 1.</p>
+        <p>The shift arithmetic left (SAL) and shift logical left (SHL) instructions perform the same operation; they
+            shift
+            the
+            bits in the destination operand to the left (toward more significant bit locations).</p>
+        <blockquote>
+            <p>Logical shift treats the number as a bunch of bits, and shifts in zeros. This is the &gt;&gt; operator in
+                C.
+            </p>
+            <p>Arithmetic shift treats the number as a signed integer (in 2s complement), and &quot;retains&quot; the
+                topmost
+                bit, shifting in zeros if the topmost bit was 0, and ones if it was one. C&#39;s right-shift operator
+                has
+                implementation-defined behavior if the number being shifted is negative.</p>
+        </blockquote>
+        <h3 id="what-is-the-difference-between-arithmetic-shift-left-and-logical-shift-left-">What is the difference
+            between
+            arithmetic shift left and logical shift left?</h3>
+        <p>They are the same operation. <strong>Both shift the bits to the left and adds a &#39;0&#39; to the
+                LSB.</strong>
+        </p>
+        <h2 id="mul">MUL</h2>
+        <h4 id="unsigned-multiply">Unsigned Multiply</h4>
+        <pre><code>Opcode    Mnemonic    Description
+F6 /<span class="hljs-number">4</span>    <span class="hljs-keyword">MUL</span> r/m8    Unsigned multiply (<span class="hljs-built_in">AX</span> = <span class="hljs-built_in">AL</span> * r/m8).
+F7 /<span class="hljs-number">4</span>    <span class="hljs-keyword">MUL</span> r/m16    Unsigned multiply (<span class="hljs-built_in">DX</span>:<span class="hljs-built_in">AX</span> = <span class="hljs-built_in">AX</span> * r/m16).
+F7 /<span class="hljs-number">4</span>    <span class="hljs-keyword">MUL</span> r/m32    Unsigned multiply (<span class="hljs-built_in">EDX</span>:<span class="hljs-built_in">EAX</span> = <span class="hljs-built_in">EAX</span> * r/m32).
+</code></pre>
+        <p>Description</p>
+        <p>Performs an unsigned multiplication of the first operand (destination operand) and the second operand (source
+            operand) and stores the result in the destination operand. The destination operand is an implied operand
+            located
+            in
+            register AL, AX or EAX (depending on the size of the operand); the source operand is located in a
+            general-purpose
+            register or a memory location. The action of this instruction and the location of the result depends on the
+            opcode
+            and the operand size as shown in the following table.</p>
+        <pre><code><span class="hljs-keyword">MUL</span> Results
+Operand Size    Source <span class="hljs-number">1</span>    Source <span class="hljs-number">2</span>    Destination
+<span class="hljs-built_in">Byte</span>            <span class="hljs-built_in">AL</span>            r/m8        <span class="hljs-built_in">AX</span>
+<span class="hljs-built_in">Word</span>            <span class="hljs-built_in">AX</span>            r/m16       <span class="hljs-built_in">DX</span>:<span class="hljs-built_in">AX</span>
+Doubleword      <span class="hljs-built_in">EAX</span>            r/m32       <span class="hljs-built_in">EDX</span>:<span class="hljs-built_in">EAX</span>
+</code></pre>
+        <p>The result is stored in register AX, register pair DX:AX, or register pair EDX:EAX (depending on the operand
+            size),
+            with the high-order bits of the product contained in register AH, DX, or EDX, respectively. If the
+            high-order
+            bits
+            of the product are 0, the CF and OF flags are cleared; otherwise, the flags are set.</p>
+        <p><strong>Note: The first and destination operand location are same. But the destination takes uses EDX
+                register
+                for
+                the high order bits based on the size of operands. [refer above]</strong></p>
+        <h2 id="div">DIV</h2>
+        <p>The DIV instruction (and its counterpart IDIV for signed numbers) gives both the quotient and remainder. For
+            unsigned, remainder and modulus are the same thing. For signed idiv, it gives you the remainder (not
+            modulus)
+            which
+            can be negative:</p>
+        <p>e.g. -5 / 2 = -2 rem -1. x86 division semantics exactly match C99&#39;s % operator.</p>
+        <p>DIV r32 divides a 64-bit number in EDX:EAX by a 32-bit operand (in any register or memory) and stores the
+            quotient in
+            EAX and the remainder in EDX. It faults on overflow of the quotient.</p>
+        <p>Unsigned 32-bit example (works in any mode)</p>
+        <pre><code class="lang-s">mov eax, <span class="hljs-number">1234</span>          ; dividend low half
+mov edx, <span class="hljs-number">0</span>             ; dividend high half = <span class="hljs-number">0.</span>  prefer  xor edx,edx
+
+mov ebx, <span class="hljs-number">10</span>            ; divisor can be any register or memory
+
+div ebx       ; Divides <span class="hljs-number">1234</span> by <span class="hljs-number">10.</span>
+        ; EDX =   <span class="hljs-number">4</span> = <span class="hljs-number">1234</span> % <span class="hljs-number">10</span>  remainder
+        ; EAX = <span class="hljs-number">123</span> = <span class="hljs-number">1234</span> / <span class="hljs-number">10</span>  quotient
+</code></pre>
+        <h2 id="loop">LOOP</h2>
+        <p><a href="https://github.com/TonyJosi97/tutorial/blob/master/computer_org_arch/x86_instructions.md#loops">refer
+                loop
+                section in this page</a></p>
+        <h2 id="leal">LEAL</h2>
+        <p><a href="https://github.com/TonyJosi97/tutorial/blob/master/computer_org_arch/x86_instructions.md#leal">refer
+                leal
+                section in this page</a></p>
+        <h2 id="push-pushl">PUSH / PUSHL</h2>
+        <p>the instruction pushl %eax is equivalent to:</p>
+        <pre><code class="lang-s">subl $4, %esp
+movl %eax, (%esp)
+</code></pre>
+        <h2 id="pop-popl">POP / POPL</h2>
+        <p>the instruction popl %eax is equivalent to:</p>
+        <pre><code class="lang-s">movl (%esp), %eax
+addl $4, %esp
+</code></pre>
+        <h2 id="what-does-pushl-record_firstname-record_buffer-do-">What does
+            <code>pushl $RECORD_FIRSTNAME + record_buffer</code> do?</h2>
+        <p>It looks like we are combining and add instruction with a push instruction, <strong>but we are not.</strong>
+        </p>
+        <p>You see, both RECORD_FIRSTNAME and record_buffer are constants.
+            The first is a direct constant, created through the use of a .equ directive, while the
+            latter is defined automatically by the assembler through its use as a label (it’s value
+            being the address that the data that follows it will start at). </p>
+        <p><strong>Since they are both constants that the assembler knows, it is able to add them together while it is
+                assembling your program, so the whole instruction is a single immediate-mode push of a single
+                constant.</strong>
+        </p>
+        <h2 id="c-idioms-in-assembly-language">C Idioms in Assembly Language</h2>
+        <h3 id="if-statement">If Statement</h3>
+        <p>In C, an if statement consists of three parts - the condition, the true branch, and the
+            false branch.</p>
+        <pre><code class="lang-C++">
+<span class="hljs-function"><span class="hljs-title">if</span><span class="hljs-params">(a == b)</span></span> {
+        <span class="hljs-comment">/* True Branch Code Here */</span>
+}
+
+<span class="hljs-keyword">else</span> {
+        <span class="hljs-comment">/* False Branch Code Here */</span>
+}
+
+<span class="hljs-comment">/* At This Point, Reconverge */</span>
+</code></pre>
+        <p>In assembly language, this can be rendered as:</p>
+        <pre><code class="lang-s">#Move a <span class="hljs-literal">and</span> b <span class="hljs-keyword">into</span> registers for comparison
+movl a, %eax
+movl b, %ebx
+
+#Compare
+cmpl %eax, %ebx
+
+#If <span class="hljs-literal">True</span>, go <span class="hljs-keyword">to</span> <span class="hljs-literal">true</span> branch
+je true_branch
+
+false_branch:
+        #This label is unnecessary,
+        #only here for documentation
+        #False Branch Code Here
+
+        #Jump <span class="hljs-keyword">to</span> recovergence point
+        jmp reconverge
+
+true_branch:
+        #True Branch Code Here
+
+reconverge:
+        #Both branches recoverge <span class="hljs-keyword">to</span> this point
+</code></pre>
+        <h3 id="variables-and-assignment">Variables and Assignment</h3>
+        <p>Global and static variables are declared using .data or .bss entries. Local
+            variables are declared by reserving space on the stack at the beginning of the
+            function.</p>
+        <p>For example, consider the following C code:</p>
+        <pre><code class="lang-C++"><span class="hljs-attribute">int</span> my_global_var;
+
+<span class="hljs-attribute">int</span> foo() {
+
+        <span class="hljs-attribute">int</span> my_local_var;
+        <span class="hljs-attribute">my_local_var</span> = <span class="hljs-number">1</span>;
+        <span class="hljs-attribute">my_global_var</span> = <span class="hljs-number">2</span>;
+        <span class="hljs-attribute">return</span> <span class="hljs-number">0</span>;
+}
+</code></pre>
+        <p>This would be rendered in assembly lagnuage as:</p>
+        <pre><code class="lang-s">.section .data
+.lcomm my_global_var, <span class="hljs-number">4</span>
+.type foo, @function
+
+foo:
+        pushl %ebp
+        movl %esp, $ebp
+        subl $4, %esp                <span class="hljs-comment"># Make room for my_local_var</span>
+        .equ my_local_var, -<span class="hljs-number">4</span>        <span class="hljs-comment"># Can now use my_local_var to</span>
+                                     <span class="hljs-comment"># find the local variable</span>
+
+movl $1, my_local_var(%ebp)
+movl $2, my_global_var
+
+movl %ebp, %esp
+popl %ebp
+ret
+</code></pre>
+        <p>In the C programming language, after the compiler loads a value
+            into a register, that value will likely stay in that register until that register is needed
+            for something else.</p>
+        <h3 id="loops">Loops</h3>
+        <p>In C, a while loop looks like this:</p>
+        <pre><code class="lang-C++"><span class="hljs-keyword">while</span><span class="hljs-comment">(a &lt; b)</span>
+{
+        <span class="hljs-comment">/* Do stuff here */</span>
+}
+<span class="hljs-comment">/* Finished Looping */</span>
+</code></pre>
+        <p>This can be rendered in assembly language like this:</p>
+        <pre><code class="lang-s"><span class="hljs-symbol">loop_begin:</span>
+        movl a, %eax
+        movl b, %ebx
+        cmpl %eax, %ebx
+        jge loop_end
+
+<span class="hljs-symbol">loop_body:</span>
+        <span class="hljs-meta"># Do stuff here</span>
+        <span class="hljs-keyword">jmp</span> loop_begin
+
+<span class="hljs-symbol">loop_end:</span>
+        <span class="hljs-meta"># Finished looping</span>
+</code></pre>
+        <p><strong>The x86 assembly language has some direct support for looping as well.</strong> The %ecx
+            register can be used as a counter that ends with zero. The loop instruction will
+            decrement %ecx and jump to a specified address unless %ecx is zero. </p>
+        <p>For example, if you wanted to execute a statement 100 times, you would do this in C:</p>
+        <pre><code class="lang-C++"><span class="hljs-keyword">for</span>(<span class="hljs-built_in">i</span>=<span class="hljs-number">0</span>; <span class="hljs-built_in">i</span> &lt; <span class="hljs-number">100</span>; <span class="hljs-built_in">i</span>++) {
+        /* Do process here */
+}
+</code></pre>
+        <p>In assembly language it would be written like this:
+            loop_initialize:</p>
+        <pre><code class="lang-S">movl $<span class="hljs-number">100</span>, %ecx
+<span class="hljs-symbol">
+loop_begin:</span>
+        <span class="hljs-meta">#</span>
+        <span class="hljs-meta"># Do Process Here</span>
+        <span class="hljs-meta">#</span>
+
+        <span class="hljs-meta"># Decrement %ecx and loops <span class="hljs-meta-keyword">if</span> not zero</span>
+        loop loop_begin
+<span class="hljs-symbol">
+rest_of_program:</span>
+<span class="hljs-meta"># Continues on to here</span>
+</code></pre>
+        <p><strong>One thing to notice is that the loop instruction requires you to be counting backwards to
+                zero.</strong>
+        </p>
+        <h2 id="pointers">Pointers</h2>
+        <p>Pointers are very easy. Remember, pointers are simply the address that a value
+            resides at. Let’s start by taking a look at global variables. For example:</p>
+        <p><code>int global_data = 30;</code></p>
+        <p>In assembly language, this would be:</p>
+        <pre><code class="lang-s"><span class="hljs-selector-class">.section</span> <span class="hljs-selector-class">.data</span>
+global_data:
+        <span class="hljs-selector-class">.long</span> <span class="hljs-number">30</span>
+</code></pre>
+        <p>Taking the address of this data in C:</p>
+        <p><code>a = &amp;global_data;</code></p>
+        <p>Taking the address of this data in assembly language:</p>
+        <p><code>movl $global_data, %eax</code></p>
+        <p>Example code:</p>
+        <pre><code class="lang-s">.section .data
+
+secret_num:
+    .long <span class="hljs-number">0</span>xBEEF
+
+print_decorator:
+    .ascii <span class="hljs-string">"%X\n\0"</span>
+
+
+.section .text
+
+.globl _start
+
+_start:
+
+    <span class="hljs-comment"># Print Value</span>
+    pushl secret_num
+    pushl <span class="hljs-variable">$print_decorator</span>
+    call printf
+
+    addl <span class="hljs-variable">$8</span>, %esp
+
+
+    <span class="hljs-comment"># Print Address</span>
+    pushl <span class="hljs-variable">$secret_num</span>
+    pushl <span class="hljs-variable">$print_decorator</span>
+    call printf
+
+    addl <span class="hljs-variable">$8</span>, %esp
+
+
+    pushl <span class="hljs-variable">$0</span>
+    call <span class="hljs-keyword">exit</span>
+</code></pre>
+        <p>Output:</p>
+        <pre><code>BEEF
+<span class="hljs-number">804B014</span>
+</code></pre>
+        <p>You see, with assembly language, you are almost always accessing memory
+            through pointers. That’s what direct addressing is. To get the pointer itself, you
+            just have to go with immediate mode addressing.</p>
+        <p>Local variables are a little more difficult, but not much. Here is how you take the
+            address of a local variable in C:</p>
+        <pre><code class="lang-C++">void foo()
+{
+        int a<span class="hljs-comment">;</span>
+        int *<span class="hljs-keyword">b;
+</span>        a = <span class="hljs-number">30</span><span class="hljs-comment">;</span>
+        <span class="hljs-keyword">b </span>= &amp;a<span class="hljs-comment">;</span>
+        *<span class="hljs-keyword">b </span>= <span class="hljs-number">44</span><span class="hljs-comment">;</span>
+}
+</code></pre>
+        <p>The same code in assembly language:</p>
+        <pre><code class="lang-s">foo:
+
+<span class="hljs-comment">#Standard opening</span>
+pushl %ebp
+movl %esp, %ebp
+
+<span class="hljs-comment">#Reserve two words of memory</span>
+subl $8, $esp
+
+.equ A_VAR, -<span class="hljs-number">4</span>
+.equ B_VAR, -<span class="hljs-number">8</span>
+
+<span class="hljs-comment">#a = 30</span>
+movl $3<span class="hljs-number">0</span>, A_VAR(%ebp)
+
+<span class="hljs-comment">#b = &amp;a</span>
+movl $A_VAR, B_VAR(%ebp)
+addl %ebp, B_VAR(%ebp)
+
+<span class="hljs-comment">#*b = 30</span>
+movl B_VAR(%ebp), %eax
+movl $3<span class="hljs-number">0</span>, (%eax)
+
+<span class="hljs-comment">#Standard closing</span>
+movl %ebp, %esp
+popl %ebp
+
+ret
+</code></pre>
+        <h4 id="leal">LEAL</h4>
+        <p>As you can see, to take the address of a local variable, the address has to be
+            computed the same way the computer computes the addresses in base pointer
+            addressing. There is an easier way - the processor provides the instruction leal ,
+            which stands for &quot;load effective address&quot;. This lets the computer compute the
+            address, and then load it wherever you want. So, we could just say:</p>
+        <pre><code class="lang-s"><span class="hljs-comment"># b = &amp;a</span>
+leal A_VAR(%ebp), %eax
+movl %eax, B_VAR(%ebp)
+</code></pre>
+        <p>It’s the same number of lines, but a little cleaner. Then, to use this value, you
+            simply have to move it to a general-purpose register and use indirect addressing,
+            as shown in the example above.</p>
+    </div>
+
+</body>
+
+</html>

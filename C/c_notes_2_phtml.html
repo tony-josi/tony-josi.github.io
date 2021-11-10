@@ -1,0 +1,1353 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" type="image/png" href="../fav.png" />
+
+    <meta charset="UTF-8">
+    <title>C NOTES 2</title>
+    <p style="padding-left: 60px; padding-right: 60px;"><a href="c_notes_2.html">Bootstrapped Page </a></p>
+
+</head>
+
+<body>
+
+    <div style="padding-left: 60px; padding-right: 60px;">
+        <h1 id="c-notes-2">C NOTES 2</h1>
+        <hr>
+        <ul>
+            <li><a href="#c-notes-2">C NOTES 2</a>
+                <ul>
+                    <li><a href="#storage-duration--linkage">Storage duration &amp; Linkage</a>
+                        <ul>
+                            <li><a href="#storage-duration">Storage duration</a></li>
+                            <li><a href="#linkage">Linkage</a>
+                                <ul>
+                                    <li><a href="#example">Example:</a>
+                                        <ul>
+                                            <li><a href="#op">OP:</a></li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#type-qualifier">type qualifier</a></li>
+                    <li><a href="#restrict-keyword">restrict keyword</a></li>
+                    <li><a href="#why-is-the-use-of-alloca-not-considered-good-practice">Why is the use of alloca() not
+                            considered good practice?</a></li>
+                    <li><a href="#whats-the-difference-between-a-vla-and-dynamic-memory-allocation-via-malloc">What&#39;s
+                            the difference between a VLA and dynamic memory allocation via malloc?</a></li>
+                    <li><a href="#anonymous-structure">Anonymous Structure</a></li>
+                    <li><a href="#forward-declaration">Forward declaration</a></li>
+                    <li><a href="#incomplete-types">Incomplete types</a></li>
+                    <li><a href="#storage-classes-in-c">Storage Classes in C</a></li>
+                    <li><a href="#type-qualifiers">Type Qualifiers</a>
+                        <ul>
+                            <li><a href="#example-1">Example</a></li>
+                            <li><a href="#uses-of-volatile">Uses of volatile</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#conditional-inclusion">Conditional inclusion</a></li>
+                    <li><a href="#define-macros">#define macros</a>
+                        <ul>
+                            <li><a href="#-and--operators"># and ## operators</a></li>
+                        </ul>
+                    </li>
+                    <li><a
+                            href="#gcc--g-vs--g3-gdb-flag-what-is-the-difference-also-is-there-a-difference-between--g-and--ggdb">GCC
+                            -g vs -g3 GDB Flag: What is the Difference? Also is there a difference between -g and
+                            -ggdb?</a></li>
+                    <li><a href="#debug-flags-in-gcc">Debug flags in gcc</a></li>
+                    <li><a href="#weak-definitions">Weak Definitions</a>
+                        <ul>
+                            <li><a href="#example-usage">Example usage:</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#targeted-flattening-instead-of-global-inlining">Targeted flattening instead of global
+                            inlining</a>
+                        <ul>
+                            <li><a href="#in-conclusion">In conclusion</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#initializing-entire-2d-array-with-one-value">Initializing entire 2D array with one
+                            value</a></li>
+                    <li><a href="#what-is-the-reason-for-explicitly-declaring-l-or-ul-for-long-values">What is the
+                            reason for explicitly declaring L or UL for long values?</a></li>
+                </ul>
+            </li>
+        </ul>
+        <h2 id="storage-duration-linkage">Storage duration &amp; Linkage</h2>
+        <h3 id="storage-duration">Storage duration</h3>
+        <p>Every object has a property called storage duration, which limits the object lifetime. There are four kinds
+            of storage duration in C:</p>
+        <ul>
+            <li>
+                <p><code>automatic</code> storage duration. The storage is allocated when the block in which the object
+                    was declared is entered and deallocated when it is exited by any means (goto, return, reaching the
+                    end). One exception is the VLAs; their storage is allocated when the declaration is executed, not on
+                    block entry, and deallocated when the declaration goes out of scope, not than when the block is
+                    exited (since C99). If the block is entered recursively, a new allocation is performed for every
+                    recursion level. All function parameters and non-static block-scope objects have this storage
+                    duration, as well as compound literals used at block scope.</p>
+            </li>
+            <li>
+                <p><code>static</code> storage duration. The storage duration is the entire execution of the program,
+                    and the value stored in the object is initialized only once, prior to main function. All objects
+                    declared static and all objects with either internal or external linkage that aren&#39;t declared
+                    _Thread_local (since C11) have this storage duration.</p>
+            </li>
+            <li>
+                <p><code>thread</code> storage duration. The storage duration is the entire execution of the thread in
+                    which it was created, and the value stored in the object is initialized when the thread is started.
+                    Each thread has its own, distinct, object. If the thread that executes the expression that accesses
+                    this object is not the thread that executed its initialization, the behavior is
+                    implementation-defined. All objects declared _Thread_local have this storage duration.
+                    (since C11)</p>
+            </li>
+            <li>
+                <p><code>allocated</code> storage duration. The storage is allocated and deallocated on request, using
+                    dynamic memory allocation functions.</p>
+            </li>
+        </ul>
+        <h3 id="linkage">Linkage</h3>
+        <p>Linkage refers to the ability of an identifier (variable or function) to be referred to in other scopes. If a
+            variable or function with the same identifier is declared in several scopes, but cannot be referred to from
+            all of them, then several instances of the variable are generated. The following linkages are recognized:
+        </p>
+        <ul>
+            <li>
+                <p><code>no linkage</code>. The identifier can be referred to only from the scope it is in. All function
+                    parameters and all non-extern block-scope variables (including the ones declared static) have this
+                    linkage.</p>
+            </li>
+            <li>
+                <p><code>internal linkage</code>. The identifier can be referred to from all scopes in the current
+                    translation unit. All static file-scope identifiers (both functions and variables) have this
+                    linkage.</p>
+            </li>
+            <li>
+                <p><code>external linkage</code>. The identifier can be referred to from any other translation units in
+                    the entire program. All non-static functions, all extern variables (unless earlier declared static),
+                    and all file-scope non-static variables have this linkage.</p>
+            </li>
+        </ul>
+        <p>If the same identifier appears with both internal and external linkage in the same translation unit, the
+            behavior is undefined. This is possible when tentative definitions are used.</p>
+        <p><a href="https://en.cppreference.com/w/c/language/storage_duration">refer</a></p>
+        <h4 id="example-">Example:</h4>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
+        
+        <span class="hljs-comment">/* static storage duration */</span>
+        <span class="hljs-keyword">int</span> A;
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+        </span>{
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"&amp;A = %p\n"</span>, (<span class="hljs-keyword">void</span>*)&amp;A);
+        
+            <span class="hljs-comment">/* automatic storage duration */</span>
+            <span class="hljs-keyword">int</span> A = <span class="hljs-number">1</span>;   <span class="hljs-comment">// hides global A</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"&amp;A = %p\n"</span>, (<span class="hljs-keyword">void</span>*)&amp;A);
+        
+            <span class="hljs-comment">/* allocated storage duration */</span>
+            <span class="hljs-keyword">int</span> *ptr_1 = <span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));   <span class="hljs-comment">/* start allocated storage duration */</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"address of int in allocated memory = %p\n"</span>, (<span class="hljs-keyword">void</span>*)ptr_1);
+            <span class="hljs-built_in">free</span>(ptr_1);                        <span class="hljs-comment">/* stop allocated storage duration  */</span>
+        
+        }
+        </code></pre>
+        <h5 id="op-">OP:</h5>
+        <pre><code class="lang-C">&amp;A = <span class="hljs-number">0x600ae4</span>
+        &amp;A = <span class="hljs-number">0x7fffc013de8c</span>
+        address of <span class="hljs-keyword">int</span> <span class="hljs-keyword">in</span> allocated memory = <span class="hljs-number">0x217bc30</span>
+        </code></pre>
+        <h2 id="type-qualifier">type qualifier</h2>
+        <p>Each individual type in the C type system has several qualified versions of that type, corresponding to one,
+            two, or all three of the const, volatile, and, for pointers to object types, restrict qualifiers. This page
+            describes the effects of the restrict qualifier.</p>
+        <h2 id="restrict-keyword">restrict keyword</h2>
+        <p>During each execution of a block in which a restricted pointer P is declared (typically each execution of a
+            function body in which P is a function parameter), if some object that is accessible through P (directly or
+            indirectly) is modified, by any means, then all accesses to that object (both reads and writes) in that
+            block must occur through P (directly or indirectly), otherwise the behavior is undefined:</p>
+        <pre><code class="lang-C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">(<span class="hljs-keyword">int</span> n, <span class="hljs-keyword">int</span> * <span class="hljs-keyword">restrict</span> p, <span class="hljs-keyword">int</span> * <span class="hljs-keyword">restrict</span> q)</span>
+        </span>{
+            <span class="hljs-keyword">while</span>(n-- &gt; <span class="hljs-number">0</span>)
+                *p++ = *q++; <span class="hljs-comment">// none of the objects modified through *p is the same</span>
+                             <span class="hljs-comment">// as any of the objects read through *q</span>
+                             <span class="hljs-comment">// compiler free to optimize, vectorize, page map, etc.</span>
+        }
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">g</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+        </span>{
+            <span class="hljs-keyword">extern</span> <span class="hljs-keyword">int</span> d[<span class="hljs-number">100</span>];
+            f(<span class="hljs-number">50</span>, d + <span class="hljs-number">50</span>, d); <span class="hljs-comment">// OK</span>
+            f(<span class="hljs-number">50</span>, d + <span class="hljs-number">1</span>, d); <span class="hljs-comment">// Undefined behavior: d[1] is accessed through both p and q in f</span>
+        }
+        </code></pre>
+        <h2 id="why-is-the-use-of-alloca-not-considered-good-practice-">Why is the use of alloca() not considered good
+            practice?</h2>
+        <p>The answer is right there in the man page (at least on Linux):</p>
+        <blockquote>
+            <p>RETURN VALUE The alloca() function returns a pointer to the beginning of the allocated space. If the
+                allocation causes stack overflow, program behaviour is undefined.</p>
+        </blockquote>
+        <p>Which isn&#39;t to say it should never be used. One of the OSS projects I work on uses it extensively, and as
+            long as you&#39;re not abusing it (alloca&#39;ing huge values), it&#39;s fine. Once you go past the
+            &quot;few hundred bytes&quot; mark, it&#39;s time to use malloc and friends, instead. You may still get
+            allocation failures, but at least you&#39;ll have some indication of the failure instead of just blowing out
+            the stack.</p>
+        <h2 id="what-s-the-difference-between-a-vla-and-dynamic-memory-allocation-via-malloc-">What&#39;s the difference
+            between a VLA and dynamic memory allocation via malloc?</h2>
+        <ul>
+            <li>Case 1: In</li>
+        </ul>
+        <p><code>char Buffer[MAX_BUF];</code></p>
+        <p>Buffer is an array of size MAX_BUF. The allocation technique is called VLA.</p>
+        <ul>
+            <li>Case 2: In</li>
+        </ul>
+        <p><code>const int MAX_BUF = 1000;</code></p>
+        <p><code>char* Buffer = malloc(MAX_BUF);</code></p>
+        <p>Buffer is a pointer which is allocated a memory of size MAX_BUF which is 1000.</p>
+        <p>and, an array is not the same as a pointer, and C-FAQ has a Very Good collection detailing the reasons.</p>
+        <p>The major difference, in terms of usability and behaviour are:</p>
+        <ul>
+            <li>(1) is on stack, usually Note, while (2) is on heap, always.</li>
+            <li>(1) has fixed size once allocated, (2) can be resized.</li>
+            <li>(1) is allocated when the enclosing function is called and has the block scope OTOH, (2) is allocated
+                memory dynamically, at runtime and the returned memory has a lifetime which extends from the allocation
+                until the deallocation.</li>
+            <li>(1) allocated memory need not be managed by programmer, while in (2) all malloc()d memory should be
+                free().</li>
+        </ul>
+        <h2 id="anonymous-structure">Anonymous Structure</h2>
+        <p>Similar to union, an unnamed member of a struct whose type is a struct without name is known as anonymous
+            struct. Every member of an anonymous struct is considered to be a member of the enclosing struct or union.
+            This applies recursively if the enclosing struct or union is also anonymous.</p>
+        <pre><code class="lang-C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">v</span> {</span>
+           <span class="hljs-class"><span class="hljs-keyword">union</span> { // <span class="hljs-title">anonymous</span> <span class="hljs-title">union</span></span>
+              <span class="hljs-class"><span class="hljs-keyword">struct</span> { <span class="hljs-title">int</span> <span class="hljs-title">i</span>, <span class="hljs-title">j</span>;</span> }; <span class="hljs-regexp">//</span> anonymous structure
+              <span class="hljs-class"><span class="hljs-keyword">struct</span> { <span class="hljs-title">long</span> <span class="hljs-title">k</span>, <span class="hljs-title">l</span>;</span> } w;
+           };
+           int m;
+        } v1;
+        
+        v1.i = <span class="hljs-number">2</span>;   <span class="hljs-regexp">//</span> valid
+        v1.k = <span class="hljs-number">3</span>;   <span class="hljs-regexp">//</span> <span class="hljs-symbol">invalid:</span> inner structure is not anonymous
+        v1.w.k = <span class="hljs-number">5</span>; <span class="hljs-regexp">//</span> valid
+        </code></pre>
+        <p>Similar to union, the behavior of the program is undefined if struct is defined without any named members
+            (including those obtained via anonymous nested structs or unions).</p>
+        <h2 id="forward-declaration">Forward declaration</h2>
+        <p>A declaration of the following form</p>
+        <p><code>struct name;</code></p>
+        <p>hides any previously declared meaning for the name name in the tag name space and declares name as a new
+            struct name in current scope, which will be defined later. Until the definition appears, this struct name
+            has incomplete type.</p>
+        <p>This allows structs that refer to each other:</p>
+        <pre><code class="lang-C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">y</span></span>;
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">x</span></span> { <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">y</span></span> *p; <span class="hljs-comment">/* ... */</span> };
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">y</span></span> { <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">x</span></span> *q; <span class="hljs-comment">/* ... */</span> };
+        </code></pre>
+        <p>Note that a new struct name may also be introduced just by using a struct tag within another declaration, but
+            if a previously declared struct with the same name exists in the tag name space, the tag would refer to that
+            name</p>
+        <pre><code class="lang-C"><span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">s</span></span>* p = NULL; <span class="hljs-comment">// tag naming an unknown struct declares it</span>
+        <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">s</span></span> { <span class="hljs-keyword">int</span> a; }; <span class="hljs-comment">// definition for the struct pointed to by p</span>
+        void g(void)
+        {
+            <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">s</span></span>; <span class="hljs-comment">// forward declaration of a new, local struct s</span>
+                      <span class="hljs-comment">// this hides global struct s until the end of this block</span>
+            <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">s</span></span> *p;  <span class="hljs-comment">// pointer to local struct s</span>
+                          <span class="hljs-comment">// without the forward declaration above,</span>
+                          <span class="hljs-comment">// this would point at the file-scope s</span>
+            <span class="hljs-class"><span class="hljs-keyword">struct</span> <span class="hljs-title">s</span></span> { <span class="hljs-keyword">char</span>* p; }; <span class="hljs-comment">// definitions of the local struct s</span>
+        }
+        </code></pre>
+        <h2 id="incomplete-types">Incomplete types</h2>
+        <p>An incomplete type is an object type that lacks sufficient information to determine the size of the objects
+            of that type. An incomplete type may be completed at some point in the translation unit.</p>
+        <p>The following types are incomplete:</p>
+        <ul>
+            <li>the type void. This type cannot be completed.</li>
+            <li>array type of unknown size. It can be completed by a later declaration that specifies the size.</li>
+        </ul>
+        <pre><code class="lang-C">extern <span class="hljs-keyword">char</span> <span class="hljs-keyword">a</span>[];<span class="hljs-comment"> // the type of a is incomplete (this typically appears in a header)</span>
+        <span class="hljs-keyword">char</span> <span class="hljs-keyword">a</span>[<span class="hljs-number">10</span>];     <span class="hljs-comment"> // the type of a is now complete (this typically appears in a source file)</span>
+        </code></pre>
+        <ul>
+            <li>structure or union type of unknown content. It can be completed by a declaration of the same structure
+                or union that defines its content later in the same scope.</li>
+        </ul>
+        <pre><code class="lang-C">struct <span class="hljs-keyword">node</span> <span class="hljs-title">{
+          struct</span> <span class="hljs-keyword">node</span> <span class="hljs-title">*next</span>; // struct <span class="hljs-keyword">node</span> <span class="hljs-title">is</span> incomplete at this point
+        }; // struct <span class="hljs-keyword">node</span> <span class="hljs-title">is</span> complete at this point
+        </code></pre>
+        <h2 id="storage-classes-in-c">Storage Classes in C</h2>
+        <p>Syntax:</p>
+        <p><code>storage_class var_data_type var_name;</code></p>
+        <p>C language uses 4 storage classes, namely:</p>
+        <ul>
+            <li><code>auto</code>: This is the default storage class for all the variables declared inside a function or
+                a block. Hence, the keyword auto is rarely used while writing programs in C language. Auto variables can
+                be only accessed within the block/function they have been declared and not outside them (which defines
+                their scope). Of course, these can be accessed within nested blocks within the parent block/function in
+                which the auto variable was declared. However, they can be accessed outside their scope as well using
+                the concept of pointers given here by pointing to the very exact memory location where the variables
+                resides. They are assigned a garbage value by default whenever they are declared.</li>
+        </ul>
+        <ul>
+            <li><code>extern</code>: Extern storage class simply tells us that the variable is defined elsewhere and not
+                within the same block where it is used. Basically, the value is assigned to it in a different block and
+                this can be overwritten/changed in a different block as well. So an extern variable is nothing but a
+                global variable initialized with a legal value where it is declared in order to be used elsewhere. It
+                can be accessed within any function/block. Also, a normal global variable can be made extern as well by
+                placing the ‘extern’ keyword before its declaration/definition in any function/block. This basically
+                signifies that we are not initializing a new variable but instead we are using/accessing the global
+                variable only. The main purpose of using extern variables is that they can be accessed between two
+                different files which are part of a large program. For more information on how extern variables work,
+                have a look at this link.</li>
+        </ul>
+        <ul>
+            <li><code>static</code>: This storage class is used to declare static variables which are popularly used
+                while writing programs in C language. Static variables have a property of preserving their value even
+                after they are out of their scope! Hence, static variables preserve the value of their last use in their
+                scope. So we can say that they are initialized only once and exist till the termination of the program.
+                Thus, no new memory is allocated because they are not re-declared. Their scope is local to the function
+                to which they were defined. Global static variables can be accessed anywhere in the program. By default,
+                they are assigned the value 0 by the compiler.</li>
+        </ul>
+        <ul>
+            <li><code>register</code>: This storage class declares register variables which have the same functionality
+                as that of the auto variables. The only difference is that the compiler tries to store these variables
+                in the register of the microprocessor if a free register is available. This makes the use of register
+                variables to be much faster than that of the variables stored in the memory during the runtime of the
+                program. If a free register is not available, these are then stored in the memory only. Usually few
+                variables which are to be accessed very frequently in a program are declared with the register keyword
+                which improves the running time of the program. An important and interesting point to be noted here is
+                that we cannot obtain the address of a register variable using pointers.</li>
+        </ul>
+        <p><a href="https://en.cppreference.com/w/c/language/storage_duration">refer</a></p>
+        <h2 id="type-qualifiers">Type Qualifiers</h2>
+        <p>There are four type qualifiers:</p>
+        <ul>
+            <li>const</li>
+            <li>volatile</li>
+            <li>__unaligned (axp)</li>
+            <li>
+                <p>__restrict (pointer type only)</p>
+            </li>
+            <li>
+                <p><code>const Type Qualifier</code> - Use the const type qualifier to qualify an object whose value
+                    cannot be changed. Objects qualified by the const keyword cannot be modified. This means that an
+                    object declared as const cannot serve as the operand in an operation that changes its value; for
+                    example, the ++ and -- operators are not allowed on objects qualified with const . Using the const
+                    qualifier on an object protects it from the side effects caused by operations that alter storage.
+                </p>
+            </li>
+            <li>
+                <p><code>volatile</code> - Every access (both read and write) made through an lvalue expression of
+                    volatile-qualified type is considered an observable side effect for the purpose of optimization and
+                    is evaluated strictly according to the rules of the abstract machine (that is, all writes are
+                    completed at some time before the next sequence point). This means that within a single thread of
+                    execution, a volatile access cannot be optimized out or reordered relative to another visible side
+                    effect that is separated by a sequence point from the volatile access.
+                    A cast of a non-volatile value to a volatile type has no effect. To access a non-volatile object
+                    using volatile semantics, its address must be cast to a pointer-to-volatile and then the access must
+                    be made through that pointer.
+                    Any attempt to read or write to an object whose type is volatile-qualified through a non-volatile
+                    lvalue results in undefined behavior:</p>
+                <pre><code class="lang-C"><span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int</span> n = <span class="hljs-number">1</span>; <span class="hljs-comment">// object of volatile-qualified type</span>
+        <span class="hljs-keyword">int</span>* p = (<span class="hljs-keyword">int</span>*)&amp;n;
+        <span class="hljs-keyword">int</span> val = *p; <span class="hljs-comment">// undefined behavior</span>
+        </code></pre>
+                <p>A member of a volatile-qualified structure or union type acquires the qualification of the type it
+                    belongs to (both when accessed using the . operator or the -&gt; operator):</p>
+                <pre><code class="lang-C">struct s { <span class="hljs-built_in">int</span> i; <span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span> ci; } s;
+        // the <span class="hljs-keyword">type</span> <span class="hljs-keyword">of</span> s.i <span class="hljs-keyword">is</span> <span class="hljs-built_in">int</span>, the <span class="hljs-keyword">type</span> <span class="hljs-keyword">of</span> s.ci <span class="hljs-keyword">is</span> <span class="hljs-keyword">const</span> <span class="hljs-built_in">int</span>
+        volatile struct s vs;
+        // the types <span class="hljs-keyword">of</span> vs.i <span class="hljs-keyword">and</span> vs.ci are volatile <span class="hljs-built_in">int</span> <span class="hljs-keyword">and</span> <span class="hljs-keyword">const</span> volatile <span class="hljs-built_in">int</span>
+        </code></pre>
+            </li>
+        </ul>
+        <h4 id="example">Example</h4>
+        <p>demonstrates the use of volatile to disable optimizations</p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;time.h&gt;</span></span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+        </span>{
+            <span class="hljs-keyword">clock_t</span> t = clock();
+            <span class="hljs-keyword">double</span> d = <span class="hljs-number">0.0</span>;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> n=<span class="hljs-number">0</span>; n&lt;<span class="hljs-number">10000</span>; ++n)
+               <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> m=<span class="hljs-number">0</span>; m&lt;<span class="hljs-number">10000</span>; ++m)
+                   d += d*n*m; <span class="hljs-comment">// reads and writes to a non-volatile </span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Modified a non-volatile variable 100m times. "</span>
+                   <span class="hljs-string">"Time used: %.2f seconds\n"</span>,
+                   (<span class="hljs-keyword">double</span>)(clock() - t)/CLOCKS_PER_SEC);
+        
+            t = clock();
+            <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">double</span> vd = <span class="hljs-number">0.0</span>;
+            <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> n=<span class="hljs-number">0</span>; n&lt;<span class="hljs-number">10000</span>; ++n)
+               <span class="hljs-keyword">for</span> (<span class="hljs-keyword">int</span> m=<span class="hljs-number">0</span>; m&lt;<span class="hljs-number">10000</span>; ++m)
+                   vd += vd*n*m; <span class="hljs-comment">// reads and writes to a volatile </span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Modified a volatile variable 100m times. "</span>
+                   <span class="hljs-string">"Time used: %.2f seconds\n"</span>,
+                   (<span class="hljs-keyword">double</span>)(clock() - t)/CLOCKS_PER_SEC);
+        }
+        </code></pre>
+        <p>Possible output:</p>
+        <pre><code>Modified <span class="hljs-keyword">a</span> non-volatile <span class="hljs-built_in">variable</span> <span class="hljs-number">100</span>m times. Time used: <span class="hljs-number">0.00</span> <span class="hljs-built_in">seconds</span>
+        Modified <span class="hljs-keyword">a</span> volatile <span class="hljs-built_in">variable</span> <span class="hljs-number">100</span>m times. Time used: <span class="hljs-number">0.79</span> <span class="hljs-built_in">seconds</span>
+        </code></pre>
+        <h4 id="uses-of-volatile">Uses of volatile</h4>
+        <ul>
+            <li>static volatile objects model memory-mapped I/O ports, and static const volatile objects model
+                memory-mapped input ports, such as a real-time clock:
+                <pre><code class="lang-C"><span class="hljs-keyword">volatile</span> <span class="hljs-keyword">short</span> *ttyport = (<span class="hljs-keyword">volatile</span> <span class="hljs-keyword">short</span>*)TTYPORT_ADDR;
+        <span class="hljs-keyword">for</span>(<span class="hljs-keyword">int</span> i = <span class="hljs-number">0</span>; i &lt; N; ++i)
+         *ttyport = a[i]; <span class="hljs-comment">// *ttyport is an lvalue of type volatile short</span>
+        </code></pre>
+            </li>
+            <li>static volatile objects of type sig_atomic_t are used for communication with signal handlers.</li>
+            <li>volatile variables that are local to a function that contains an invocation of the setjmp macro are the
+                only local variables guaranteed to retain their values after longjmp returns.</li>
+            <li>In addition, volatile variables can be used to disable certain forms of optimization, e.g. to disable
+                dead store elimination or constant folding for microbenchmarks.</li>
+        </ul>
+        <p><a href="https://en.cppreference.com/w/c/language/volatile">more</a></p>
+        <p><a href="https://www.cs.auckland.ac.nz/references/unix/digital/AQTLTBTE/DOCU_037.HTM">refer</a></p>
+        <h2 id="conditional-inclusion">Conditional inclusion</h2>
+        <p>The preprocessor supports conditional compilation of parts of a source file. This behavior is controlled by
+            #if, #else, #elif, #ifdef, #ifndef and #endif directives.</p>
+        <p>Syntax:</p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> expression        </span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> identifier        </span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">ifndef</span> identifier        </span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">elif</span> expression        </span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">else</span>        </span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+        </code></pre>
+        <p>Example:</p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> ABCD 2</span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        
+        int main(void)
+        {
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> ABCD</span>
+            printf(<span class="hljs-string">"1: yes\n"</span>);
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+            printf(<span class="hljs-string">"1: no\n"</span>);
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">ifndef</span> ABCD</span>
+            printf(<span class="hljs-string">"2: no1\n"</span>);
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">elif</span> ABCD == 2</span>
+            printf(<span class="hljs-string">"2: yes\n"</span>);
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">else</span></span>
+            printf(<span class="hljs-string">"2: no2\n"</span>);
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">if</span> !defined(DCBA) &amp;&amp; (ABCD &lt; 2*4-3)</span>
+            printf(<span class="hljs-string">"3: yes\n"</span>);
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+        }
+        </code></pre>
+        <p>Output:</p>
+        <pre><code><span class="hljs-number">1</span>: <span class="hljs-literal">yes</span>
+        <span class="hljs-number">2</span>: <span class="hljs-literal">yes</span>
+        <span class="hljs-number">3</span>: <span class="hljs-literal">yes</span>
+        </code></pre>
+        <h2 id="-define-macros">#define macros</h2>
+        <p>Example:</p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        
+        <span class="hljs-comment">//make function factory and use it</span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> FUNCTION(name, a) int fun_##name(int x) { return (a)*x;}</span>
+        
+        FUNCTION(quadruple, <span class="hljs-number">4</span>)
+        FUNCTION(<span class="hljs-keyword">double</span>, <span class="hljs-number">2</span>)
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">undef</span> FUNCTION</span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> FUNCTION 34</span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> OUTPUT(a) puts( #a )</span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+        </span>{
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"quadruple(13): %d\n"</span>, fun_quadruple(<span class="hljs-number">13</span>) );
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"double(21): %d\n"</span>, fun_double(<span class="hljs-number">21</span>) );
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, FUNCTION);
+            OUTPUT(million);               <span class="hljs-comment">//note the lack of quotes</span>
+        }
+        </code></pre>
+        <p>Output:</p>
+        <pre><code class="lang-C"><span class="hljs-function"><span class="hljs-title">quadruple</span><span class="hljs-params">(<span class="hljs-number">13</span>)</span></span>: <span class="hljs-number">52</span>
+        <span class="hljs-function"><span class="hljs-title">double</span><span class="hljs-params">(<span class="hljs-number">21</span>)</span></span>: <span class="hljs-number">42</span>
+        <span class="hljs-number">34</span>
+        million
+        </code></pre>
+        <h4 id="-and-operators"># and ## operators</h4>
+        <p>In function-like macros, a # operator before an identifier in the replacement-list runs the identifier
+            through parameter replacement and encloses the result in quotes, effectively creating a string literal. In
+            addition, the preprocessor adds backslashes to escape the quotes surrounding embedded string literals, if
+            any, and doubles the backslashes within the string as necessary. All leading and trailing whitespace is
+            removed, and any sequence of whitespace in the middle of the text (but not inside embedded string literals)
+            is collapsed to a single space. This operation is called &quot;stringification&quot;. If the result of
+            stringification is not a valid string literal, the behavior is undefined.</p>
+        <p>When # appears before <strong>VA_ARGS</strong>, the entire expanded <strong>VA_ARGS</strong> is enclosed in
+            quotes:</p>
+        <pre><code class="lang-C"><span class="hljs-selector-id">#define</span> <span class="hljs-selector-tag">showlist</span>(...) <span class="hljs-selector-tag">puts</span>(#__VA_ARGS__)
+        <span class="hljs-selector-tag">showlist</span>();            <span class="hljs-comment">// expands to puts("")</span>
+        <span class="hljs-selector-tag">showlist</span>(<span class="hljs-number">1</span>, <span class="hljs-string">"x"</span>, int); <span class="hljs-comment">// expands to puts("1, \"x\", int")</span>
+        </code></pre>
+        <p>(since C99)</p>
+        <p>A ## operator between any two successive identifiers in the replacement-list runs parameter replacement on
+            the two identifiers and then concatenates the result. </p>
+        <p><a href="https://en.cppreference.com/w/c/preprocessor/replace">more</a></p>
+        <h2 id="gcc-g-vs-g3-gdb-flag-what-is-the-difference-also-is-there-a-difference-between-g-and-ggdb-">GCC -g vs
+            -g3 GDB Flag: What is the Difference? Also is there a difference between -g and -ggdb?</h2>
+        <p><strong><code>-g</code></strong></p>
+        <p>Produce debugging information in the operating system&#39;s native format (stabs, COFF, XCOFF, or DWARF 2).
+            GDB can work with this debugging information. On most systems that use stabs format, -g enables use of extra
+            debugging information that only GDB can use; this extra information makes debugging work better in GDB but
+            probably makes other debuggers crash or refuse to read the program. If you want to control for certain
+            whether to generate the extra information, use -gstabs+, -gstabs, -gxcoff+, -gxcoff, or -gvms (see below).
+        </p>
+        <p>...</p>
+        <p><strong><code>-ggdb</code></strong></p>
+        <p>Produce debugging information for use by GDB. This means to use the most expressive format available (DWARF
+            2, stabs, or the native format if neither of those are supported), including GDB extensions if at all
+            possible.</p>
+        <p><strong><code>-gvmslevel</code></strong></p>
+        <p>Request debugging information and also use level to specify how much information. The default level is 2.
+            Level 0 produces no debug information at all. Thus, -g0 negates -g.</p>
+        <p>....</p>
+        <p><strong>Level 3 includes extra information, such as all the macro definitions present in the program. Some
+                debuggers support macro expansion when you use -g3.</strong></p>
+        <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Debugging-Options.html">docs.</a></p>
+        <h2 id="debug-flags-in-gcc">Debug flags in gcc</h2>
+        <p>-g and -ggdb are similar with some slight differences, I read this <a
+                href="https://gcc.gnu.org/legacy-ml/gcc-help/2009-02/msg00130.html">here</a>:</p>
+        <p>-g produces debugging information in the OS¹s native format (stabs, COFF, XCOFF, or DWARF 2).</p>
+        <p>-ggdb produces debugging information specifically intended for gdb.</p>
+        <p>-ggdb3 produces extra debugging information, for example: including macro definitions.</p>
+        <p>-ggdb by itself without specifying the level defaults to -ggdb2 (i.e., gdb for level 2).</p>
+        <h2 id="weak-definitions">Weak Definitions</h2>
+        <p>A function definition (or EXPORTed label in assembler) can also be marked as weak, as can a variable
+            definition. In this case, a weak symbol definition is created in the object file.</p>
+        <p>A weak definition can be used to resolve any reference to that symbol in the same way as a normal definition.
+            However, if another (non-weak) definition of that symbol exists in the build, the linker will use that
+            definition instead of the weak definition, and not produce an error due to multiply-defined symbols.</p>
+        <h4 id="example-usage-">Example usage:</h4>
+        <p>A simple or dummy implementation of a function can be provided as a WEAK definition. This allows the software
+            to be built (with defined behaviour) without providing a &#39;full&#39; implementation of this function, but
+            also allows a full implementation to be provided for some builds if required.</p>
+        <h2 id="targeted-flattening-instead-of-global-inlining">Targeted flattening instead of global inlining</h2>
+        <p>Now for the trick! Both GCC and Clang support <code>__attribute__((flatten)).</code> Putting it on a function
+            causes all of its callees to be inlined into it. It’s dead simple.</p>
+        <pre><code class="lang-C"><span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">do_thing</span>(int input)
+        {
+            <span class="hljs-comment">// this code is not always inlined at the call site</span>
+        }
+        
+        <span class="hljs-selector-tag">__attribute__</span>((flatten)) <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">hot_code</span>()
+        {
+            <span class="hljs-comment">// the program spends &gt;80% of its runtime in this function</span>
+            <span class="hljs-selector-tag">while</span> (condition) {
+                <span class="hljs-selector-tag">call_something</span>();   <span class="hljs-comment">// inlined!</span>
+                <span class="hljs-selector-tag">do_thing</span>(y);        <span class="hljs-comment">// inlined!</span>
+                <span class="hljs-selector-tag">other_thing</span>();      <span class="hljs-comment">// also inlined!</span>
+            }
+        }
+        
+        <span class="hljs-selector-tag">void</span> <span class="hljs-selector-tag">cool_code</span>()
+        {
+            <span class="hljs-comment">// the program spends &lt;5% of its runtime in this function</span>
+            ...
+            <span class="hljs-selector-tag">do_thing</span>(a);            <span class="hljs-comment">// not inlined!</span>
+            <span class="hljs-selector-tag">do_thing</span>(b);            <span class="hljs-comment">// not inlined!</span>
+            <span class="hljs-selector-tag">do_thing</span>(c);            <span class="hljs-comment">// guess!</span>
+        }
+        </code></pre>
+        <p><strong>Note: Functions with <code>__attribute__((noinline))</code> will not be inlined. The same goes for
+                functions where the compiler can’t see the body.</strong></p>
+        <h4 id="in-conclusion">In conclusion</h4>
+        <p><code>__attribute__((flatten))</code>lets you opt in to the pros of aggressive inlining on a per-function
+            basis, while protecting the rest of your program from the cons!</p>
+        <h2 id="initializing-entire-2d-array-with-one-value">Initializing entire 2D array with one value</h2>
+        <p>With the following declaration</p>
+        <p><code>int array[ROW][COLUMN]={0};</code></p>
+        <p>I get the array with all zeroes but with the following one</p>
+        <p><code>int array[ROW][COLUMN]={1};</code></p>
+        <p>I don’t get the array with all one value. The default value is still 0.</p>
+        <p>Why this behavior and how can I initialize with all 1?</p>
+        <hr>
+        <p>You get this behavior, because <code>int array [ROW][COLUMN] = {1};</code>does not mean <strong>&quot;set all
+                items to one&quot;</strong>. Let me try to explain how this works step by step.</p>
+        <p>The explicit, overly clear way of initializing your array would be like this:</p>
+        <pre><code class="lang-C++"><span class="hljs-section">#define ROW 2</span>
+        <span class="hljs-section">#define COLUMN 2</span>
+        
+        int array [<span class="hljs-string">ROW</span>][<span class="hljs-symbol">COLUMN</span>] =
+        {
+          {0, 0},
+          {0, 0}
+        };
+        </code></pre>
+        <p>However, C allows you to leave out some of the items in an array (or struct/union). You could for example
+            write:</p>
+        <pre><code class="lang-C++">int array [<span class="hljs-string">ROW</span>][<span class="hljs-symbol">COLUMN</span>] =
+        {
+          {1, 2}
+        };
+        </code></pre>
+        <p><strong>This means, initialize the first elements to 1 and 2, and the rest of the elements &quot;as if they
+                had static storage duration&quot;.</strong> </p>
+        <p><strong>There is a rule in C saying that all objects of static storage duration, that are not explicitly
+                initialized by the programmer, must be set to zero.</strong></p>
+        <p>So in the above example, the first row gets set to 1,2 and the next to 0,0 since we didn&#39;t give them any
+            explicit values.</p>
+        <p>Next, there is a rule in C allowing lax brace style. The first example could as well be written as</p>
+        <p><code>int array [ROW][COLUMN] = {0, 0, 0, 0};</code></p>
+        <p>although of course this is poor style, it is harder to read and understand. But this rule is convenient,
+            because it allows us to write</p>
+        <p><code>int array [ROW][COLUMN] = {0};</code></p>
+        <p>which means: &quot;initialize the very first column in the first row to 0, and all other items as if they had
+            static storage duration, ie set them to zero.&quot;</p>
+        <p>therefore, if you attempt</p>
+        <p><code>int array [ROW][COLUMN] = {1};</code></p>
+        <p>it means <strong>&quot;initialize the very first column in the first row to 1 and set all other items to
+                zero&quot;.</strong></p>
+        <h2 id="what-is-the-reason-for-explicitly-declaring-l-or-ul-for-long-values-">What is the reason for explicitly
+            declaring L or UL for long values?</h2>
+        <h3 id="indirect-use-of-l-or-ul-type-details-in-macro-or-compile-time-constant-expressions">Indirect use of L or
+            UL type details in macro or compile time constant expressions</h3>
+        <p><a
+                href="https://github.com/TonyJosi97/tutorial/blob/master/c/readme_2.md#example-for-integer-promotions-and-usual-arithmetic-conversions">refer</a>
+        </p>
+        <pre><code class="lang-c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span> </span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdint.h&gt;</span></span>
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BMP280_DATA_UPDATE_FREQ   (1000)</span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">define</span> BMP280_DATA_UPDATE_FREQ_U (1000U)</span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>  </span>{ 
+        
+            <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> prev_val1 = <span class="hljs-number">0xFFFF</span>;
+            <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> cur_val1 = <span class="hljs-number">1000</span>;
+        
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d\n"</span>, (cur_val1 - prev_val1));
+        
+            <span class="hljs-keyword">if</span>((cur_val1 - prev_val1) &gt; BMP280_DATA_UPDATE_FREQ)
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Works with BMP280_DATA_UPDATE_FREQ\n"</span>);
+        
+            <span class="hljs-keyword">if</span>((cur_val1 - prev_val1) &gt; BMP280_DATA_UPDATE_FREQ_U)
+                <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Works with BMP280_DATA_UPDATE_FREQ_U\n"</span>);
+        
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        </code></pre>
+        <p>Output:</p>
+        <pre><code>-<span class="ruby"><span class="hljs-number">64535</span>
+        </span>Works with BMP280_DATA_UPDATE_FREQ_U
+        </code></pre>
+        <p>In the above example the type of the macro BMP280_DATA_UPDATE_FREQ also affects the behaviour of the
+            <code>if</code> expression thus adding required type information to macro can force the operation to be in
+            the required type.</p>
+        <p>In the first <code>if</code> above, the LHS is calculated as int and type of the macro value is int as well
+            (C standard). The comparisson becomes -64535 &gt; 1000 which is false.</p>
+        <p>But in the 2nd case the LHS is calculated as int and RHS is unsigned int thus the comparisson is done in
+            unsigned int. So the int in LHS is casted to unsigned int, ie -64535 ==&gt; 2&#39;s Complement of 64535
+            ==&gt; 1001. 1001 &gt; 1000 -&gt; True.</p>
+        <hr>
+        <p>When a suffix L or UL is not used, the compiler uses the first type that can contain the constant from a list
+            (see details in sC99 standard, clause 6.4.4:5. For a decimal constant, the list is int, long int, long long
+            int).</p>
+        <p>As a consequence, most of the times, it is not necessary to use the suffix. It does not change the meaning of
+            the program. It does not change the meaning of your example initialization of x for most architectures,
+            although it would if you had chosen a number that could not be represented as a long long. See also
+            codebauer&#39;s answer for an example where the U part of the suffix is necessary.</p>
+        <p>There are a couple of circumstances when the programmer may want to set the type of the constant explicitly.
+            One example is when using a variadic function:</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">printf</span>(<span class="hljs-string">"%lld"</span>, <span class="hljs-number">1</span>LL); <span class="hljs-regexp">//</span> correct, because <span class="hljs-number">1</span>LL has type long long
+        <span class="hljs-keyword">printf</span>(<span class="hljs-string">"%lld"</span>, <span class="hljs-number">1</span>);   <span class="hljs-regexp">//</span> undefined behavior, because <span class="hljs-number">1</span> has type <span class="hljs-keyword">int</span>
+        </code></pre>
+        <p>A common reason to use a suffix is ensuring that the result of a computation doesn&#39;t overflow. Two
+            examples are:</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">long</span> x = <span class="hljs-number">10000L</span> * <span class="hljs-number">4096L</span>;
+        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> y = <span class="hljs-number">1U</span>LL &lt;&lt; <span class="hljs-number">36</span>;
+        </code></pre>
+        <p>In both examples, without suffixes, the constants would have type int and the computation would be made as
+            int. In each example this incurs a risk of overflow. Using the suffixes means that the computation will be
+            done in a larger type instead, which has sufficient range for the result.</p>
+        <p>As Lightness Races in Orbit puts it, the litteral&#39;s suffix comes before the assignment. In the two
+            examples above, simply declaring x as long and y as unsigned long long is not enough to prevent the overflow
+            in the computation of the expressions assigned to them.</p>
+        <p>Another example is the comparison x &lt; 12U where variable x has type int. Without the U suffix, the
+            compiler types the constant 12 as an int, and the comparison is therefore a comparison of signed ints.</p>
+        <pre><code class="lang-C">int x = <span class="hljs-number">-3</span>;
+        printf(<span class="hljs-string">"%d<span class="hljs-subst">\n</span>"</span>, x &lt; <span class="hljs-number">12</span>); <span class="hljs-comment">// prints 1 because it's true that -3 &lt; 12</span>
+        </code></pre>
+        <p>With the U suffix, the comparison becomes a comparison of unsigned ints. “Usual arithmetic conversions” mean
+            that -3 is converted to a large unsigned int:</p>
+        <p><code>printf(&quot;%d\n&quot;, x &lt; 12U); // prints 0 because (unsigned int)-3 is large</code></p>
+        <p>In fact, the type of a constant may even change the result of an arithmetic computation, again because of the
+            way “usual arithmetic conversions” work.</p>
+        <p>Note that, for decimal constants, the list of types suggested by C99 does not contain unsigned long long. In
+            C90, the list ended with the largest standardized unsigned integer type at the time (which was unsigned
+            long). A consequence was that the meaning of some programs was changed by adding the standard type long long
+            to C99: the same constant that was typed as unsigned long in C90 could now be typed as a signed long long
+            instead. I believe this is the reason why in C99, it was decided not to have unsigned long long in the list
+            of types for decimal constants. </p>
+        <h2 id="how-are-negative-signed-values-stored-">How are negative signed values stored?</h2>
+        <p><a
+                href="https://softwareengineering.stackexchange.com/questions/239036/how-are-negative-signed-values-stored">src</a>
+        </p>
+        <p><strong>The C standard doesn&#39;t mandate any particular way of representing negative signed
+                numbers.</strong></p>
+        <p>In most implementations that you are likely to encounter, negative signed integers are stored in what is
+            called two&#39;s complement. The other major way of storing negative signed numbers is called one&#39;s
+            complement.</p>
+        <p>The <strong>two&#39;s complement</strong> of an N-bit number x is defined as 2^N - x. For example, the
+            two&#39;s complement of 8-bit 1 is 2^8 - 1, or 1111 1111. The two&#39;s complement of 8-bit 8 is 2^8 - 8,
+            which in binary is 1111 1000. This can also be calculated by flipping the bits of x and adding one. For
+            example:</p>
+        <p><a href="https://en.wikipedia.org/wiki/Signed_number_representations#Two&#39;s_complement">more</a></p>
+        <pre><code> <span class="hljs-number">1</span>      = <span class="hljs-number">0000</span> <span class="hljs-number">0001</span>
+        ~<span class="hljs-number">1</span>      = <span class="hljs-number">1111</span> <span class="hljs-number">1110</span> (<span class="hljs-number">1</span>'s complement)
+        ~<span class="hljs-number">1</span> + <span class="hljs-number">1</span>  = <span class="hljs-number">1111</span> <span class="hljs-number">1111</span> (<span class="hljs-number">2</span>'s complement)
+        <span class="hljs-number">-1</span>      = <span class="hljs-number">1111</span> <span class="hljs-number">1111</span>
+        
+         <span class="hljs-number">21</span>     = <span class="hljs-number">0001</span> <span class="hljs-number">0101</span>
+        ~<span class="hljs-number">21</span>     = <span class="hljs-number">1110</span> <span class="hljs-number">1010</span>
+        ~<span class="hljs-number">21</span> + <span class="hljs-number">1</span> = <span class="hljs-number">1110</span> <span class="hljs-number">1011</span>
+        <span class="hljs-number">-21</span>     = <span class="hljs-number">1110</span> <span class="hljs-number">1011</span>
+        </code></pre>
+        <p><strong>An easier method to get the negation of a number in two&#39;s complement is as follows:</strong></p>
+        <ul>
+            <li>Starting from the right, find the first &quot;1&quot; </li>
+            <li>Invert all of the bits to the left of that &quot;1&quot;</li>
+        </ul>
+        <p>Example:</p>
+        <pre><code>Example <span class="hljs-number">1</span>    Example <span class="hljs-number">2</span>
+        <span class="hljs-number">00101001</span>    <span class="hljs-number">00101100</span>
+        <span class="hljs-number">11010111</span>    <span class="hljs-number">11010100</span>
+        </code></pre>
+        <pre><code>Binary value                        <span class="hljs-number">0</span>   <span class="hljs-number">1</span>   <span class="hljs-number">10</span>  <span class="hljs-number">11</span>  <span class="hljs-number">100</span> ..  ... ..  <span class="hljs-number">01111111</span> <span class="hljs-number">10000000</span>   <span class="hljs-number">10000001</span>    ..  ...     <span class="hljs-number">11111110</span>    <span class="hljs-number">11111111</span>
+        Two's complement interpretation        <span class="hljs-number">0</span>   <span class="hljs-number">1</span>   <span class="hljs-number">2</span>   <span class="hljs-number">3</span>   <span class="hljs-number">4</span>   ..  ... ..  <span class="hljs-number">127</span>      <span class="hljs-number">-128</span>       <span class="hljs-number">-127</span>        ..  ...     <span class="hljs-number">-2</span>          <span class="hljs-number">-1</span>        
+        Unsigned interpretation             <span class="hljs-number">0</span>   <span class="hljs-number">1</span>   <span class="hljs-number">2</span>   <span class="hljs-number">3</span>   <span class="hljs-number">4</span>   ..  ... ..  <span class="hljs-number">127</span>       <span class="hljs-number">128</span>       <span class="hljs-number">129</span>         ..  ...     <span class="hljs-number">254</span>         <span class="hljs-number">255</span>
+        </code></pre>
+        <p><strong>Here is the process to convert a negative two&#39;s complement number back to decimal:</strong></p>
+        <ul>
+            <li>flip all the bits,</li>
+            <li>add 1, and</li>
+            <li>interpret the result as a binary representation of the magnitude and add a negative sign</li>
+        </ul>
+        <p>The <strong>one&#39;s complement</strong> of an N-bit number x is defined as x with all its bits flipped,
+            basically.</p>
+        <pre><code> <span class="hljs-number">1</span>      = <span class="hljs-number">0000</span> <span class="hljs-number">0001</span>
+        <span class="hljs-number">-1</span>      = <span class="hljs-number">1111</span> <span class="hljs-number">1110</span>
+        
+         <span class="hljs-number">21</span>     = <span class="hljs-number">0001</span> <span class="hljs-number">0101</span>
+        <span class="hljs-number">-21</span>     = <span class="hljs-number">1110</span> <span class="hljs-number">1010</span>
+        </code></pre>
+        <p>Two&#39;s complement has several advantages over one&#39;s complement. For example, it doesn&#39;t have the
+            concept of &#39;negative zero&#39;, which for good reason is confusing to many people. Addition,
+            multiplication and subtraction work the same with signed integers implemented with two&#39;s complemented as
+            they do with unsigned integers as well.</p>
+        <h4 id="signed-magnitude-">Signed magnitude.</h4>
+        <p>This is the easiest to understand, because it works the same as we are used to when dealing with negative
+            decimal values: The first position (bit) represents the sign (0 for positive, 1 for negative), and the other
+            bits represent the number. Although it is easy for us to understand, it is hard for computers to work with,
+            especially when doing arithmetic with negative numbers.
+            In 8-bit signed magnitude, the value 8 is represented as 0 0001000 and -8 as 1 0001000.</p>
+        <h2 id="what-is-the-default-data-type-of-number-in-c-">What is the default data type of number in C?</h2>
+        <p><a href="https://stackoverflow.com/questions/37606564/what-is-the-default-data-type-of-number-in-c">src</a>
+        </p>
+        <p>When using a decimal constant without any suffixes the type of the decimal constant is the first that can be
+            represented, in order (the current C standard, 6.4.4 Constants p5):</p>
+        <ul>
+            <li>int</li>
+            <li>long int</li>
+            <li>long long int</li>
+        </ul>
+        <h4 id="example-">Example:</h4>
+        <pre><code><span class="hljs-keyword">In</span> C,
+        
+        <span class="hljs-built_in">unsigned</span> int size = <span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>*<span class="hljs-number">1024</span>*<span class="hljs-number">2</span>;
+        which results a <span class="hljs-literal">warning</span> <span class="hljs-string">"integer overflow in expression..."</span> <span class="hljs-keyword">While</span>
+        
+        <span class="hljs-built_in">unsigned</span> int size = <span class="hljs-number">2147483648</span>;
+        results no <span class="hljs-literal">warning</span>?
+        
+        <span class="hljs-keyword">Is</span> the right value <span class="hljs-keyword">of</span> the first expression <span class="hljs-keyword">is</span> <span class="hljs-keyword">default</span> as int? Where does it mention <span class="hljs-keyword">in</span> C99 spec?
+        </code></pre>
+        <hr>
+        <p>The type of the first expression is int, since values 1024 and 2 can be represented as int. The computation
+            of those constants will be done in type int, and the result will overflow. This expression
+            <code>1024*1024*1024*2</code>(in the expression 1024 and 2 are of type signed int) produces result that is
+            of type signed int and this value is too big for signed int . </p>
+        <p>Assuming INT_MAX equals 2147483647 and LONG_MAX is greater than 2147483647, the type of the second expression
+            is long int, since this value cannot be represented as int, but can be as long int. If INT_MAX equals
+            LONG_MAX equals 2147483647, then the type is long long int.</p>
+        <h2 id="is-unsigned-integer-subtraction-defined-behavior-">Is unsigned integer subtraction defined behavior?
+        </h2>
+        <p>The result of a subtraction generating a negative number in an unsigned type <strong>is
+                well-defined:</strong></p>
+        <blockquote>
+            <p>[...] A computation involving unsigned operands can never overflow, because a result that cannot be
+                represented by the resulting unsigned integer type is reduced modulo the number that is one greater than
+                the largest value that can be represented by the resulting type. (ISO/IEC 9899:1999 (E) §6.2.5/9)</p>
+        </blockquote>
+        <p>As you can see, (unsigned)0 - (unsigned)1 equals -1 modulo UINT_MAX+1, or in other words, UINT_MAX.</p>
+        <p>Example: </p>
+        <p>the way unsigned subtraction works for uint16_t -</p>
+        <p>0 - 1000 != 1000</p>
+        <p>0 - 1000 == -1000 mod (65535 + 1)== 64536</p>
+        <p>0 - 64535 == -64535 mod (65535 + 1) = 1001</p>
+        <pre><code class="lang-C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdint.h&gt;</span></span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-keyword">uint16_t</span> a = <span class="hljs-number">0</span>, b = <span class="hljs-number">1000</span>;
+            <span class="hljs-keyword">uint16_t</span> c = a - b;
+        
+            <span class="hljs-keyword">uint16_t</span> a1 = <span class="hljs-number">0</span>, b1 = <span class="hljs-number">64535</span>;
+            <span class="hljs-keyword">uint16_t</span> c1 = a1 - b1;
+        
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%d %d\n"</span>, c, c1);
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        </code></pre>
+        <p>Output: </p>
+        <p><code>64536 1001</code></p>
+        <h2 id="implicit-type-promotion-rules">Implicit type promotion rules</h2>
+        <p><a href="https://stackoverflow.com/questions/46073295/implicit-type-promotion-rules">src</a></p>
+        <p>Promotion is the process by which values of <strong>integer type &quot;smaller&quot; that int/unsigned
+                int</strong> are converted either to int or unsigned int. The rules are expressed somewhat strangely
+            (mostly for the benefit of handling adequately char) but ensure that value and sign are conserved.</p>
+        <p>Few examples of effects of promotion rules:</p>
+        <p>Example 1) - Why does this give a strange, large integer number and not 255?</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> x = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> y = <span class="hljs-number">1</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%u\n"</span>, x - y);
+        </code></pre>
+        <p>Example 2) - Why does this give &quot;-1 is larger than 0&quot;?</p>
+        <pre><code class="lang-C++"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">signed</span> <span class="hljs-keyword">int</span> b = <span class="hljs-number">-2</span>;
+        <span class="hljs-keyword">if</span>(a + b &gt; <span class="hljs-number">0</span>)
+          <span class="hljs-built_in">puts</span>(<span class="hljs-string">"-1 is larger than 0"</span>);
+        </code></pre>
+        <p>Example 3) - Why does changing the type in the above example to short fix the problem?</p>
+        <pre><code class="lang-C++"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> a = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">signed</span> <span class="hljs-keyword">short</span> b = <span class="hljs-number">-2</span>;
+        <span class="hljs-keyword">if</span>(a + b &gt; <span class="hljs-number">0</span>)
+          <span class="hljs-built_in">puts</span>(<span class="hljs-string">"-1 is larger than 0"</span>); <span class="hljs-comment">// will not print</span>
+        </code></pre>
+        <p>(These examples were intended for a 32 or 64 bit computer with 16 bit short.)</p>
+        <hr>
+        <p><a href="https://stackoverflow.com/questions/46073295/implicit-type-promotion-rules">src</a></p>
+        <p>C was designed to implicitly and silently change the integer types of the operands used in expressions. There
+            exist several cases where the language forces the compiler to either change the operands to a larger type,
+            or to change their signedness.</p>
+        <p>The rationale behind this is to prevent accidental overflows during arithmetic, but also to allow operands
+            with different signedness to co-exist in the same expression.</p>
+        <p>Unfortunately, the rules for implicit type promotion cause much more harm than good, to the point where they
+            might be one of the biggest flaws in the C language. These rules are often not even known by the average C
+            programmer and therefore causing all manner of very subtle bugs.</p>
+        <p>Typically you see scenarios where the programmer says &quot;just cast to type x and it works&quot; - but they
+            don&#39;t know why. Or such bugs manifest themselves as rare, intermittent phenomenon striking from within
+            seemingly simple and straight-forward code. Implicit promotion is particularly troublesome in code doing bit
+            manipulations, since most bit-wise operators in C come with poorly-defined behavior when given a signed
+            operand.</p>
+        <h3 id="integer-types-and-conversion-rank">Integer types and conversion rank</h3>
+        <p>The integer types in C are char, short, int, long, long long and enum.
+            _Bool/bool is also treated as an integer type when it comes to type promotions.</p>
+        <p>All integers have a specified conversion rank. C11 6.3.1.1, emphasis mine on the most important parts:</p>
+        <p>Every integer type has an integer conversion rank defined as follows:</p>
+        <ul>
+            <li>No two signed integer types shall have the same rank, even if they have the same representation.</li>
+            <li>The rank of a signed integer type shall be greater than the rank of any signed integer type with less
+                precision.</li>
+            <li>The rank of long long int shall be greater than the rank of long int, which shall be greater than the
+                rank of int, which shall be greater than the rank of short int, which shall be greater than the rank of
+                signed char.</li>
+            <li>The rank of any unsigned integer type shall equal the rank of the corresponding signed integer type, if
+                any.</li>
+            <li>The rank of any standard integer type shall be greater than the rank of any extended integer type with
+                the same width.</li>
+            <li>The rank of char shall equal the rank of signed char and unsigned char.</li>
+            <li>The rank of _Bool shall be less than the rank of all other standard integer types.</li>
+            <li>The rank of any enumerated type shall equal the rank of the compatible integer type (see 6.7.2.2).</li>
+        </ul>
+        <p>The types from stdint.h sort in here too, with the same rank as whatever type they happen to correspond to on
+            the given system. For example, int32_t has the same rank as int on a 32 bit system.</p>
+        <p>Further, C11 6.3.1.1 specifies which types that are regarded as the small integer types (not a formal term):
+        </p>
+        <blockquote>
+            <p>The following may be used in an expression wherever an int or unsigned int may be used:</p>
+            <p>— An object or expression with an integer type (other than int or unsigned int) whose integer conversion
+                rank is less than or equal to the rank of int and unsigned int.</p>
+        </blockquote>
+        <p>What this somewhat cryptic text means in practice, is that _Bool, char and short (and also int8_t, uint8_t
+            etc) are the &quot;small integer types&quot;. These are treated in special ways and subject to implicit
+            promotion, as explained below.</p>
+        <h3 id="the-integer-promotions">The integer promotions</h3>
+        <p>Whenever a small integer type is used in an expression, it is implicitly converted to int which is always
+            signed. This is known as the integer promotions or the integer promotion rule.</p>
+        <p>Formally, the rule says (C11 6.3.1.1):</p>
+        <p>If an int can represent all values of the original type (as restricted by the width, for a bit-field), the
+            value is converted to an int; otherwise, it is converted to an unsigned int. These are called the integer
+            promotions.</p>
+        <p>This means that all small integer types, no matter signedness, get implicitly converted to (signed) int when
+            used in most expressions.</p>
+        <p>This text is often misunderstood as: &quot;all small, signed integer types are converted to signed int and
+            all small, unsigned integer types are converted to unsigned int&quot;. This is incorrect. The unsigned part
+            here only means that if we have for example an unsigned short operand, and int happens to have the same size
+            as short on the given system, then the unsigned short operand is converted to unsigned int. As in, nothing
+            of note really happens. But in case short is a smaller type than int, it is always converted to (signed)
+            int, regardless of it the short was signed or unsigned!</p>
+        <p>The harsh reality caused by the integer promotions means that almost no operation in C can be carried out on
+            small types like char or short. Operations are always carried out on int or larger types.</p>
+        <p>This might sound like nonsense, but luckily the compiler is allowed to optimize the code. For example, an
+            expression containing two unsigned char operands would get the operands promoted to int and the operation
+            carried out as int. But the compiler is allowed to optimize the expression to actually get carried out as an
+            8 bit operation, as would be expected. However, here comes the problem: the compiler is not allowed to
+            optimize out the implicit change of signedness caused by the integer promotion. Because there is no way for
+            the compiler to tell if the programmer is purposely relying on implicit promotion to happen, or if it is
+            unintentional.</p>
+        <p>This is why example 1 in the question fails. Both unsigned char operands are promoted to type int, the
+            operation is carried out on type int, and the result of x - y is of type int. Meaning that we get -1 instead
+            of 255 which might have been expected. The compiler may generate machine code that executes the code with 8
+            bit instructions instead of int, but it may not optimize out the change of signedness. Meaning that we end
+            up with a negative result, that in turn results in a weird number when printf(&quot;%u is invoked. Example 1
+            could be fixed by casting the result of the operation back to type unsigned char.</p>
+        <p>With the exception of a few special cases like ++ and sizeof operators, the integer promotions apply to
+            almost all operations in C, no matter if unary, binary (or ternary) operators are used.</p>
+        <h3 id="the-usual-arithmetic-conversions">The usual arithmetic conversions</h3>
+        <p>Usual arithmetic conversion by which operands of arithmetic operators are converted to a common type. It
+            begins by promoting the operand (to either int or unsigned) if they are of a type smaller than int and then
+            choosing a target type by the following process (for integer types, 6.3.1.8/1) (Listed below as bullets).
+        </p>
+        <p>Whenever a binary operation (an operation with 2 operands) is done in C, both operands of the operator have
+            to be of the same type. Therefore, in case the operands are of different types, C enforces an implicit
+            conversion of one operand to the type of the other operand. The rules for how this is done are named the
+            usual artihmetic conversions (sometimes informally referred to as &quot;balancing&quot;). These are
+            specified in C11 6.3.18:</p>
+        <p>(Think of this rule as a long, nested if-else if statement and it might be easier to read :) )</p>
+        <blockquote>
+            <p>6.3.1.8 Usual arithmetic conversions</p>
+        </blockquote>
+        <p>Many operators that expect operands of arithmetic type cause conversions and yield result types in a similar
+            way. The purpose is to determine a common real type for the operands and result. For the specified operands,
+            each operand is converted, without change of type domain, to a type whose corresponding real type is the
+            common real type. Unless explicitly stated otherwise, the common real type is also the corresponding real
+            type of the result, whose type domain is the type domain of the operands if they are the same, and complex
+            otherwise. This pattern is called the usual arithmetic conversions:</p>
+        <ul>
+            <li>First, if the corresponding real type of either operand is long double, the other operand is converted,
+                without change of type domain, to a type whose corresponding real type is long double.</li>
+            <li>Otherwise, if the corresponding real type of either operand is double, the other operand is converted,
+                without change of type domain, to a type whose corresponding real type is double.</li>
+            <li>Otherwise, if the corresponding real type of either operand is float, the other operand is converted,
+                without change of type domain, to a type whose corresponding real type is float.</li>
+            <li>
+                <p>Otherwise, the integer promotions are performed on both operands. Then the following rules are
+                    applied to the promoted operands:</p>
+                <ul>
+                    <li>If both operands have the same type, then no further conversion is needed.</li>
+                    <li>Otherwise, if both operands have signed integer types or both have unsigned integer types, the
+                        operand with the type of lesser integer conversion rank is converted to the type of the operand
+                        with greater rank.</li>
+                    <li>Otherwise, if the operand that has unsigned integer type has rank greater or equal to the rank
+                        of the type of the other operand, then the operand with signed integer type is converted to the
+                        type of the operand with unsigned integer type.</li>
+                    <li>Otherwise, if the type of the operand with signed integer type can represent all of the values
+                        of the type of the operand with unsigned integer type, then the operand with unsigned integer
+                        type is converted to the type of the operand with signed integer type.</li>
+                    <li>Otherwise, both operands are converted to the unsigned integer type corresponding to the type of
+                        the operand with signed integer type.</li>
+                </ul>
+            </li>
+        </ul>
+        <p>Notable here is that the usual arithmetic conversions apply to both floating point and integer variables. In
+            case of integers, we can also note that the integer promotions are invoked from within the usual arithmetic
+            conversions. And after that, when both operands have at least the rank of int, the operators are balanced to
+            the same type, with the same signedness.</p>
+        <p>This is the reason why a + b in example 2 gives a strange result. Both operands are integers and they are at
+            least of rank int, so the integer promotions do not apply. The operands are not of the same type - a is
+            unsigned int and b is signed int. Therefore the operator b is temporarily converted to type unsigned int.
+            During this conversion it loses the sign information and ends up as a large value.</p>
+        <p>The reason why changing type to short in example 3 fixes the problem, is because short is a small integer
+            type. Meaning that both operands are integer promoted to type int which is signed. After integer promotion,
+            both operands have the same type (int), no further conversion is needed. And then the operation can be
+            carried out on a signed type as expected.</p>
+        <h2
+            id="implicit-type-promotion-rules-my-explanation-for-examples-in-so-question-about-implicit-type-promotion-rules">
+            Implicit type promotion rules - My explanation for examples in SO question about Implicit type promotion
+            rules</h2>
+        <ul>
+            <li>Why does this give a strange, large integer number and not 255?</li>
+        </ul>
+        <pre><code class="lang-C++"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> x = <span class="hljs-number">0</span>;
+        <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">char</span> y = <span class="hljs-number">1</span>;
+        <span class="hljs-built_in">printf</span>(<span class="hljs-string">"%u\n"</span>, x - y);
+        </code></pre>
+        <p>Ans:</p>
+        <p>Based on the integer promotion rules both x and y are small integer types, they are type casted implicitly to
+            int before <code>-</code> operation. But as the <code>x - y</code> expression is a temporary result in
+            printf() and is not assigned to another typed variable, the evaluted result of the expression still stays as
+            int. And thus
+            <code>int 0 - int 1 = int 0xFFFFFFFF</code> and thats why it prints 0xFFFFFFFF.</p>
+        <ul>
+            <li>Why does this give &quot;-1 is larger than 0&quot;?</li>
+        </ul>
+        <pre><code class="lang-C++"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> a = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">signed</span> <span class="hljs-keyword">int</span> b = <span class="hljs-number">-2</span>;
+        <span class="hljs-keyword">if</span>(a + b &gt; <span class="hljs-number">0</span>)
+            <span class="hljs-built_in">puts</span>(<span class="hljs-string">"-1 is larger than 0"</span>);
+        </code></pre>
+        <p>Ans:</p>
+        <p><strong>As both a and b are having types are having at least the rank of <code>int</code>, so the integer
+                promotions do not apply.</strong> Based on the usual arithmetic conversions, b is typecasted to unsigned
+            int. Thus the expression is evaluted as and to unsigned int. In the comparisson operation the value 0 is of
+            type int, so 0 is also converted to the type unsigned int. Thus, causing a greater value (1 + 0xFFFFFFFE =
+            0xFFFFFFFF) at the LHS of &gt; operator.</p>
+        <ul>
+            <li>Why does changing the type in the above example to short fix the problem?</li>
+        </ul>
+        <pre><code class="lang-C++"><span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">short</span> a = <span class="hljs-number">1</span>;
+        <span class="hljs-keyword">signed</span> <span class="hljs-keyword">short</span> b = <span class="hljs-number">-2</span>;
+        <span class="hljs-keyword">if</span>(a + b &gt; <span class="hljs-number">0</span>)
+            <span class="hljs-built_in">puts</span>(<span class="hljs-string">"-1 is larger than 0"</span>); <span class="hljs-comment">// will not print</span>
+        </code></pre>
+        <p>Ans:</p>
+        <p><strong>As both a and b are having types with rank less than rank of <code>int</code> the integer promotions
+                do apply.</strong>
+            Both a and b are converted to int before operation. Thus the expression is evaluted as and to int. Causing a
+            lesser value (1 + -2 = -1) at the LHS of &gt; operator.</p>
+        <h2 id="implicit-type-promotion-rules-and-the-usual-arithmetic-conversions-examples">Implicit type promotion
+            rules and The usual arithmetic conversions - Examples</h2>
+        <p><a href="https://stackoverflow.com/a/38854764/6792356">refer</a></p>
+        <ol>
+            <li>If both operands have the same type, then no further conversion is needed.</li>
+        </ol>
+        <p>Example: </p>
+        <pre><code><span class="hljs-keyword">int</span> a;
+        <span class="hljs-keyword">int</span> b;
+        
+        <span class="hljs-keyword">no</span> convertion
+        </code></pre>
+        <ol>
+            <li>Otherwise, if both operands have signed integer types or both have unsigned integer types, the operand
+                with the type of lesser integer conversion rank is converted to the type of the operand with greater
+                rank.</li>
+        </ol>
+        <p>Example:</p>
+        <pre><code><span class="hljs-built_in">long</span> a;
+        <span class="hljs-built_in">long</span> <span class="hljs-built_in">long</span> b;
+        
+        a <span class="hljs-keyword">is</span> converted <span class="hljs-keyword">to</span> <span class="hljs-built_in">long</span> <span class="hljs-built_in">long</span>
+        </code></pre>
+        <ol>
+            <li>Otherwise, if the operand that has unsigned integer type has rank greater or equal to the rank of the
+                type of the other operand, then the operand with signed integer type is converted to the type of the
+                operand with unsigned integer type.</li>
+        </ol>
+        <p>Example:</p>
+        <pre><code>unsigned <span class="hljs-built_in">int</span> a;
+        <span class="hljs-built_in">int</span> b;
+        
+        b will be converted <span class="hljs-keyword">to</span> unsigned <span class="hljs-built_in">int</span>. <span class="hljs-type">Same</span> example <span class="hljs-keyword">as</span> example <span class="hljs-number">2</span> <span class="hljs-keyword">of</span> just above topic
+        </code></pre>
+        <ol>
+            <li>Otherwise, if the type of the operand with signed integer type can represent all of the values of the
+                type of the operand with unsigned integer type, then the operand with unsigned integer type is converted
+                to the type of the operand with signed integer type.</li>
+        </ol>
+        <p>Example:</p>
+        <pre><code>unsigned int <span class="hljs-keyword">a</span>;     <span class="hljs-comment"> // range: 0 to 4294967295</span>
+        <span class="hljs-keyword">long</span> b;             <span class="hljs-comment"> // range: -9223372036854775808 to 9223372036854775807</span>
+        
+        <span class="hljs-keyword">a</span> will be converted <span class="hljs-built_in">to</span> <span class="hljs-keyword">long</span>, <span class="hljs-keyword">as</span> <span class="hljs-keyword">long</span> can represent all <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> values <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> type <span class="hljs-keyword">of</span> <span class="hljs-keyword">the</span> operand <span class="hljs-keyword">with</span> unsigned <span class="hljs-keyword">integer</span> type, <span class="hljs-keyword">if</span> int is <span class="hljs-number">32</span> bits <span class="hljs-keyword">and</span> <span class="hljs-keyword">long</span> is <span class="hljs-number">64</span> bits.
+        </code></pre>
+        <ol>
+            <li>Otherwise, both operands are converted to the unsigned integer type corresponding to the type of the
+                operand with signed integer type.</li>
+        </ol>
+        <p>Example:</p>
+        <pre><code>typically <span class="hljs-keyword">long</span> is <span class="hljs-number">64</span>-bit, <span class="hljs-keyword">and</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> is <span class="hljs-number">64</span>-bit.
+        
+        unsigned <span class="hljs-keyword">long</span> c;    <span class="hljs-comment"> // range: 0 to 18446744073709551615</span>
+        <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> d;        <span class="hljs-comment"> // range: -9223372036854775808 to 9223372036854775807</span>
+        
+        Both c <span class="hljs-keyword">and</span> d are converted <span class="hljs-built_in">to</span> unsigned <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">as</span> all values <span class="hljs-keyword">of</span> unsigned <span class="hljs-keyword">long</span> type cannot be represented <span class="hljs-keyword">using</span> <span class="hljs-keyword">long</span> <span class="hljs-keyword">long</span>, because both <span class="hljs-keyword">of</span> them are <span class="hljs-number">64</span> bits <span class="hljs-keyword">for</span> <span class="hljs-keyword">a</span> <span class="hljs-keyword">system</span>.
+        </code></pre>
+        <h2 id="how-is-typecasting-done-bit-level">How is typecasting done bit level</h2>
+        <p><a href="https://stackoverflow.com/questions/38854596/integer-conversion-rank-and-promotion">refer</a></p>
+        <p>Regarding what happens during a promotion / conversion on the bit level, let&#39;s first assume that the
+            lower rank type is smaller than the higher rank type, and that signed types use 2&#39;s complement
+            representation.</p>
+        <p>For a conversion from a 32 bit int to a 64 bit long, if the value is positive, 4 bytes containing all 0 bits
+            are added on the left. If the value is negative, 4 bytes containing all 1 bits are added on the left. For
+            example, the representation of value 5 changes from 0x00000005 to 0x0000000000000005. For the value -5, the
+            representation changes from 0xfffffffb to 0xfffffffffffffffb.</p>
+        <h2 id="example-for-integer-promotions-and-usual-arithmetic-conversions">Example for Integer Promotions and
+            Usual Arithmetic Conversions</h2>
+        <pre><code class="lang-C++"><span class="hljs-comment">#include &lt;stdio.h&gt; </span>
+        <span class="hljs-comment">#include &lt;stdint.h&gt;</span>
+        
+        <span class="hljs-comment">#define BMP280_DATA_UPDATE_FREQ (1000)</span>
+        <span class="hljs-comment">#define BMP280_DATA_UPDATE_FREQ__U (1000U)</span>
+        
+        <span class="hljs-built_in">int</span> main()  { 
+        
+            uint32_t prev_val = <span class="hljs-number">0xFFFFFFFF</span>;
+            uint32_t cur_val = <span class="hljs-number">1000</span>;
+        
+            /* <span class="hljs-type">If</span> an <span class="hljs-built_in">int</span> can represent all values <span class="hljs-keyword">of</span> the original <span class="hljs-keyword">type</span>
+             (<span class="hljs-keyword">as</span> restricted by the width, <span class="hljs-keyword">for</span> a bit-field), 
+             the value <span class="hljs-keyword">is</span> converted to an <span class="hljs-built_in">int</span>; otherwise, 
+             it <span class="hljs-keyword">is</span> converted to an unsigned <span class="hljs-built_in">int</span>. 
+             <span class="hljs-type">These</span> are called the integer promotions. */
+        
+            /* <span class="hljs-type">Here</span> the below expression <span class="hljs-keyword">is</span> evaluated <span class="hljs-keyword">as</span> unisigned <span class="hljs-built_in">int</span> (it <span class="hljs-built_in">int</span> <span class="hljs-keyword">is</span> <span class="hljs-number">32</span> bits)
+            itself <span class="hljs-keyword">as</span> all values <span class="hljs-keyword">of</span> uint32_t cannot be represented <span class="hljs-keyword">using</span> <span class="hljs-built_in">int</span>. */
+            uint32_t ress = cur_val - prev_val;
+            printf(<span class="hljs-string">"%u\n"</span>, ress);
+            printf(<span class="hljs-string">"%u\n"</span>, cur_val - prev_val);
+            printf(<span class="hljs-string">"%u\n"</span>, sizeof(unsigned <span class="hljs-built_in">int</span>) == sizeof(uint32_t));
+        
+            /* <span class="hljs-type">If</span> an <span class="hljs-built_in">int</span> can represent all values <span class="hljs-keyword">of</span> the original <span class="hljs-keyword">type</span>
+            (<span class="hljs-keyword">as</span> restricted by the width, <span class="hljs-keyword">for</span> a bit-field), 
+            the value <span class="hljs-keyword">is</span> converted to an <span class="hljs-built_in">int</span>; otherwise, 
+            it <span class="hljs-keyword">is</span> converted to an unsigned <span class="hljs-built_in">int</span>. 
+            <span class="hljs-type">These</span> are called the integer promotions. 
+        
+            <span class="hljs-type">The</span> unsigned part here only means that <span class="hljs-keyword">if</span> we have <span class="hljs-keyword">for</span> example an
+            unsigned short operand, <span class="hljs-keyword">and</span> <span class="hljs-built_in">int</span> happens to have the same size 
+            <span class="hljs-keyword">as</span> short on the given system, then the unsigned short operand 
+            <span class="hljs-keyword">is</span> converted to unsigned <span class="hljs-built_in">int</span> */
+        
+            /* <span class="hljs-type">Thus</span> the (cur_val - prev_val) evaluates to an unsigned <span class="hljs-built_in">int</span> (<span class="hljs-keyword">as</span> <span class="hljs-built_in">uint32</span> 
+            <span class="hljs-keyword">and</span> <span class="hljs-built_in">int</span> are <span class="hljs-keyword">of</span> same size, refer above para.) <span class="hljs-keyword">and</span> the '<span class="hljs-keyword">if</span>' becomes <span class="hljs-literal">true</span>, even <span class="hljs-keyword">if</span> 
+            <span class="hljs-type">BMP280_DATA_UPDATE_FREQ</span> doesnt have 'U' at the <span class="hljs-keyword">end</span>. <span class="hljs-type">BMP280_DATA_UPDATE_FREQ</span> will
+            be <span class="hljs-keyword">cast</span> to unsigned <span class="hljs-built_in">int</span> based on usual arithemetic conversions. */
+            <span class="hljs-keyword">if</span>((cur_val - prev_val) &gt; <span class="hljs-type">BMP280_DATA_UPDATE_FREQ</span>)
+                printf(<span class="hljs-string">"Works with BMP280_DATA_UPDATE_FREQ\n"</span>);
+        
+            uint16_t prev_val1 = <span class="hljs-number">0xFFFF</span>;
+            uint16_t cur_val1 = <span class="hljs-number">1000</span>;
+        
+            <span class="hljs-built_in">int</span> inter_res = cur_val1 - prev_val1;
+            printf(<span class="hljs-string">"%X %d\n"</span>, inter_res, inter_res);
+            /* inter_res = <span class="hljs-type">FFFF03E9</span>, this value <span class="hljs-keyword">is</span> -<span class="hljs-number">64535</span> (obtained by 
+            taking <span class="hljs-number">2</span>s compliment <span class="hljs-keyword">of</span> <span class="hljs-type">FFFF03E9</span> <span class="hljs-keyword">and</span> adding sign) */
+        
+            /* -<span class="hljs-number">64535</span> cannot be represeted <span class="hljs-keyword">in</span> uint16_t its reduced by modulo 
+            the number that <span class="hljs-keyword">is</span> one greater than the largest value that can 
+            be represented by the resulting <span class="hljs-keyword">type</span>, ie <span class="hljs-type">UINT16_T_MAX</span> + <span class="hljs-number">1</span>
+            ==&gt;  -<span class="hljs-number">64535</span> <span class="hljs-keyword">mod</span> (<span class="hljs-number">65535</span> + <span class="hljs-number">1</span>) = <span class="hljs-number">1001</span> */
+            uint16_t ress1 = inter_res;
+            uint16_t ress2 = cur_val1 - prev_val1;
+            printf(<span class="hljs-string">"%u %u\n"</span>, ress1, ress2);
+        
+            /* <span class="hljs-type">Here</span> the (cur_val - prev_val) evaluates to an <span class="hljs-built_in">int</span> (integer promotion) 
+            <span class="hljs-keyword">and</span> the '<span class="hljs-keyword">if</span>' becomes <span class="hljs-literal">false</span>, <span class="hljs-keyword">as</span> <span class="hljs-type">BMP280_DATA_UPDATE_FREQ</span> <span class="hljs-keyword">is</span> also <span class="hljs-built_in">int</span> (refer next line), 
+            no additional casting <span class="hljs-keyword">is</span> done. 
+        
+            (<span class="hljs-type">When</span> <span class="hljs-keyword">using</span> a decimal 
+            constant <span class="hljs-keyword">without</span> <span class="hljs-built_in">any</span> suffixes the <span class="hljs-keyword">type</span> <span class="hljs-keyword">of</span> the decimal constant 
+            <span class="hljs-keyword">is</span> the first that can be represented, <span class="hljs-keyword">in</span> order 
+            (the current C standard, <span class="hljs-number">6</span>.<span class="hljs-number">4</span>.<span class="hljs-number">4</span> <span class="hljs-type">Constants</span> p5):
+            <span class="hljs-built_in">int</span>
+            long <span class="hljs-built_in">int</span>
+            long long <span class="hljs-built_in">int</span>) 
+            */
+            <span class="hljs-keyword">if</span>((cur_val1 - prev_val1) &gt; <span class="hljs-type">BMP280_DATA_UPDATE_FREQ</span>)
+                printf(<span class="hljs-string">"Works\n"</span>);
+        
+            /* <span class="hljs-type">Here</span> the (cur_val - prev_val) evaluates to an <span class="hljs-built_in">int</span> (integer promotion) 
+            <span class="hljs-keyword">and</span> the '<span class="hljs-keyword">if</span>' becomes <span class="hljs-literal">true</span>, becuase <span class="hljs-keyword">as</span> the <span class="hljs-type">BMP280_DATA_UPDATE_FREQ__U</span> <span class="hljs-keyword">is</span> unsigned
+            (cur_val - prev_val) also be casted to unisgned <span class="hljs-built_in">int</span>. based on usual arithemetic conversions. */
+            <span class="hljs-keyword">if</span>((cur_val1 - prev_val1) &gt; <span class="hljs-type">BMP280_DATA_UPDATE_FREQ__U</span>)
+                printf(<span class="hljs-string">"Works with BMP280_DATA_UPDATE_FREQ__U\n"</span>);
+        
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        </code></pre>
+        <p>Output:</p>
+        <pre><code><span class="hljs-number">1001</span>
+        <span class="hljs-number">1001</span>
+        <span class="hljs-number">1</span>
+        Works with BMP280_DATA_UPDATE_FREQ
+        FFFF03E9 <span class="hljs-number">-64535</span>
+        <span class="hljs-number">1001</span> <span class="hljs-number">1001</span>
+        Works with BMP280_DATA_UPDATE_FREQ__U
+        </code></pre>
+        <h2 id="comparisson-between-float-and-double">Comparisson between float and double</h2>
+        <pre><code class="lang-C++"><span class="hljs-keyword">float</span> f = <span class="hljs-number">0.7</span>;
+        <span class="hljs-keyword">if</span>( f == <span class="hljs-number">0.7</span> )
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"equal"</span>);
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"not equal"</span>);
+        </code></pre>
+        <p>Why is the output not equal ?</p>
+        <hr>
+        <p><a
+                href="https://stackoverflow.com/questions/1839422/strange-output-in-comparison-of-float-with-float-literal/1839468#1839468">src</a>
+        </p>
+        <p>This happens because in your statement</p>
+        <p><code>if(f == 0.7)</code></p>
+        <p>the 0.7 is treated as a double.</p>
+        <p><strong>you should never test for exact equality of floating-point values.</strong></p>
+        <p>More elaborate explanation:</p>
+        <p>In the line <code>float f = 0.7;</code> the double value 0.7 is converted to float first. Then in
+            <code>if(f == 0.7)</code> f is converted to double as RHS 0.7 is also double, based on <strong>usual
+                arithemetic conversion</strong> rules (refer above).</p>
+        <p>Note that 0.7 is not representable exactly either as a float (or as a double). If it was represented exactly,
+            then there would be no loss of information when converting to float and then back to double, and you
+            wouldn&#39;t have this problem.</p>
+        <p><strong>All non-integer numbers that can be represented exactly have 5 as their last decimal digit.
+                Unfortunately, the converse is not true: some numbers have 5 as their last decimal digit and cannot be
+                represented exactly.</strong></p>
+        <h2 id="why-comparing-double-and-float-leads-to-unexpected-result-">Why comparing double and float leads to
+            unexpected result?</h2>
+        <p>The important factors under consideration with float or double numbers are:
+            Precision &amp; Rounding</p>
+        <h4 id="precision-">Precision:</h4>
+        <p>The precision of a floating point number is how many digits it can represent without losing any information
+            it contains.</p>
+        <p>Consider the fraction 1/3. The decimal representation of this number is 0.33333333333333… with 3′s going out
+            to infinity. An infinite length number would require infinite memory to be depicted with exact precision,
+            but float or double data types typically only have 4 or 8 bytes. Thus Floating point &amp; double numbers
+            can only store a certain number of digits, and the rest are bound to get lost. Thus, there is no definite
+            accurate way of representing float or double numbers with numbers that require more precision than the
+            variables can hold.</p>
+        <h4 id="rounding-">Rounding:</h4>
+        <p>There is a non-obvious differences between binary and decimal (base 10) numbers.
+            Consider the fraction 1/10. In decimal, this can be easily represented as 0.1, and 0.1 can be thought of as
+            an easily representable number. However, in binary, 0.1 is represented by the infinite sequence:
+            0.00011001100110011…</p>
+        <p>An example:</p>
+        <pre><code class="lang-C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iomanip&gt;</span></span>
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+        </span>{
+            <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>;
+            <span class="hljs-built_in">cout</span> &lt;&lt; setprecision(<span class="hljs-number">17</span>);
+            <span class="hljs-keyword">double</span> dValue = <span class="hljs-number">0.1</span>;
+            <span class="hljs-built_in">cout</span> &lt;&lt; dValue &lt;&lt; <span class="hljs-built_in">endl</span>;
+        }
+        </code></pre>
+        <p>This output is:</p>
+        <p><code>0.10000000000000001</code></p>
+        <p>And not</p>
+        <p><code>0.1.</code></p>
+        <p>This is because the double had to truncate the approximation due to it’s limited memory, which results in a
+            number that is not exactly 0.1. Such an scenario is called a Rounding error.</p>
+        <p>Whenever comparing two close float and double numbers such rounding errors kick in and eventually the
+            comparison yields incorrect results and this is the reason you should never compare floating point numbers
+            or double using ==.</p>
+        <p>The best you can do is to take their difference and check if it is less than an epsilon.</p>
+        <p><code>abs(x - y) &lt; epsilon</code></p>
+        <h3 id="example-why-comparing-double-and-float-leads-to-unexpected-result-">Example: Why comparing double and
+            float leads to unexpected result?</h3>
+        <pre><code class="lang-C++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span> </span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> 
+        </span>{ 
+        <span class="hljs-keyword">float</span> f = <span class="hljs-number">0.5</span>;
+        <span class="hljs-keyword">double</span> f1 = f;
+        
+        <span class="hljs-keyword">if</span>( f == <span class="hljs-number">0.5</span> ) <span class="hljs-comment">// 0.5 is double</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"equal\n"</span>);
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"not equal\n"</span>);
+        
+        <span class="hljs-keyword">if</span>( f1 == <span class="hljs-number">0.5</span> ) <span class="hljs-comment">// 0.5 is double, wont work with numbers that doesnt end with 5 </span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"equal\n"</span>);
+        <span class="hljs-keyword">else</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"not equal\n"</span>);
+        }
+        </code></pre>
+        <h2 id="thread-local-data-in-c">Thread local data in C</h2>
+        <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Thread-Local.html">refer1</a></p>
+        <p><a href="https://stackoverflow.com/questions/19823143/thread-local-data-in-c">refer2</a></p>
+        <p><strong>Thread-local storage (TLS)</strong> is a mechanism by which variables are allocated such that there
+            is one instance of the variable per extant thread. The runtime model GCC uses to implement this originates
+            in the IA-64 processor-specific ABI, but has since been migrated to other processors as well. I</p>
+        <p>At the user level, the extension is visible with a new storage class keyword: __thread. For example:</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">__thread</span> <span class="hljs-keyword">int</span> i;
+        <span class="hljs-keyword">extern</span> <span class="hljs-keyword">__thread</span> <span class="hljs-keyword">struct</span> state s;
+        <span class="hljs-keyword">static</span> <span class="hljs-keyword">__thread</span> <span class="hljs-built_in">char</span> *p;
+        </code></pre>
+        <p>The <strong>thread specifier may be used alone, with the extern or static specifiers, but with no other
+                storage class specifier. When used with extern or static, </strong>thread must appear immediately after
+            the other storage class specifier.</p>
+        <p>In C++, if an initializer is present for a thread-local variable, it must be a constant-expression, as
+            defined in 5.19.2 of the ANSI/ISO C++ standard.</p>
+        <p>Example:</p>
+        <pre><code class="lang-c++"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdlib.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;string.h&gt;</span></span>
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;pthread.h&gt;</span></span>
+        
+        
+        <span class="hljs-function"><span class="hljs-keyword">void</span> *<span class="hljs-title">test</span> <span class="hljs-params">(<span class="hljs-keyword">void</span> *arg)</span> 
+        </span>{
+            <span class="hljs-keyword">static</span> __thread <span class="hljs-keyword">int</span> val = <span class="hljs-number">0</span>;
+            <span class="hljs-keyword">static</span> __thread <span class="hljs-keyword">char</span> *<span class="hljs-built_in">string</span> = <span class="hljs-literal">NULL</span>;
+        
+            <span class="hljs-built_in">string</span> = (<span class="hljs-keyword">char</span> *) <span class="hljs-built_in">calloc</span> (<span class="hljs-number">100</span>, <span class="hljs-keyword">sizeof</span> (<span class="hljs-keyword">char</span>));
+        
+            <span class="hljs-built_in">strcpy</span> (<span class="hljs-built_in">string</span>, <span class="hljs-string">"hello"</span>);
+        
+            val++;
+        
+            <span class="hljs-built_in">printf</span> (<span class="hljs-string">"val(%p):%d\n"</span>, &amp;val, val);
+            <span class="hljs-built_in">printf</span> (<span class="hljs-string">"string(%p):%s\n"</span>, &amp;<span class="hljs-built_in">string</span>, <span class="hljs-built_in">string</span>);
+        
+            pthread_exit (<span class="hljs-literal">NULL</span>);
+        }
+        
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span> <span class="hljs-params">(<span class="hljs-keyword">int</span> argc, <span class="hljs-keyword">char</span> *argv[])</span>
+        </span>{
+            <span class="hljs-keyword">int</span> num_threads = <span class="hljs-number">3</span>, i;
+            <span class="hljs-keyword">pthread_t</span> tid[num_threads];
+        
+            <span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>;i&lt;num_threads;i++) {
+                pthread_create (&amp;tid[i], <span class="hljs-literal">NULL</span>, &amp;test, <span class="hljs-literal">NULL</span>);
+            }
+        
+            <span class="hljs-keyword">for</span> (i=<span class="hljs-number">0</span>;i&lt;num_threads;i++) {
+                pthread_join (tid[i], <span class="hljs-literal">NULL</span>);
+            }
+        
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        </code></pre>
+        <p>Output with __thread after static storage class specifier:</p>
+        <p>val(0xf6d8cb38):1
+            string(0xf6d8cb3c):hello
+            val(0xf758db38):1
+            string(0xf758db3c):hello
+            val(0xf7d8eb38):1
+            string(0xf7d8eb3c):hello</p>
+        <p>Output without __thread:</p>
+        <p>val(0xf7cd234c):1
+            string(0xf7cd2348):hello
+            val(0xf6cd034c):1
+            string(0xf6cd0348):hello
+            val(0xf74d134c):1
+            string(0xf74d1348):hello</p>
+        <p>string var has different address because its allocated by calloc which produce different mem mapping for each
+            call.</p>
+
+    </div>
+</body>
+
+</html>

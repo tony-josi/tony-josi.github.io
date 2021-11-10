@@ -1,0 +1,1389 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" type="image/png" href="../fav.png" />
+
+    <meta charset="UTF-8">
+    <title>C NOTES</title>
+    <p style="padding-left: 60px; padding-right: 60px;"><a href="c_notes.html">Bootstrapped Page </a></p>
+
+</head>
+
+<body>
+
+    <div style="padding-left: 60px; padding-right: 60px;">
+        <h1 id="c-notes">C NOTES</h1>
+        <p><a href="https://github.com/TonyJosi97/tutorial/blob/master/c/readme_2.md"><strong>Readme Page -
+                    2</strong></a></p>
+        <hr>
+        <p><strong>Readme Page - 1</strong></p>
+        <hr>
+        <ul>
+            <li><a href="#c-notes">C NOTES</a>
+                <ul>
+                    <li><a href="#memory-segments-of-an-object-file">Memory Segments of an object file</a>
+                        <ul>
+                            <li><a href="#text">Text</a></li>
+                            <li><a href="#data">Data</a></li>
+                            <li><a href="#bss-block-start-by-symbol">BSS [block start by symbol]</a>
+                                <ul>
+                                    <li><a href="#more-on-bss">More on BSS</a></li>
+                                    <li><a href="#static-storage-duration">Static storage duration</a></li>
+                                </ul>
+                            </li>
+                            <li><a href="#heap">Heap</a></li>
+                            <li><a href="#stack">Stack</a></li>
+                            <li><a href="#where-is-rvalue-stored-in-c">where is rvalue stored in c?</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#why-are-global-variables-always-initialized-to-0-but-not-local-variables">Why are
+                            global variables always initialized to &#39;0&#39;, but not local variables?</a></li>
+                    <li><a href="#literal">Literal</a></li>
+                    <li><a href="#expressions">Expressions</a>
+                        <ul>
+                            <li><a href="#unevaluated-expressions">Unevaluated expressions</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#value-categories">Value categories</a>
+                        <ul>
+                            <li><a href="#is-a-pointer-an-lvalue-or-rvalue">Is a pointer an lvalue or rvalue?</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#what-is-the-reason-for-explicitly-declaring-l-or-ul-for-long-values">What is the
+                            reason for explicitly declaring L or UL for long values</a></li>
+                    <li><a href="#using-assembly-language-with-c">Using Assembly Language with C</a>
+                        <ul>
+                            <li><a href="#basic-asm--assembler-instructions-without-operands">Basic Asm — Assembler
+                                    Instructions Without Operands</a></li>
+                            <li><a href="#extended-asm---assembler-instructions-with-c-expression-operands">Extended Asm
+                                    - Assembler Instructions with C Expression Operands</a></li>
+                            <li><a href="#parameters">Parameters</a></li>
+                            <li><a href="#examples">Examples:</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#pointer---value-type-casting">Pointer - Value type casting</a>
+                        <ul>
+                            <li><a href="#example---uint32_t--float">Example - UINT32_T &amp; FLOAT</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#difference-between-const-char-p-char--const-p-and-const-char--const-p">Difference
+                            between const char *p, char * const p and const char * const p</a>
+                        <ul>
+                            <li><a
+                                    href="#const-keyword-applies-to-whatever-is-immediately-to-its-left-if-there-is-nothing-to-its-left-it-applies-to-whatever-is-immediately-to-its-right">const
+                                    keyword applies to whatever is immediately to its left. If there is nothing to its
+                                    left, it applies to whatever is immediately to its right.</a>
+                                <ul>
+                                    <li><a
+                                            href="#note-there-is-no-difference-between-const-char-p-and-char-const-p-as-both-are-pointer-to-a-const-char-and-position-of--asterik-is-also-same">NOTE:
+                                            There is no difference between const char *p and char const *p as both are
+                                            pointer to a const char and position of * (asterik) is also same.</a></li>
+                                    <li><a href="#note-char-const--const-ptr-is-same-as-const-char-const-ptr">NOTE: char
+                                            const * const ptr is same as const char *const ptr.</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#difference-between-int-var-and-int-var">Difference between int* var and int *var</a>
+                        <ul>
+                            <li><a
+                                    href="#prefer-int-i-because-the-parser-attaches-the-star-to-the-variable-and-not-the-type">prefer
+                                    int *i; because the parser attaches the star to the variable, and not the type.</a>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#size_t-type">size_t type</a></li>
+                    <li><a
+                            href="#to-convert-the-decimal-into-floating-point-we-have-3-elements-in-a-32-bit-floating-point-representation">To
+                            convert the decimal into floating point, we have 3 elements in a 32-bit floating point
+                            representation:</a>
+                        <ul>
+                            <li><a href="#i-sign-msb">i) Sign (MSB)</a></li>
+                            <li><a href="#ii-exponent-8-bits-after-msb">ii) Exponent (8 bits after MSB)</a></li>
+                            <li><a href="#iii-mantissa-remaining-23-bits">iii) Mantissa (Remaining 23 bits)</a></li>
+                        </ul>
+                    </li>
+                    <li><a
+                            href="#to-convert-the-decimal-into-floating-point-we-have-3-elements-in-a-32-bit-floating-point-representation-1">To
+                            convert the decimal into floating point, we have 3 elements in a 32-bit floating point
+                            representation:</a>
+                        <ul>
+                            <li><a href="#i-sign-msb-1">i) Sign (MSB)</a></li>
+                            <li><a href="#ii-exponent-8-bits-after-msb-1">ii) Exponent (8 bits after MSB)</a></li>
+                            <li><a href="#iii-mantissa-remaining-23-bits-1">iii) Mantissa (Remaining 23 bits)</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#__cplusplus-macro">__cplusplus macro</a></li>
+                    <li><a href="#extern-c-with-__cplusplus-macro">extern C with __cplusplus macro</a>
+                        <ul>
+                            <li><a href="#example">Example:</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#static-variables">static variables</a></li>
+                    <li><a
+                            href="#the-c-language-is-pass-by-value-without-exception-passing-a-pointer-as-a-parameter-does-not-mean-pass-by-reference">The
+                            C language is pass-by-value without exception. Passing a pointer as a parameter does not
+                            mean pass-by-reference.</a>
+                        <ul>
+                            <li><a href="#a-function-is-not-able-to-change-the-actual-parameters-value">A function is
+                                    not able to change the actual parameters value.</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#header-and-source-files-in-c">Header and source files in C</a>
+                        <ul>
+                            <li><a
+                                    href="#converting-c-source-code-files-to-an-executable-program-is-normally-done-in-two-steps-compiling-and-linking">Converting
+                                    C source code files to an executable program is normally done in two steps:
+                                    compiling and linking.</a>
+                                <ul>
+                                    <li><a href="#linkage">Linkage</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#location-of-local-pointer">Location of local pointer</a></li>
+                    <li><a
+                            href="#how-to-change-a-pointer-inside-a-function-addr-it-points-not-value--pointer-to-pointer">How
+                            to change a pointer inside a function (addr. it points, not value) / pointer to pointer</a>
+                        <ul>
+                            <li><a href="#use-pointer-to-pointer-double-pointer">use pointer to pointer (double
+                                    pointer)</a></li>
+                            <li><a href="#also">Also,</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#realloc">realloc()</a></li>
+                    <li><a href="#finding-element-size-of-arrays-in-functions">Finding element size of arrays in
+                            functions</a>
+                        <ul>
+                            <li><a href="#note">NOTE:</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#difference-between-char-str10--string-and-char-str--string">Difference between
+                            <code>char str[10] = &quot;string&quot;</code> and
+                            <code>char *str = &quot;string&quot;</code></a>
+                        <ul>
+                            <li><a href="#char-str10--string"><code>char str[10] = &quot;string&quot;</code></a></li>
+                            <li><a href="#char-str--string"><code>char *str = &quot;string&quot;</code></a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#what-is-the-difference-between-these-initializations">What is the difference between
+                            these initializations?</a></li>
+                    <li><a href="#alignment">Alignment</a></li>
+                    <li><a href="#difference-between-sizeof-and-alignof">Difference between sizeof and alignof</a></li>
+                    <li><a href="#lvalue-and-rvalue">lvalue and rvalue</a></li>
+                    <li><a href="#type-groups">Type groups</a></li>
+                    <li><a href="#compiling-multiple-c-files-and-linking-them">Compiling multiple C files and linking
+                            them</a></li>
+                    <li><a href="#undefined-behaviour-not-exactly-undefined-while-using-scanf">Undefined behaviour (not
+                            exactly undefined) while using scanf()</a></li>
+                    <li><a href="#difference-between-pointers-and-reference">Difference between pointers and
+                            reference</a></li>
+                    <li><a href="#turn-on-different-warnings-while-compiling-c-files">Turn on different warnings while
+                            compiling c files:</a></li>
+                    <li><a href="#why-is-arr--1-and-arr--1-different-though-arr-and-arr-point-to-the-same-location">Why
+                            is (arr + 1) and (&amp;arr + 1) different though arr and &amp;arr point to the same
+                            location?</a></li>
+                    <li><a href="#the-clockwisespiral-rule">The ``Clockwise/Spiral Rule&#39;&#39;</a>
+                        <ul>
+                            <li><a href="#by-david-anderson">By David Anderson</a>
+                                <ul>
+                                    <li><a href="#examples-1">Examples:</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </li>
+                    <li><a href="#can-enum-member-be-the-size-of-an-array-in-ansi-c">Can enum member be the size of an
+                            array in ANSI-C?</a></li>
+                    <li><a href="#c-const-actually-means-read-only">C <code>const</code> actually means read only.</a>
+                    </li>
+                    <li><a href="#can-a-const-variable-be-used-to-declare-the-size-of-an-array-in-c">Can a const
+                            variable be used to declare the size of an array in C?</a></li>
+                    <li><a href="#when-and-for-what-purposes-should-the-const-keyword-be-used-in-c-for-variables">When
+                            and for what purposes should the const keyword be used in C for variables?</a></li>
+                    <li><a href="#is-extern-needed-for-functions-in-header-file">Is <code>extern</code> needed for
+                            functions in header file</a></li>
+                    <li><a href="#difference-between-defining-a-variable-and-declaring-a-variable">Difference between
+                            defining a variable and declaring a variable</a></li>
+                    <li><a href="#best-way-to-declare-and-define-global-variables">Best way to declare and define global
+                            variables</a></li>
+                    <li><a href="#what-is-external-linkage-and-internal-linkage">What is external linkage and internal
+                            linkage?</a></li>
+                    <li><a href="#what-is-the-difference-between-scope-and-linkage">What is the difference between scope
+                            and linkage?</a></li>
+                    <li><a href="#how-can-i-access-structure-fields-by-name-at-run-time">How can I access structure
+                            fields by name at run time?</a></li>
+                    <li><a href="#bit-fields-in-c">Bit Fields in C</a>
+                        <ul>
+                            <li><a href="#facts-about-bit-fields-in-c">Facts about bit fields in C.</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#is-there-a-quick-way-to-determine-endianness-of-your-machine">Is there a quick way to
+                            determine endianness of your machine?</a></li>
+                    <li><a
+                            href="#the-behavior-of-code-which-contains-multiple-ambiguous-side-effects-has-always-been-undefined-loosely-speaking-by-multiple-ambiguous-side-effects-we-mean-any-combination-of-increment-decrement-and-assignment-operators---------etc-in-a-single-expression-which-causes-the-same-object-either-to-be-modified-twice-or-modified-and-then-inspected">The
+                            behavior of code which contains multiple, ambiguous side effects has always been undefined.
+                            (Loosely speaking, by ``multiple, ambiguous side effects&#39;&#39; we mean any combination
+                            of increment, decrement, and assignment operators (++, --, =, +=, -=, etc.) in a single
+                            expression which causes the same object either to be modified twice or modified and then
+                            inspected.</a></li>
+                    <li><a href="#short-circuiting-behavior-in-c">short-circuiting behavior in C</a>
+                        <ul>
+                            <li><a href="#note-1">Note:</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#sequence-point">sequence point</a></li>
+                    <li><a
+                            href="#how-can-i-avoid-these-undefined-evaluation-order-difficulties-if-i-dont-feel-like-learning-the-complicated-rules">How
+                            can I avoid these undefined evaluation order difficulties if I don&#39;t feel like learning
+                            the complicated rules?</a></li>
+                    <li><a href="#why-doesnt-this-code-int-a--1000-b--1000-long-int-c--a--b-work">Why doesn&#39;t this
+                            code <code>int a = 1000, b = 1000; long int c = a * b;</code> work?</a></li>
+                    <li><a href="#to-do">TO DO:</a></li>
+                </ul>
+            </li>
+        </ul>
+        <h2 id="memory-segments-of-an-object-file">Memory Segments of an object file</h2>
+        <p><img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/50/Program_memory_layout.pdf/page1-225px-Program_memory_layout.pdf.jpg"
+                alt="Memory Segments"></p>
+        <h3 id="text">Text</h3>
+        <p>The code segment, also known as a text segment or simply as text, is where a portion of an object file or the
+            corresponding section of the program&#39;s address space that contains executable instructions is stored and
+            is generally read-only and fixed size.</p>
+        <h3 id="data">Data</h3>
+        <p>In computing, a data segment (often denoted .data) is a portion of an object file or the corresponding
+            address space of a program that contains initialized static variables, that is, global variables and static
+            local variables. The size of this segment is determined by the size of the values in the program&#39;s
+            source code, and does not change at run time.</p>
+        <p>The data segment is read/write, since the values of variables can be altered at run time. This is in contrast
+            to the read-only data segment (rodata segment or .rodata), which contains static constants rather than
+            variables; it also contrasts to the code segment, also known as the text segment, which is read-only on many
+            architectures. Uninitialized data, both variables and constants, is instead in the BSS segment.</p>
+        <p>The .data segment contains any global or static variables which have a pre-defined value and can be modified.
+            That is any variables that are not defined within a function (and thus can be accessed from anywhere) or are
+            defined in a function but are defined as static so they retain their address across subsequent calls.
+            Examples, in C, include:</p>
+        <pre><code class="lang-C">   <span class="hljs-built_in">int</span> <span class="hljs-keyword">val</span> = <span class="hljs-number">3</span>;
+           <span class="hljs-built_in">char</span> <span class="hljs-built_in">string</span><span class="hljs-literal">[]</span> = <span class="hljs-string">"Hello World"</span>;
+        </code></pre>
+        <p><strong>The values for these variables are initially stored within the read-only memory (typically within
+                .text) and are copied into the .data segment during the start-up routine of the program.</strong> <a
+                href="https://stackoverflow.com/q/1665310/6792356">more</a></p>
+        <p>Note that in the above example, if these variables had been declared from within a function, they would
+            default to being stored in the local stack frame.</p>
+        <h3 id="bss-block-start-by-symbol-">BSS [block start by symbol]</h3>
+        <p>The BSS segment, also known as uninitialized data, is usually adjacent to the data segment. The BSS segment
+            contains all global variables and static variables that are initialized to zero or do not have explicit
+            initialization in source code. For instance, a variable defined as static int i; would be contained in the
+            BSS segment.</p>
+        <h5 id="more-on-bss">More on BSS</h5>
+        <p>In C code, any variable with static storage duration is defined to be initialized to 0 by the spec (Section
+            6.7.8 Initialization, paragraph 10):</p>
+        <p>If an object that has static storage duration is not initialized explicitly, then:</p>
+        <ul>
+            <li>if it has pointer type, it is initialized to a null pointer;</li>
+            <li>if it has arithmetic type, it is initialized to (positive or unsigned) zero;</li>
+            <li>if it is an aggregate, every member is initialized (recursively) according to these rules;</li>
+            <li>if it is a union, the first named member is initialized (recursively) according to these rules.</li>
+        </ul>
+        <p>Some program <strong>loaders</strong> will fill the whole section with zeroes to start with, and others will
+            fill it &#39;on demand&#39; as a perfomance improvement. So while you are technically correct that the .bss
+            section may not really contain all zeroes when the C code starts executing, it logically does. In any case,
+            assuming you have a standard compliant toolchain, you can think of it as being all zero.</p>
+        <p><strong>Any variables that are initialized to non-zero values will never end up in the .bss section; they are
+                handled in the .data or .rodata sections, depending on their particular characteristics.</strong></p>
+        <h5 id="static-storage-duration">Static storage duration</h5>
+        <p>&quot;Global variables&quot; are defined at file scope, outside any function. All variables that are defined
+            at file scope and all variables that are declared with the keyword static have something called static
+            storage duration. This means that they will be allocated in a separate part of the memory and exist
+            throughout the whole lifetime of the program.</p>
+        <p>It also means that they are guaranteed to be initialized to zero on any C compiler.</p>
+        <p><a href="https://en.wikipedia.org/wiki/.bss">bss</a></p>
+        <h3 id="heap">Heap</h3>
+        <p>The heap area commonly begins at the end of the .bss and .data segments and grows to larger addresses from
+            there. The heap area is managed by malloc, calloc, realloc, and free, which may use the brk and sbrk system
+            calls to adjust its size (note that the use of brk/sbrk and a single &quot;heap area&quot; is not required
+            to fulfill the contract of malloc/calloc/realloc/free; they may also be implemented using mmap/munmap to
+            reserve/unreserve potentially non-contiguous regions of virtual memory into the process&#39; virtual address
+            space). The heap area is shared by all threads, shared libraries, and dynamically loaded modules in a
+            process.</p>
+        <h3 id="stack">Stack</h3>
+        <p>The stack area contains the program stack, a LIFO structure, typically located in the higher parts of memory.
+            A &quot;stack pointer&quot; register tracks the top of the stack; it is adjusted each time a value is
+            &quot;pushed&quot; onto the stack. The set of values pushed for one function call is termed a &quot;stack
+            frame&quot;. A stack frame consists at minimum of a return address. Automatic variables are also allocated
+            on the stack.</p>
+        <p>The stack area traditionally adjoined the heap area and they grew towards each other; when the stack pointer
+            met the heap pointer, free memory was exhausted. With large address spaces and virtual memory techniques
+            they tend to be placed more freely, but they still typically grow in a converging direction. On the standard
+            PC x86 architecture the stack grows toward address zero, meaning that more recent items, deeper in the call
+            chain, are at numerically lower addresses and closer to the heap. On some other architectures it grows the
+            opposite direction.</p>
+        <h3 id="where-is-rvalue-stored-in-c-">where is rvalue stored in c?</h3>
+        <p><a href="https://stackoverflow.com/q/1665310/6792356">more</a></p>
+        <p>Where it stores it is actually totally up to the compiler. The standard does not dictate this behavior.
+            <strong>(typically within .text segment)</strong></p>
+        <ul>
+            <li>The result of the computation in the RHS (right-hand-side) is computed by the compiler in a step
+                that&#39;s called &quot;constant propagation&quot;.</li>
+            <li>Then, it is stored as an operand of the assembly instruction moving the value into a</li>
+        </ul>
+        <pre><code class="lang-C">  int a;
+          a = <span class="hljs-number">10</span> + <span class="hljs-number">5</span> - <span class="hljs-number">3</span>;
+        </code></pre>
+        <p>Here&#39;s a disassembly from MSVC:</p>
+        <p><code>0041338E  mov         dword ptr [a],0Ch</code></p>
+        <h2 id="why-are-global-variables-always-initialized-to-0-but-not-local-variables-">Why are global variables
+            always initialized to &#39;0&#39;, but not local variables?</h2>
+        <p>Because that&#39;s the way it is, according to the C Standard. <strong>The reason for that is
+                efficiency:</strong></p>
+        <p><code>static</code> - since their address is known and fixed. Initializing them to 0 does not incur a runtime
+            cost. Actually static variables are initialized at runtime too. The C runtime (crt) will initialize them
+            before calling main. Of course this happens only once but it still at runtime.</p>
+        <p><code>automatic</code> variables can have different addresses for different calls and would have to be
+            initialized at runtime each time the function is called, incurring a runtime cost that may not be needed. If
+            you do need that initialization, then request it.</p>
+        <blockquote>
+            <p>Also, you cannot initialize anything at compile time. The program needs to be started and loaded in
+                memory so that you can 0 out the contents (in this case the bss section). It is impossible to that at
+                compile time, only runtime. </p>
+        </blockquote>
+        <h2 id="literal">Literal</h2>
+        <p>In computer science, a literal is a notation for representing a fixed value in source code. Almost all
+            programming languages have notations for atomic values such as integers, floating-point numbers, and
+            strings, and usually for booleans and characters; some also have notations for elements of enumerated types
+            and compound values such as arrays, records, and objects. An anonymous function is a literal for the
+            function type.</p>
+        <p>In contrast to literals, variables or constants are symbols that can take on one of a class of fixed values,
+            the constant being constrained not to change. <strong>Literals are often used to initialize
+                variables</strong>, for example, in the following, 1 is an integer literal and the three letter string
+            in &quot;cat&quot; is a string literal:</p>
+        <pre><code><span class="hljs-attribute">int a</span> = 1;
+        <span class="hljs-attribute">string s</span> = <span class="hljs-string">"cat"</span>;
+        </code></pre>
+        <h2 id="expressions">Expressions</h2>
+        <p>An expression is a sequence of operators and their operands, that specifies a computation.</p>
+        <p>Expression evaluation may produce a result (e.g., evaluation of 2+2 produces the result 4), may generate
+            side-effects (e.g. evaluation of <code>printf(&quot;%d&quot;,4)</code> sends the character
+            <code>&#39;4&#39;</code> to the standard output stream), and may designate objects or functions.</p>
+        <h3 id="unevaluated-expressions">Unevaluated expressions</h3>
+        <p>The operands of the <code>sizeof</code> operator , the <code>_Alignof</code> operator, and the controlling
+            expression of a generic selection, (since C11) are expressions that are not evaluated (unless they are VLAs)
+            (since C99). Thus, <code>size_t n = sizeof(printf(&quot;%d&quot;, 4));</code> does not perform console
+            output.</p>
+        <h2 id="value-categories">Value categories</h2>
+        <p>The words &quot;<code>lvalue</code>&quot; and &quot;<code>rvalue</code>&quot; (that&#39;s how the C standard
+            spells them) have a long history. The terms come from &#39;l&#39; for &quot;left&quot; and &#39;r&#39; for
+            &quot;right&quot;, referring to the left and right sides of an assignment.</p>
+        <p>In some contexts, an <strong>expression</strong> may be either <strong>evaluated for its lvalue or evaluated
+                for its rvalue</strong>. Given those definitions of the terms, an &quot;rvalue&quot; is what you&#39;d
+            normally think of as the value of an expression; evaluating 2+2 yields 4. Evaluating an expression for its
+            lvalue meant determining what object it refers to. For example, given:</p>
+        <pre><code>int x;
+        x = <span class="hljs-number">2</span> + <span class="hljs-number">2</span>;
+        </code></pre>
+        <p>the right side of the assignment, 2 + 2 would be evaluated for its rvalue, yielding 4, and the left side
+            would be evaluated for its lvalue, which means determining the object to which it refers. (The rvalue of the
+            expression is not evaluated; the value previously stored in x, if any, is not used.)</p>
+        <p>The C standard defines them differently. In C, an lvalue is not a value; it&#39;s a kind of expression.
+            Specifically, quoting the 2011 ISO C standard, section 6.3.2.1:</p>
+        <blockquote>
+            <p>An lvalue is an expression (with an object type other than void) that potentially designates an object;
+                if an lvalue does not designate an object when it is evaluated, the behavior is undefined.</p>
+        </blockquote>
+        <p>(The word &quot;potentially&quot; was added to cover cases like <em>ptr, where ptr is a pointer object; if
+                ptr == NULL then </em>ptr doesn&#39;t currently designate an object, but it&#39;s still an lvalue. You
+            can always determine at compile time whether a given expression is an lvalue or not. Earlier editions of the
+            C standard has flawed definitions for lvalue.)</p>
+        <p><strong>So basically an <code>lvalue</code> in C is an expression that designates an object</strong>. You can
+            think of it as an expression that can appear on the left side of an assignment, though that&#39;s not
+            entirely accurate; for example, the name of a const object can&#39;t be on the LHS of an assignment, but
+            it&#39;s still an lvalue. (As you can see, nailing down a precise and consistent definition for lvalue can
+            be tricky.)</p>
+        <p><strong>Neither x++ nor ++x is an lvalue in C.</strong></p>
+        <p>The C standard doesn&#39;t use the term <code>rvalue</code> beyond mentioning it in a single footnote:</p>
+        <blockquote>
+            <p>What is sometimes called &quot;rvalue&quot; is in this International Standard described as the
+                &quot;value of an expression&quot;.</p>
+        </blockquote>
+        <p>So, as C defines the terms, an lvalue is a kind of expression (something that exists in C source code), but
+            an rvalue is the result of evaluating an expression (something that exists during program execution).</p>
+        <h3 id="is-a-pointer-an-lvalue-or-rvalue-">Is a pointer an lvalue or rvalue?</h3>
+        <p>A pointer is not the kind of thing that can be an rvalue or an lvalue. A pointer is a type. <strong>The only
+                thing that can be an rvalue or an lvalue is an expression.</strong></p>
+        <p>Consider this similar question: &quot;Is an integer an lvalue or an rvalue&quot;. Well, neither.
+            &quot;3&quot; is an integer, and an rvalue. &quot;3=i;&quot; is illegal. But &quot;i=3;&quot; is legal if
+            &#39;i&#39; is an integer. So &#39;i&#39; is an integer and an lvalue. &#39;3&#39; is an integer and a
+            rvalue.</p>
+        <h2 id="what-is-the-reason-for-explicitly-declaring-l-or-ul-for-long-values">What is the reason for explicitly
+            declaring L or UL for long values</h2>
+        <p><strong>Because it&#39;s not &quot;after&quot;; it&#39;s &quot;before&quot;.</strong></p>
+        <p>First you have the literal, then it is converted to whatever the type is of the variable you&#39;re trying to
+            squeeze it into.</p>
+        <p>When a suffix L or UL is not used, the compiler uses the first type that can contain the constant from a list
+            (see details in C99 standard, clause 6.4.4:5. For a decimal constant, the list is int, long int, long long
+            int).</p>
+        <p>As a consequence, most of the times, it is not necessary to use the suffix. It does not change the meaning of
+            the program. It does not change the meaning of your example initialization of x for most architectures,
+            although it would if you had chosen a number that could not be represented as a long long. See also
+            codebauer&#39;s answer for an example where the U part of the suffix is necessary.</p>
+        <h2 id="using-assembly-language-with-c">Using Assembly Language with C</h2>
+        <p>The asm keyword allows you to embed assembler instructions within C code. GCC provides two forms of inline
+            asm statements. A basic asm statement is one with no operands (see Basic Asm), while an extended asm
+            statement (see Extended Asm) includes one or more operands. The extended form is preferred for mixing C and
+            assembly language within a function, but to include assembly language at top level you must use basic asm.
+        </p>
+        <p><a href="https://gcc.gnu.org/onlinedocs/gcc/Using-Assembly-Language-with-C.html">more</a></p>
+        <h4 id="basic-asm-assembler-instructions-without-operands">Basic Asm — Assembler Instructions Without Operands
+        </h4>
+        <p>A basic asm statement has the following syntax:</p>
+        <pre><code><span class="hljs-keyword">asm</span> <span class="hljs-keyword">asm</span>-qualifiers ( AssemblerInstructions )
+        </code></pre>
+        <p>The asm keyword is a GNU extension. When writing code that can be compiled with -ansi and the various -std
+            options, use <code>__asm__</code> instead of asm.</p>
+        <ul>
+            <li>
+                <p><code>Qualifiers</code></p>
+                <ul>
+                    <li>
+                        <p><code>volatile</code> - The optional volatile qualifier has no effect. All basic asm blocks
+                            are implicitly volatile.</p>
+                    </li>
+                    <li>
+                        <p><code>inline</code> - If you use the inline qualifier, then for inlining purposes the size of
+                            the asm statement is taken as the smallest size possible</p>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+        <ul>
+            <li><code>AssemblerInstructions</code>:</li>
+        </ul>
+        <p>This is a literal string that specifies the assembler code. The string can contain any instructions
+            recognized by the assembler, including directives. GCC does not parse the assembler instructions themselves
+            and does not know what they mean or even whether they are valid assembler input.</p>
+        <p>You may place multiple assembler instructions together in a single asm string, separated by the characters
+            normally used in assembly code for the system. A combination that works in most places is a newline to break
+            the line, plus a tab character (written as ‘\n\t’). Some assemblers allow semicolons as a line separator.
+            However, note that some assembler dialects use semicolons to start a comment.</p>
+        <h4 id="extended-asm-assembler-instructions-with-c-expression-operands">Extended Asm - Assembler Instructions
+            with C Expression Operands</h4>
+        <p>With extended asm you can read and write C variables from assembler and perform jumps from assembler code to
+            C labels. Extended asm syntax uses colons (‘:’) to delimit the operand parameters after the assembler
+            template:</p>
+        <pre><code>asm asm-qualifiers ( AssemblerTemplate 
+                         : <span class="hljs-type">OutputOperands</span> 
+                         [ : <span class="hljs-type">InputOperands</span> 
+                         [ : <span class="hljs-type">Clobbers</span> ] ])
+        
+        asm asm-qualifiers ( AssemblerTemplate 
+                              : 
+                              : <span class="hljs-type">InputOperands</span>
+                              : <span class="hljs-type">Clobbers</span>
+                              : <span class="hljs-type">GotoLabels</span>)
+        where <span class="hljs-keyword">in</span> the last form, asm-qualifiers contains <span class="hljs-keyword">goto</span> (<span class="hljs-keyword">and</span> <span class="hljs-keyword">in</span> the first form, <span class="hljs-keyword">not</span>).
+        </code></pre>
+        <p>The asm keyword is a GNU extension.</p>
+        <h4 id="parameters">Parameters</h4>
+        <ul>
+            <li>
+                <p><code>AssemblerTemplate</code> - This is a literal string that is the template for the assembler
+                    code. It is a combination of fixed text and tokens that refer to the input, output, and goto
+                    parameters. See AssemblerTemplate.</p>
+            </li>
+            <li>
+                <p><code>OutputOperands</code> - A comma-separated list of the C variables modified by the instructions
+                    in the AssemblerTemplate. An empty list is permitted. See OutputOperands.</p>
+            </li>
+            <li>
+                <p><code>InputOperands</code> - A comma-separated list of C expressions read by the instructions in the
+                    AssemblerTemplate. An empty list is permitted. See InputOperands.</p>
+            </li>
+            <li>
+                <p><code>Clobbers</code> - A comma-separated list of registers or other values changed by the
+                    AssemblerTemplate, beyond those listed as outputs. An empty list is permitted. See Clobbers and
+                    Scratch Registers. In assembler programming, the term &#39;clobbered registers&#39; is used to
+                    denote any registers whose value may be overwritten during the course of executing an instruction or
+                    procedure.</p>
+            </li>
+            <li>
+                <p><code>GotoLabels</code> - When you are using the goto form of asm, this section contains the list of
+                    all C labels to which the code in the AssemblerTemplate may jump. See GotoLabels.</p>
+            </li>
+        </ul>
+        <p>asm statements may not perform jumps into other asm statements, only to the listed GotoLabels. GCC’s
+            optimizers do not know about other jumps; therefore they cannot take account of them when deciding how to
+            optimize.</p>
+        <p>The total number of input + output + goto operands is limited to 30.</p>
+        <h4 id="examples-">Examples:</h4>
+        <p>In below example, %0 is just the first input/output operand defined in your code. In practice, this could be
+            a stack variable, a heap variable or a register depending on how the assembly code generated by the
+            compiler.</p>
+        <p>For example:</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">int</span> a=<span class="hljs-number">10</span>, b;
+        <span class="hljs-keyword">asm</span> (<span class="hljs-string">"movl %1, %%eax; 
+              movl %%eax, %0;"</span>
+             :<span class="hljs-string">"=r"</span>(b)        <span class="hljs-comment">/* output */</span>
+             :<span class="hljs-string">"r"</span>(a)         <span class="hljs-comment">/* input */</span>
+             :<span class="hljs-string">"%eax"</span>         <span class="hljs-comment">/* clobbered register */</span>
+             );
+        </code></pre>
+        <p>%0 is b in this case and %1 is a.</p>
+        <p>Another Example:</p>
+        <pre><code class="lang-C">int current_task<span class="hljs-comment">;</span>
+        asm( <span class="hljs-string">"str %[output]"</span>
+           : [output] <span class="hljs-string">"=r"</span> (<span class="hljs-name">current_task</span>)
+            )<span class="hljs-comment">;</span>
+        </code></pre>
+        <p><a href="https://wiki.osdev.org/Inline_Assembly">more</a></p>
+        <h2 id="pointer-value-type-casting">Pointer - Value type casting</h2>
+        <h4 id="example-uint32_t-float">Example - UINT32_T &amp; FLOAT</h4>
+        <pre><code class="lang-C"><span class="hljs-keyword">uint32_t</span> FloatToUint(<span class="hljs-keyword">float</span> n) {
+           <span class="hljs-keyword">return</span> (<span class="hljs-keyword">uint32_t</span>)(*(<span class="hljs-keyword">uint32_t</span>*)&amp;n);
+        }
+        
+        <span class="hljs-function"><span class="hljs-keyword">float</span> <span class="hljs-title">UintToFloat</span><span class="hljs-params">(<span class="hljs-keyword">uint32_t</span> n)</span> </span>{
+           <span class="hljs-keyword">return</span> (<span class="hljs-keyword">float</span>)(*(<span class="hljs-keyword">float</span>*)&amp;n);
+        }
+        </code></pre>
+        <h2 id="difference-between-const-char-p-char-const-p-and-const-char-const-p">Difference between const char *p,
+            char * const p and const char * const p</h2>
+        <h3
+            id="const-keyword-applies-to-whatever-is-immediately-to-its-left-if-there-is-nothing-to-its-left-it-applies-to-whatever-is-immediately-to-its-right-">
+            const keyword applies to whatever is immediately to its left. If there is nothing to its left, it applies to
+            whatever is immediately to its right.</h3>
+        <p><code>const char *ptr</code> : This is a pointer to a constant character. You cannot change the value pointed
+            by ptr, but you can change the pointer itself. const char * is a (non-const) pointer to a const char.</p>
+        <h4
+            id="note-there-is-no-difference-between-const-char-p-and-char-const-p-as-both-are-pointer-to-a-const-char-and-position-of-asterik-is-also-same-">
+            NOTE: There is no difference between const char *p and char const *p as both are pointer to a const char and
+            position of * (asterik) is also same.</h4>
+        <p><code>char *const ptr</code> : This is a constant pointer to non-constant character. You cannot change the
+            pointer p, but can change the value pointed by ptr.</p>
+        <p><code>const char * const ptr</code> : This is a constant pointer to constant character. You can neither
+            change the value pointed by ptr nor the pointer ptr.</p>
+        <h4 id="note-char-const-const-ptr-is-same-as-const-char-const-ptr-">NOTE: char const * const ptr is same as
+            const char *const ptr.</h4>
+        <h2 id="difference-between-int-var-and-int-var">Difference between int* var and int *var</h2>
+        <h4 id="prefer-int-i-because-the-parser-attaches-the-star-to-the-variable-and-not-the-type-">prefer int *i;
+            because the parser attaches the star to the variable, and not the type.</h4>
+        <p>This only becomes meaningful when you try to define two variables on the line. Regardless of how you write
+            it:</p>
+        <pre><code class="lang-C">int* <span class="hljs-built_in">i</span>,<span class="hljs-built_in">j</span>;
+        int*<span class="hljs-built_in">i</span>,<span class="hljs-built_in">j</span>;
+        int *<span class="hljs-built_in">i</span>,<span class="hljs-built_in">j</span>;`
+        </code></pre>
+        <p>in each of those, i is a pointer to an int, while j is just an int. The last syntax makes that clearer</p>
+        <h2 id="size_t-type">size_t type</h2>
+        <p>According to the 1999 ISO C standard (C99), <code>size_t</code> is an unsigned integer type of at least 16
+            bit (see sections 7.17 and 7.18.3).</p>
+        <p>This type is used to represent the size of an object. Library functions that take or return sizes expect them
+            to be of type or have the return type of <code>size_t</code>. Further, the most frequently used
+            compiler-based operator sizeof should evaluate to a constant value that is compatible with
+            <code>size_t</code>.</p>
+        <p>It is guaranteed to be big enough to contain the size of the biggest object the host system can handle.
+            Basically the maximum permissible size is dependent on the compiler; if the compiler is 32 bit then it is
+            simply a typedef(i.e., alias) for unsigned int but if the compiler is 64 bit then it would be a typedef for
+            unsigned long long. The <code>size_t</code> data type is never negative.</p>
+        <h2
+            id="to-convert-the-decimal-into-floating-point-we-have-3-elements-in-a-32-bit-floating-point-representation-">
+            To convert the decimal into floating point, we have 3 elements in a 32-bit floating point representation:
+        </h2>
+        <h4 id="i-sign-msb-">i) Sign (MSB)</h4>
+        <h4 id="ii-exponent-8-bits-after-msb-">ii) Exponent (8 bits after MSB)</h4>
+        <h4 id="iii-mantissa-remaining-23-bits-">iii) Mantissa (Remaining 23 bits)</h4>
+        <p><code>Sign bit</code> is the first bit of the binary representation. &#39;1&#39; implies negative number and
+            &#39;0&#39; implies positive number.
+            Example: To convert -17 into 32-bit floating point representation Sign bit = 1</p>
+        <p><code>Exponent</code> is decided by the nearest smaller or equal to 2n number. For 17, 16 is the nearest 2n.
+            Hence the exponent of 2 will be 4 since 24 = 16. 127 is the unique number for 32 bit floating point
+            representation. It is known as bias. It is determined by 2k-1 -1 where &#39;k&#39; is the number of bits in
+            exponent field.
+            Thus bias = 127 for 32 bit. (28-1 -1 = 128-1 = 127)</p>
+        <p>Now, 127 + 4 = 131 i.e. 10000011 in binary representation.</p>
+        <p><code>Mantissa</code>: 17 in binary = 10001.
+            Move the binary point so that there is only one bit from the left. Adjust the exponent of 2 so that the
+            value does not change. This is normalizing the number. 1.0001 x 24. Now, consider the fractional part and
+            represented as 23 bits by adding zeros.</p>
+        <p>00010000000000000000000</p>
+        <p>Thus the floating point representation of -17 is 1 10000011 00010000000000000000000</p>
+        <h2
+            id="to-convert-the-decimal-into-floating-point-we-have-3-elements-in-a-32-bit-floating-point-representation-">
+            To convert the decimal into floating point, we have 3 elements in a 32-bit floating point representation:
+        </h2>
+        <h4 id="i-sign-msb-">i) Sign (MSB)</h4>
+        <h4 id="ii-exponent-8-bits-after-msb-">ii) Exponent (8 bits after MSB)</h4>
+        <h4 id="iii-mantissa-remaining-23-bits-">iii) Mantissa (Remaining 23 bits)</h4>
+        <p><code>Sign</code> bit is the first bit of the binary representation. &#39;1&#39; implies negative number and
+            &#39;0&#39; implies positive number.
+            Example: To convert -17 into 32-bit floating point representation Sign bit = 1</p>
+        <p><code>Exponent</code> is decided by the nearest smaller or equal to 2n number. For 17, 16 is the nearest 2n.
+            Hence the exponent of 2 will be 4 since 24 = 16. 127 is the unique number for 32 bit floating point
+            representation. It is known as bias. It is determined by 2k-1 -1 where &#39;k&#39; is the number of bits in
+            exponent field.
+            Thus bias = 127 for 32 bit. (28-1 -1 = 128-1 = 127)</p>
+        <p>Now, 127 + 4 = 131 i.e. 10000011 in binary representation.</p>
+        <p><code>Mantissa</code>: 17 in binary = 10001.
+            Move the binary point so that there is only one bit from the left. Adjust the exponent of 2 so that the
+            value does not change. This is normalizing the number. 1.0001 x 24. Now, consider the fractional part and
+            represented as 23 bits by adding zeros.</p>
+        <p>00010000000000000000000</p>
+        <p>Thus the floating point representation of -17 is 1 10000011 00010000000000000000000</p>
+        <h2 id="__cplusplus-macro">__cplusplus macro</h2>
+        <p>The __cplusplus preprocessor macro is defined if the compilation unit is compiled with a C++ compiler. If
+            defined, its value corresponds to the C++ standard that the compiler uses to compile a compilation unit.</p>
+        <h2 id="extern-c-with-__cplusplus-macro">extern C with __cplusplus macro</h2>
+        <p>extern &quot;C&quot; is meant to be recognized by a C++ compiler and to notify the compiler that the function
+            is (or to be) compiled in C style.</p>
+        <h4 id="example-">Example:</h4>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+        <span class="hljs-built_in">extern</span> <span class="hljs-string">"C"</span> {
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+        
+        \\ <span class="hljs-built_in">statements</span> to be compiled in C style
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">ifdef</span> __cplusplus</span>
+        }
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">endif</span></span>
+        </code></pre>
+        <h2 id="static-variables">static variables</h2>
+        <p>Static variables have a property of preserving their value even after they are out of their scope</p>
+        <p>If <strong><code>global static variable</code></strong> is declared in a header file and its included in
+            <code>multiple</code> source files, then, the variable will be treated
+            <strong><code>as an independant (seperate) variable in each source files.</code></strong></p>
+        <p>In the C programming language, <code>static</code> is used with <code>global variables</code> and
+            <code>functions</code> to set their scope to the containing file. <strong>In local variables, static is used
+                to store the variable in the statically allocated memory instead of the automatically allocated
+                memory.</strong> While the language does not dictate the implementation of either type of memory,
+            <strong>statically allocated memory is typically reserved in data segment of the program at compile
+                time</strong>, while the <code>automatically</code> allocated memory is normally
+            <code>implemented</code> as a <code>transient call stack.</code></p>
+        <p>Static global variables and functions are also possible in C/C++. The purpose of these is to limit scope of a
+            variable or function to a file.</p>
+        <p>Static variables should not be declared inside structure. The reason is C compiler requires the entire
+            structure elements to be placed together (i.e.) memory allocation for structure members should be
+            contiguous. It is possible to declare structure inside the function (stack segment) or allocate memory
+            dynamically(heap segment) or it can be even global (BSS or data segment). Whatever might be the case, all
+            structure members should reside in the same memory segment because the value for the structure element is
+            fetched by counting the offset of the element from the beginning address of the structure. Separating out
+            one member alone to data segment defeats the purpose of static variable and it is possible to have an entire
+            structure as static.</p>
+        <p>In C, functions are global by default. The “static” keyword before a function name makes it static. </p>
+        <p>Unlike global functions in C, access to static functions is restricted to the file where they are declared.
+            Therefore, when we want to restrict access to functions, we make them static. Another reason for making
+            functions static can be reuse of the same function name in other files.</p>
+        <h2
+            id="the-c-language-is-pass-by-value-without-exception-passing-a-pointer-as-a-parameter-does-not-mean-pass-by-reference-">
+            The C language is pass-by-value without exception. Passing a pointer as a parameter does not mean
+            pass-by-reference.</h2>
+        <h4 id="a-function-is-not-able-to-change-the-actual-parameters-value-">A function is not able to change the
+            actual parameters value.</h4>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">function2</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *param)</span> </span>{
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"param's address %d\n"</span>, param);
+            param = <span class="hljs-literal">NULL</span>;
+        }
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span> </span>{
+            <span class="hljs-keyword">int</span> variable = <span class="hljs-number">111</span>;
+            <span class="hljs-keyword">int</span> *ptr = &amp;variable;
+        
+            function2(ptr);
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"ptr's address %d\n"</span>, ptr);
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>;
+        }
+        </code></pre>
+        <p>The result will be that the two addresses are equal </p>
+        <p>Example result:</p>
+        <pre><code>param<span class="hljs-symbol">'s</span> address -<span class="hljs-number">1846583468</span>
+        ptr<span class="hljs-symbol">'s</span> address -<span class="hljs-number">1846583468</span>
+        </code></pre>
+        <h2 id="header-and-source-files-in-c">Header and source files in C</h2>
+        <h4
+            id="converting-c-source-code-files-to-an-executable-program-is-normally-done-in-two-steps-compiling-and-linking-">
+            Converting C source code files to an executable program is normally done in two steps: compiling and
+            linking.</h4>
+        <p><strong>First, the compiler converts the source code to object files (*.o)</strong>
+            <strong>Then, the linker takes these object files, together with statically-linked libraries and creates an
+                executable program.</strong></p>
+        <p>In the first step, the compiler takes a compilation unit, which is normally a preprocessed source file (so, a
+            source file with the contents of all the headers that it #includes) and converts that to an object file.</p>
+        <p>In each compilation unit, all the functions that are used must be declared, to let the compiler know that the
+            function exists and what its arguments are. In your example, the declaration of the function returnSeven is
+            in the header file header.h. When you compile main.c, you include the header with the declaration so that
+            the compiler knows that returnSeven exists when it compiles main.c.</p>
+        <p>When the linker does its job, it needs to find the definition of each function. Each function has to be
+            defined exactly once in one of the object files - if there are multiple object files that contain the
+            definition of the same function, the linker will stop with an error.</p>
+        <h3 id="linkage">Linkage</h3>
+        <p>There is <strong>external linkage</strong> and <strong>internal linkage</strong>.</p>
+        <p>By default, functions have <strong>external linkage</strong>, which means that the compiler makes these
+            functions visible to the linker. If you make a function <strong><em>static</em></strong>, it has
+            <strong>internal linkage</strong> - it is only visible inside the compilation unit in which it is defined
+            (the linker won&#39;t know that it exists). This can be useful for functions that do something internally in
+            a source file and that you want to hide from the rest of the program.</p>
+        <h2 id="location-of-local-pointer">Location of local pointer</h2>
+        <pre><code class="lang-C"><span class="hljs-keyword">const</span> char* <span class="hljs-function"><span class="hljs-keyword">func</span><span class="hljs-params">()</span></span>
+        {
+            char *<span class="hljs-built_in">ptr</span> = <span class="hljs-string">"OK"</span><span class="hljs-comment">;</span>
+            <span class="hljs-keyword">return</span> <span class="hljs-built_in">ptr</span><span class="hljs-comment">;</span>
+        }
+        </code></pre>
+        <p>If you are referring to the location where the string <code>OK</code> is stored, then its stored in the
+            <strong>code section</strong> of the memory and ptr is stored in the <strong>stack</strong>.</p>
+        <p>And the location of <code>OK</code> in code section is still accessible as its address is being returned by
+            <code>func()</code>.</p>
+        <p>Also, the code section is <strong>read only</strong>. That is the reason why other answers suggested to make
+            your function declaration as:</p>
+        <p><code>const char * func ()</code></p>
+        <h2 id="how-to-change-a-pointer-inside-a-function-addr-it-points-not-value-pointer-to-pointer">How to change a
+            pointer inside a function (addr. it points, not value) / pointer to pointer</h2>
+        <h3 id="use-pointer-to-pointer-double-pointer-">use pointer to pointer (double pointer)</h3>
+        <p>Use <code>\*\*</code> when you want to preserve (OR retain change in) the Memory-Allocation or Assignment
+            even outside of a function call. </p>
+        <pre><code class="lang-C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">allocate</span><span class="hljs-params">(<span class="hljs-keyword">int</span>** p)</span>
+        </span>{
+          *p = (<span class="hljs-keyword">int</span>*)<span class="hljs-built_in">malloc</span>(<span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">int</span>));
+        }
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>
+        </span>{
+          <span class="hljs-keyword">int</span>* p = <span class="hljs-literal">NULL</span>;
+          allocate(&amp;p);
+          *p = <span class="hljs-number">42</span>;
+          <span class="hljs-built_in">free</span>(p);
+        }
+        </code></pre>
+        <h3 id="also-">Also,</h3>
+        <p>If you want to have a list of characters (a word), you can use <code>char *word</code></p>
+        <p>If you want a list of words (a sentence), you can use <code>char **sentence</code></p>
+        <p>If you want a list of sentences (a monologue), you can use <code>char ***monologue</code></p>
+        <p>so on...</p>
+        <h2 id="realloc-">realloc()</h2>
+        <p><strong>Size of dynamically allocated memory can be changed by using realloc().</strong></p>
+        <p><code>void *realloc(void *ptr, size_t size);</code></p>
+        <p><code>realloc</code> deallocates the old object pointed to by ptr and returns a pointer to a new object that
+            has the size specified by size. The contents of the new object is identical to that of the old object prior
+            to deallocation, up to the lesser of the new and old sizes. Any bytes in the new object beyond the size of
+            the old object have indeterminate values.</p>
+        <p>The point to note is that <code>realloc()</code> should only be used for dynamically allocated memory.</p>
+        <h2 id="finding-element-size-of-arrays-in-functions">Finding element size of arrays in functions</h2>
+        <p><code>sizeof( a ) / sizeof( a[0] )</code></p>
+        <h4 id="note-">NOTE:</h4>
+        <p>Parameters declared like arrays are adjusted to pointers to the type of the array element. </p>
+        <pre><code class="lang-C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">( <span class="hljs-keyword">int</span> a[<span class="hljs-number">10</span>] )</span>
+        </span>{
+            <span class="hljs-keyword">size_t</span> n = <span class="hljs-keyword">sizeof</span>( a ) / <span class="hljs-keyword">sizeof</span>( a[<span class="hljs-number">0</span>] );
+            <span class="hljs-comment">//...</span>
+        }
+        </code></pre>
+        <p><strong>SAME AS</strong></p>
+        <pre><code class="lang-C"><span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">f</span><span class="hljs-params">( <span class="hljs-keyword">int</span> *a )</span></span>;
+        </code></pre>
+        <p>and within the function in expression</p>
+        <p><code>size_t n = sizeof( a ) / sizeof( a[0] );</code> parameter a is just a pointer. </p>
+        <p>Pointers do not keep an information about whether they point to a single object or the first object of some
+            array.</p>
+        <p>In this case you should declare the function with second parameter that specifies the number of elements in
+            the array. </p>
+        <h2 id="difference-between-char-str-10-string-and-char-str-string-">Difference between
+            <code>char str[10] = &quot;string&quot;</code> and <code>char *str = &quot;string&quot;</code></h2>
+        <h4 id="-char-str-10-string-"><code>char str[10] = &quot;string&quot;</code></h4>
+        <ul>
+            <li><code>str</code> is an array</li>
+            <li><code>sizeof(str)</code> is 10 bytes</li>
+            <li><code>str</code> and <code>&amp;str</code> are same // check &amp;str[]</li>
+            <li>&quot;string&quot; is stored in the stack section of the memory</li>
+            <li><code>str</code> = &quot;hello&quot; is not possible</li>
+            <li><code>str++</code> is invalid (possible inside another func.) // check</li>
+        </ul>
+        <h4 id="-char-str-string-"><code>char *str = &quot;string&quot;</code></h4>
+        <ul>
+            <li><code>str</code> is a pointer variable</li>
+            <li><code>sizeof(p)</code> = depends on the system, 4 bytes for 32 bits systems</li>
+            <li><code>str</code> and <code>&amp;str</code> are not same</li>
+            <li><code>str</code> is stored in stack but &quot;string&quot; is stored in the code section of memory</li>
+            <li><code>str</code> = &quot;another string&quot; possible</li>
+            <li><code>str++</code> is valid</li>
+        </ul>
+        <h2 id="what-is-the-difference-between-these-initializations-">What is the difference between these
+            initializations?</h2>
+        <pre><code class="lang-C">char a[] = <span class="hljs-string">"string literal"</span><span class="hljs-comment">;</span>
+        char *p  = <span class="hljs-string">"string literal"</span><span class="hljs-comment">;</span>
+        </code></pre>
+        <ul>
+            <li>As the initializer for an array of char, as in the declaration of char a[] , it specifies the initial
+                values of the characters in that array (and, if necessary, its size).</li>
+            <li>Anywhere else, it turns into an unnamed, static array of characters, and this
+                <strong><code>unnamed array may be stored in read-only memory,</code></strong> and which
+                <strong>therefore cannot necessarily be modified.
+                    <code>[gives UB (undefined behavior) if modified]</code></strong> In an expression context, the
+                array is converted at once to a pointer, so the second declaration initializes p to point to the unnamed
+                array&#39;s first element.</li>
+        </ul>
+        <h2 id="alignment">Alignment</h2>
+        <p>Every complete object type has a property called alignment requirement, which is an integer value of type
+            <code>size_t</code> representing the number of bytes between successive addresses at which objects of this
+            type can be allocated. The valid alignment values are non-negative integral powers of two.</p>
+        <p>The alignment requirement of a type can be queried with <code>_Alignof</code>. (since C11)</p>
+        <p>In order to satisfy alignment requirements of all members of a struct, padding may be inserted after some of
+            its members.</p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdalign.h&gt;</span></span>
+        
+        <span class="hljs-comment">// objects of struct S can be allocated at any address</span>
+        <span class="hljs-comment">// because both S.a and S.b can be allocated at any address</span>
+        <span class="hljs-keyword">struct</span> S {
+            <span class="hljs-keyword">char</span> a; <span class="hljs-comment">// size: 1, alignment: 1</span>
+            <span class="hljs-keyword">char</span> b; <span class="hljs-comment">// size: 1, alignment: 1</span>
+        }; <span class="hljs-comment">// size: 2, alignment: 1</span>
+        
+        <span class="hljs-comment">// objects of struct X must be allocated at 4-byte boundaries</span>
+        <span class="hljs-comment">// because X.n must be allocated at 4-byte boundaries</span>
+        <span class="hljs-comment">// because int's alignment requirement is (usually) 4</span>
+        <span class="hljs-keyword">struct</span> X {
+            <span class="hljs-keyword">int</span> n;  <span class="hljs-comment">// size: 4, alignment: 4</span>
+            <span class="hljs-keyword">char</span> c; <span class="hljs-comment">// size: 1, alignment: 1</span>
+            <span class="hljs-comment">// three bytes padding</span>
+        }; <span class="hljs-comment">// size: 8, alignment: 4</span>
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">(<span class="hljs-keyword">void</span>)</span>
+        </span>{
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"sizeof(struct S) = %zu\n"</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> S));
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"alignof(struct S) = %zu\n"</span>, <span class="hljs-keyword">alignof</span>(<span class="hljs-keyword">struct</span> S));
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"sizeof(struct X) = %zu\n"</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> X));
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"alignof(struct X) = %zu\n"</span>, <span class="hljs-keyword">alignof</span>(<span class="hljs-keyword">struct</span> X));
+        }
+        </code></pre>
+        <h2 id="difference-between-sizeof-and-alignof">Difference between sizeof and alignof</h2>
+        <p>REF: <a href="https://github.com/TonyJosi97/tutorial/blob/master/c/sizeof_alignof.c">sizeof_alignof.c</a></p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdalign.h&gt;</span></span>
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdint.h&gt;</span> </span>
+        
+        <span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> _GOOD_STRUCT {
+            <span class="hljs-keyword">uint64_t</span> eight_byte;
+            <span class="hljs-keyword">uint16_t</span> four_byte;
+            <span class="hljs-keyword">uint8_t</span> one_byte;
+        } GOOD_STRUCT;
+        
+        <span class="hljs-keyword">typedef</span> <span class="hljs-keyword">struct</span> _BAD_STRUCT {
+            <span class="hljs-keyword">uint8_t</span> one_byte;
+            <span class="hljs-keyword">uint32_t</span> eight_byte;
+            <span class="hljs-keyword">uint16_t</span> four_byte;
+            GOOD_STRUCT gd_struct;
+        } BAD_STRUCT;
+        
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> </span>{
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"GOOD: sizeof -&gt; %d   alignof -&gt; %d\n"</span>, <span class="hljs-keyword">sizeof</span>(GOOD_STRUCT), <span class="hljs-keyword">alignof</span>(GOOD_STRUCT));
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"BAD : sizeof -&gt; %d   alignof -&gt; %d"</span>, <span class="hljs-keyword">sizeof</span>(BAD_STRUCT), <span class="hljs-keyword">alignof</span>(BAD_STRUCT));
+        }
+        </code></pre>
+        <p>OP:</p>
+        <pre><code>GOOD: <span class="hljs-keyword">sizeof</span> -&gt; <span class="hljs-number">16</span>   <span class="hljs-keyword">alignof</span> -&gt; <span class="hljs-number">8</span>
+        BAD : <span class="hljs-keyword">sizeof</span> -&gt; <span class="hljs-number">32</span>   <span class="hljs-keyword">alignof</span> -&gt; <span class="hljs-number">8</span>
+        </code></pre>
+        <p>Here sizeof of BAD is 32 because as GOOD is included inside BAD the alignment which is higher in GOOD follows
+            in BAD as well.</p>
+        <p>an alignment of 4 means that data of this type should (or must, depends on the CPU) be stored starting at an
+            address that is a multiple of 4.</p>
+        <h2 id="lvalue-and-rvalue">lvalue and rvalue</h2>
+        <p>An <code>lvalue</code> (locator value) represents an object that occupies some identifiable location in
+            memory (i.e. has an address).</p>
+        <p><code>rvalues</code> are defined by exclusion. Every expression is either an lvalue or an rvalue, so, an
+            rvalue is an expression that does not represent an object occupying some identifiable location in memory.
+        </p>
+        <p>For example, An assignment expects an lvalue as its left operand, so the following is valid:</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">int</span> i = <span class="hljs-number">10</span>;
+        But <span class="hljs-keyword">this</span> <span class="hljs-keyword">is</span> not:
+        <span class="hljs-keyword">int</span> i;
+        <span class="hljs-number">10</span> = i;
+        </code></pre>
+        <p>This is because i has an address in memory and is a lvalue. While 10 doesn&#39;t have an identifiable memory
+            location and hence is an rvalue. So assigning the value of i to 10 doesn&#39;t make any sense.</p>
+        <p>Unlike C++, pointer incrementation/decrementation does not return an lvalue in C.</p>
+        <h2 id="type-groups">Type groups</h2>
+        <ul>
+            <li><code>object</code> types: all types that aren&#39;t function types</li>
+            <li><code>character</code> types: char, signed char, unsigned char</li>
+            <li><code>integer</code> types: char, signed integer types, unsigned integer types, enumerated types</li>
+            <li><code>real</code> types: integer types and real floating types</li>
+            <li><code>arithmetic</code> types: integer types and floating types</li>
+            <li><code>scalar</code> types: arithmetic types and pointer types</li>
+            <li><code>aggregate</code> types: array types and structure types</li>
+            <li><code>derived</code> declarator types: array types, function types, and pointer types</li>
+        </ul>
+        <h2 id="compiling-multiple-c-files-and-linking-them">Compiling multiple C files and linking them</h2>
+        <p>If you have your two source files, you can compile them into object files without linking, as so:</p>
+        <pre><code class="lang-sh">gcc main<span class="hljs-selector-class">.c</span> -o main<span class="hljs-selector-class">.o</span> -c
+        gcc module<span class="hljs-selector-class">.c</span> -o module<span class="hljs-selector-class">.o</span> -c
+        </code></pre>
+        <p>Where the -c flag tells the compiler to stop after the compilation phase, without linking. Then, you can link
+            your two object files as so:</p>
+        <pre><code class="lang-sh">gcc -o myprog main.o <span class="hljs-class"><span class="hljs-keyword">module</span>.<span class="hljs-title">o</span></span>
+        </code></pre>
+        <h2 id="undefined-behaviour-not-exactly-undefined-while-using-scanf-">Undefined behaviour (not exactly
+            undefined) while using scanf()</h2>
+        <p>Check for return value of scanf to check if ip buffer is pollutted</p>
+        <p>On success, the function returns the number of items of the argument list successfully filled. This count can
+            match the expected number of items or be less (even zero) due to a matching failure, a reading error, or the
+            reach of the end-of-file.</p>
+        <p>If a reading error happens or the end-of-file is reached while reading, the proper indicator is set (feof or
+            ferror). And, if either happens before any data could be successfully read, EOF is returned.</p>
+        <p>If an encoding error happens interpreting wide characters, the function sets errno to EILSEQ.</p>
+        <p>Example:</p>
+        <pre><code class="lang-C"><span class="hljs-built_in">printf</span>(<span class="hljs-string">"Enter option: "</span>);
+        <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, &amp;usr_option))
+            scanf_err_handle_flush_n_get_ip(&amp;usr_option);
+        
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">scanf_err_handle_flush_n_get_ip</span><span class="hljs-params">(<span class="hljs-keyword">int</span> *ip_buff)</span> </span>{
+        
+            <span class="hljs-keyword">int</span> c;
+            <span class="hljs-keyword">while</span>((c = getchar()) != <span class="hljs-string">'\n'</span> &amp;&amp; c != EOF)
+                <span class="hljs-comment">/* stdin ip discard */</span> ;
+        
+            <span class="hljs-comment">/* recursively ask for ip till scanf exits with success */</span>
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"\nEnter option: "</span>);
+        
+            <span class="hljs-keyword">if</span>(!<span class="hljs-built_in">scanf</span>(<span class="hljs-string">"%d"</span>, ip_buff))     
+                scanf_err_handle_flush_n_get_ip(ip_buff);
+        
+        }
+        </code></pre>
+        <h2 id="difference-between-pointers-and-reference">Difference between pointers and reference</h2>
+        <p>A pointer is a variable that holds a memory address. A reference has the same memory address as the item it
+            references.</p>
+        <p>Example:</p>
+        <pre><code class="lang-cpp">
+        <span class="hljs-comment">// C++ program to swap two numbers using </span>
+        <span class="hljs-comment">// pass by reference. </span>
+        
+        <span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;iostream&gt;</span> </span>
+        <span class="hljs-keyword">using</span> <span class="hljs-keyword">namespace</span> <span class="hljs-built_in">std</span>; 
+        <span class="hljs-function"><span class="hljs-keyword">void</span> <span class="hljs-title">swap</span><span class="hljs-params">(<span class="hljs-keyword">int</span>&amp; x, <span class="hljs-keyword">int</span>&amp; y)</span> 
+        </span>{ 
+            <span class="hljs-keyword">int</span> z = x; 
+            x = y; 
+            y = z; 
+        } 
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> 
+        </span>{ 
+            <span class="hljs-keyword">int</span> a = <span class="hljs-number">45</span>, b = <span class="hljs-number">35</span>; 
+            <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"Before Swap\n"</span>; 
+            <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"a = "</span> &lt;&lt; a &lt;&lt; <span class="hljs-string">" b = "</span> &lt;&lt; b &lt;&lt; <span class="hljs-string">"\n"</span>; 
+        
+            swap(a, b); 
+        
+            <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"After Swap with pass by reference\n"</span>; 
+            <span class="hljs-built_in">cout</span> &lt;&lt; <span class="hljs-string">"a = "</span> &lt;&lt; a &lt;&lt; <span class="hljs-string">" b = "</span> &lt;&lt; b &lt;&lt; <span class="hljs-string">"\n"</span>; 
+        }
+        </code></pre>
+        <p>A pointer to a class/struct uses ‘-&gt;&#39;(arrow operator) to access it’s members whereas a reference uses
+            a ‘.&#39;(dot operator)
+            A pointer needs to be dereferenced with * to access the memory location it points to, whereas a reference
+            can be used directly.</p>
+        <h2 id="turn-on-different-warnings-while-compiling-c-files-">Turn on different warnings while compiling c files:
+        </h2>
+        <p>Example: </p>
+        <blockquote>
+            <p>gcc main.c -o main.o -c -pedantic -Wall -Wextra -Wconversion</p>
+        </blockquote>
+        <pre><code class="lang-sh">-<span class="ruby">Wpedantic
+        </span>-<span class="ruby">pedantic</span>
+        </code></pre>
+        <p>Issue all the warnings demanded by strict ISO C and ISO C++; reject all programs that use forbidden
+            extensions, and some other programs that do not follow ISO C and ISO C++. For ISO C, follows the version of
+            the ISO C standard specified by any -std option used.</p>
+        <pre><code class="lang-sh"><span class="hljs-deletion">-Wall</span>
+        </code></pre>
+        <p>This enables all the warnings about constructions that some users consider questionable, and that are easy to
+            avoid (or modify to prevent the warning), even in conjunction with macros. This also enables some
+            language-specific warnings described in C++ Dialect Options and Objective-C and Objective-C++ Dialect
+            Options.</p>
+        <p><code>-Wall</code> turns on the following warning flags:
+            -Waddress<br>-Warray-bounds=1 (only with -O2)<br>-Wbool-compare<br>-Wbool-operation<br>-Wc++11-compat
+            -Wc++14-compat<br>-Wcatch-value (C++ and Objective-C++
+            only)<br>-Wchar-subscripts<br>-Wcomment<br>-Wduplicate-decl-specifier (C and Objective-C only)
+            -Wenum-compare (in C/ObjC; this is on by default in C++)
+            -Wenum-conversion in C/ObjC;
+            -Wformat<br>-Wint-in-bool-context<br>-Wimplicit (C and Objective-C only)
+            -Wimplicit-int (C and Objective-C only)
+            -Wimplicit-function-declaration (C and Objective-C only)
+            -Winit-self (only for C++)
+            -Wzero-length-bounds
+            -Wlogical-not-parentheses
+            -Wmain (only for C/ObjC and unless -ffreestanding)<br>-Wmaybe-uninitialized
+            -Wmemset-elt-size
+            -Wmemset-transposed-args
+            -Wmisleading-indentation (only for C/C++)
+            -Wmissing-attributes
+            -Wmissing-braces (only for C/ObjC)
+            -Wmultistatement-macros<br>-Wnarrowing (only for C++)<br>-Wnonnull<br>-Wnonnull-compare<br>-Wopenmp-simd
+            -Wparentheses<br>-Wpessimizing-move (only for
+            C++)<br>-Wpointer-sign<br>-Wreorder<br>-Wrestrict<br>-Wreturn-type<br>-Wsequence-point<br>-Wsign-compare
+            (only in C++)<br>-Wsizeof-pointer-div
+            -Wsizeof-pointer-memaccess
+            -Wstrict-aliasing<br>-Wstrict-overflow=1<br>-Wswitch<br>-Wtautological-compare<br>-Wtrigraphs<br>-Wuninitialized<br>-Wunknown-pragmas<br>-Wunused-function<br>-Wunused-label<br>-Wunused-value<br>-Wunused-variable<br>-Wvolatile-register-var
+        </p>
+        <pre><code class="lang-sh"><span class="hljs-deletion">-Wextra</span>
+        </code></pre>
+        <p>This enables some extra warning flags that are not enabled by -Wall. (This option used to be called -W. The
+            older name is still supported, but the newer name is more descriptive.)</p>
+        <p>The option -Wextra also prints warning messages for the following cases:</p>
+        <p>A pointer is compared against integer zero with &lt;, &lt;=, &gt;, or &gt;=.
+            (C++ only) An enumerator and a non-enumerator both appear in a conditional expression.
+            (C++ only) Ambiguous virtual bases.
+            (C++ only) Subscripting an array that has been declared register.
+            (C++ only) Taking the address of a variable that has been declared register.
+            (C++ only) A base class is not initialized in the copy constructor of a derived class.</p>
+        <pre><code class="lang-sh"><span class="hljs-deletion">-Wconversion</span>
+        </code></pre>
+        <p>Warn for implicit conversions that may alter a value. This includes conversions between real and integer,
+            like abs (x) when x is double; conversions between signed and unsigned, like unsigned ui = -1; and
+            conversions to smaller types, like sqrtf (M_PI). Do not warn for explicit casts like abs ((int) x) and ui =
+            (unsigned) -1, or if the value is not changed by the conversion like in abs (2.0). Warnings about
+            conversions between signed and unsigned integers can be disabled by using -Wno-sign-conversion.</p>
+        <p>For C++, also warn for confusing overload resolution for user-defined conversions; and conversions that never
+            use a type conversion operator: conversions to void, the same type, a base class or a reference to them.
+            Warnings about conversions between signed and unsigned integers are disabled by default in C++ unless
+            -Wsign-conversion is explicitly enabled.</p>
+        <p>Warnings about conversion from arithmetic on a small type back to that type are only given with
+            -Warith-conversion.</p>
+        <h2 id="why-is-arr-1-and-arr-1-different-though-arr-and-arr-point-to-the-same-location-">Why is (arr + 1) and
+            (&amp;arr + 1) different though arr and &amp;arr point to the same location?</h2>
+        <p>They are different types.
+            <code>arr</code> is of the type int <code>*</code>, where as <code>&amp;arr</code> is of the type
+            <code>int (*)[size]</code>.</p>
+        <p>So, <code>&amp;arr</code> points to the entire array where as <code>arr</code> points to the first element of
+            the array.</p>
+        <h2 id="the-clockwise-spiral-rule-">The ``Clockwise/Spiral Rule&#39;&#39;</h2>
+        <h4 id="by-david-anderson">By David Anderson</h4>
+        <p>There is a technique known as the ``Clockwise/Spiral Rule&#39;&#39; which enables any C programmer to parse
+            in their head any C declaration!</p>
+        <p>There are three simple steps to follow:</p>
+        <p>Starting with the unknown element, move in a spiral/clockwise direction; when ecountering the following
+            elements replace them with the corresponding english statements:</p>
+        <ul>
+            <li><code>[X] or []</code> =&gt; Array X size of... or Array undefined size of...</li>
+            <li><code>(type1, type2)</code>=&gt; function passing type1 and type2 returning...</li>
+            <li><code>*</code> =&gt; pointer(s) to...</li>
+        </ul>
+        <p>Keep doing this in a spiral/clockwise direction until all tokens have been covered.</p>
+        <p><strong>Always resolve anything in parenthesis first!</strong></p>
+        <h5 id="examples-">Examples:</h5>
+        <pre><code class="lang-C">                     +-----------------------------+
+                              |<span class="hljs-string">                  +---+      </span>|
+                              |<span class="hljs-string">  +---+           </span>|<span class="hljs-string">+-+</span>|<span class="hljs-string">      </span>|
+                              |<span class="hljs-string">  ^   </span>|<span class="hljs-string">           </span>|<span class="hljs-string">^ </span>||<span class="hljs-string">      </span>|
+                        void (<span class="hljs-symbol">*</span>signal(int, void (<span class="hljs-symbol">*</span>fp)(int)))(int);
+                         ^    ^      |<span class="hljs-string">      ^    ^  </span>||<span class="hljs-string">      </span>|
+                         |<span class="hljs-string">    +------+      </span>|<span class="hljs-string">    +--+</span>|<span class="hljs-string">      </span>|
+                         |<span class="hljs-string">                  +--------+      </span>|
+                         +----------------------------------+
+        </code></pre>
+        <pre><code class="lang-C">Question we ask ourselves: What <span class="hljs-keyword">is</span> `signal<span class="hljs-comment">'?</span>
+        
+        Notice that signal <span class="hljs-keyword">is</span> inside parenthesis, so we must resolve this first!
+        
+        Moving <span class="hljs-keyword">in</span> a clockwise direction we see `(<span class="hljs-comment">' so we have...</span>
+        ``signal <span class="hljs-keyword">is</span> a <span class="hljs-keyword">function</span> passing an int <span class="hljs-keyword">and</span> a...
+        
+        Hmmm, we can use this same rule <span class="hljs-keyword">on</span> `fp<span class="hljs-comment">', so... What is fp? fp is also inside parenthesis so continuing we see an `*', so...</span>
+        fp <span class="hljs-keyword">is</span> a pointer <span class="hljs-keyword">to</span>...
+        
+        <span class="hljs-keyword">Continue</span> <span class="hljs-keyword">in</span> a spiral clockwise direction <span class="hljs-keyword">and</span> we <span class="hljs-keyword">get</span> <span class="hljs-keyword">to</span> `(<span class="hljs-comment">', so...</span>
+        ``fp <span class="hljs-keyword">is</span> a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing int returning...<span class="hljs-comment">''</span>
+        
+        Now we <span class="hljs-keyword">continue</span> out <span class="hljs-keyword">of</span> the <span class="hljs-keyword">function</span> parenthesis <span class="hljs-keyword">and</span> we see void, so...
+        ``fp <span class="hljs-keyword">is</span> a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing int returning <span class="hljs-literal">nothing</span> (void)<span class="hljs-comment">''</span>
+        
+        We have finished <span class="hljs-keyword">with</span> fp so <span class="hljs-keyword">let</span><span class="hljs-comment">'s catch up with `signal', we now have...</span>
+        ``signal <span class="hljs-keyword">is</span> a <span class="hljs-keyword">function</span> passing an int <span class="hljs-keyword">and</span> a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing an int returning <span class="hljs-literal">nothing</span> (void) returning...
+        
+        We are still inside parenthesis so the <span class="hljs-keyword">next</span> character seen <span class="hljs-keyword">is</span> a `*<span class="hljs-comment">', so...</span>
+        ``signal <span class="hljs-keyword">is</span> a <span class="hljs-keyword">function</span> passing an int <span class="hljs-keyword">and</span> a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing an int returning <span class="hljs-literal">nothing</span> (void) returning a pointer <span class="hljs-keyword">to</span>...
+        
+        We have now resolved the items within parenthesis, so continuing clockwise, we <span class="hljs-keyword">then</span> see another `(<span class="hljs-comment">', so...</span>
+        ``signal <span class="hljs-keyword">is</span> a <span class="hljs-keyword">function</span> passing an int <span class="hljs-keyword">and</span> a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing an int returning <span class="hljs-literal">nothing</span> (void) returning a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing an int returning...
+        
+        <span class="hljs-keyword">Finally</span> we <span class="hljs-keyword">continue</span> <span class="hljs-keyword">and</span> the only thing left <span class="hljs-keyword">is</span> the word `void<span class="hljs-comment">', so the final complete definition for signal is:</span>
+        ``signal <span class="hljs-keyword">is</span> a <span class="hljs-keyword">function</span> passing an int <span class="hljs-keyword">and</span> a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing an int returning <span class="hljs-literal">nothing</span> (void) returning a pointer <span class="hljs-keyword">to</span> a <span class="hljs-keyword">function</span> passing an int returning <span class="hljs-literal">nothing</span> (void)<span class="hljs-comment">''</span>
+        </code></pre>
+        <h2 id="can-enum-member-be-the-size-of-an-array-in-ansi-c-">Can enum member be the size of an array in ANSI-C?
+        </h2>
+        <p>Yes, </p>
+        <ul>
+            <li>enumeration constants are constant expressions</li>
+            <li>for the array not to be variable length, we need a constant expression</li>
+        </ul>
+        <h2 id="c-const-actually-means-read-only-">C <code>const</code> actually means read only.</h2>
+        <pre><code>The<span class="hljs-built_in"> const </span>qualifier really means ``read-only''; an object so qualified is a run-time object which cannot (normally) be assigned to. The value of a<span class="hljs-built_in"> const-qualified </span>object is therefore<span class="hljs-built_in"> not </span>a constant expression in the full sense of the term,<span class="hljs-built_in"> and </span>cannot be used for<span class="hljs-built_in"> array </span>dimensions, case labels,<span class="hljs-built_in"> and </span>the like. (C is unlike C++ in this regard.) When you need a true compile-time constant, use a preprocessor <span class="hljs-comment">#define (or perhaps an enum).</span>
+        
+        References: ISO Sec. 6.4 H&amp;S Secs. 7.11.2,7.11.3 pp. 226-7
+        </code></pre>
+        <h2 id="can-a-const-variable-be-used-to-declare-the-size-of-an-array-in-c-">Can a const variable be used to
+            declare the size of an array in C?</h2>
+        <p>In C, const is a misnomer for read-only. const variables can change their value, e.g. it is perfectly okay to
+            declare</p>
+        <pre><code class="lang-C"><span class="hljs-keyword">const</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int</span> timer_tick_register; <span class="hljs-comment">/* A CPU register. */</span>
+        </code></pre>
+        <p>which you can read and get a different value with each read, but not write to. The language specification
+            thus treats <code>const</code> qualified objects not as constant expressions suitable for array sizes.</p>
+        <p>In a very simple way because the compiler must know the dimension of the array at compilation time and since
+            you can initialize <code>const</code> variable at run time you can&#39;t do it. So the size of statically
+            declared arrays must be a constant expression and a <code>const</code> variable is not it. For constant
+            expression you should use either a macro (#define) or enum.</p>
+        <h2 id="when-and-for-what-purposes-should-the-const-keyword-be-used-in-c-for-variables-">When and for what
+            purposes should the const keyword be used in C for variables?</h2>
+        <ul>
+            <li>Always use const for function parameters passed by reference where the function does not modify (or
+                free) the data pointed to.</li>
+        </ul>
+        <pre><code class="lang-C"><span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> *data, <span class="hljs-keyword">size_t</span> size, <span class="hljs-keyword">int</span> value)</span></span>;
+        </code></pre>
+        <ul>
+            <li>Always use const for constants that might otherwise be defined using a #define or an enum. The compiler
+                can locate the data in read-only memory (ROM) as a result (although the linker is often a better tool
+                for this purpose in embedded systems).</li>
+        </ul>
+        <pre><code class="lang-C"><span class="hljs-keyword">const</span> <span class="hljs-keyword">double</span> <span class="hljs-literal">PI</span> = <span class="hljs-number">3.14</span>;
+        </code></pre>
+        <ul>
+            <li>Never use const in a function prototype for a parameter passed by value. It has no meaning and is hence
+                just &#39;noise&#39;.</li>
+        </ul>
+        <pre><code class="lang-C"><span class="hljs-comment">// don't add const to 'value' or 'size'</span>
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">find</span><span class="hljs-params">(<span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> *data, <span class="hljs-keyword">size_t</span> size, <span class="hljs-keyword">const</span> <span class="hljs-keyword">int</span> value)</span></span>;
+        </code></pre>
+        <ul>
+            <li>Where appropriate, use const volatile on locations that cannot be changed by the program but might still
+                change. Hardware registers are the typical use case here, for example a status register that reflects a
+                device state:</li>
+        </ul>
+        <pre><code class="lang-C"><span class="hljs-keyword">const</span> <span class="hljs-keyword">volatile</span> <span class="hljs-keyword">int32_t</span> *DEVICE_STATUS =  (<span class="hljs-keyword">int32_t</span>*) <span class="hljs-number">0x100</span>;
+        </code></pre>
+        <h2 id="is-extern-needed-for-functions-in-header-file">Is <code>extern</code> needed for functions in header
+            file</h2>
+        <p>Functions declared in header files do not need to be declared extern. They are implicitly declared with
+            &quot;extern&quot;.</p>
+        <h2 id="difference-between-defining-a-variable-and-declaring-a-variable">Difference between defining a variable
+            and declaring a variable</h2>
+        <p>It is important to understand the <strong>difference between defining a variable and declaring a
+                variable:</strong></p>
+        <ul>
+            <li>A variable is declared when the compiler is informed that a variable exists (and this is its type); it
+                does not allocate the storage for the variable at that point.</li>
+            <li>A variable is defined when the compiler allocates the storage for the variable.</li>
+        </ul>
+        <p>You may declare a variable multiple times (though once is sufficient); you may only define it once within a
+            given scope. A variable definition is also a declaration, but not all variable declarations are definitions.
+        </p>
+        <h2 id="best-way-to-declare-and-define-global-variables">Best way to declare and define global variables</h2>
+        <p>The clean, reliable way to declare and define <code>global variables</code> is to use a header file to
+            contain an extern declaration of the variable.</p>
+        <p>The header is included by the one source file that defines the variable and by all the source files that
+            reference the variable. For each program, one source file (and only one source file) defines the variable.
+            Similarly, one header file (and only one header file) should declare the variable. The header file is
+            crucial; it enables cross-checking between independent TUs (translation units — think source files) and
+            ensures consistency.</p>
+        <ul>
+            <li>A header file only contains extern declarations of variables — never static or unqualified variable
+                definitions.
+                For any given variable, only one header file declares it (SPOT — Single Point of Truth).</li>
+            <li>A source file never contains extern declarations of variables — source files always include the (sole)
+                header that declares them.</li>
+            <li>For any given variable, exactly one source file defines the variable, preferably initializing it too.
+                (Although there is no need to initialize explicitly to zero, it does no harm and can do some good,
+                because there can be only one initialized definition of a particular global variable in a program).</li>
+            <li>The source file that defines the variable also includes the header to ensure that the definition and the
+                declaration are consistent.</li>
+            <li>A function should never need to declare a variable using extern.</li>
+            <li>Avoid global variables whenever possible — use functions instead.</li>
+        </ul>
+        <h2 id="what-is-external-linkage-and-internal-linkage-">What is external linkage and internal linkage?</h2>
+        <p>When you write an implementation file (.cpp, .cxx, etc) your compiler generates a <strong>translation
+                unit</strong>. This is the object file from your implementation file plus all the headers you #included
+            in it.</p>
+        <p>Internal linkage refers to everything only in <strong>scope of a translation unit.</strong></p>
+        <p>External linkage refers to things that exist beyond a particular translation unit. In other words,
+            <strong>accessible through the whole program</strong>, which is the combination of all translation units (or
+            object files).</p>
+        <p>You can explicitly control the linkage of a symbol by using the <code>extern</code> and <code>static</code>
+            keywords. <strong>If the linkage isn&#39;t specified then the default linkage is <code>extern</code> for
+                non-const symbols and <code>static</code> (internal) for <code>const</code> symbols.</strong></p>
+        <h2 id="what-is-the-difference-between-scope-and-linkage-">What is the difference between scope and linkage?
+        </h2>
+        <p>&quot;<code>scope</code>&quot; is a namespace of the compiler; &quot;<code>linkage</code>&quot; is about
+            compiled units.</p>
+        <p>I explain a bit more: A variable declared in a function has the scope of that function, i.e. it is visible
+            only within that function. A variable declared as static in a source file, can be seen only by the code in
+            that source file (and all included files!). Variables can also have global scope: they can be referred to in
+            a source file, but not declared (allocated) in that source file but declared in another source file.</p>
+        <p>In stead of &quot;source file&quot; we should say &quot;compilation unit&quot; as it is the C source file
+            being compiled, plus all included files. Scope refers to everything the compiler can &quot;see&quot; in a
+            compilation unit. These are namespaces.</p>
+        <p><strong>After compilation of a project there are a number of object files, one for each compile
+                unit.</strong> Each may refer to variables used that are not declared in the compile unit. The linker
+            must now resolve these references between object files: linkage.</p>
+        <p>This also holds for functions.</p>
+        <h2 id="how-can-i-access-structure-fields-by-name-at-run-time-">How can I access structure fields by name at run
+            time?</h2>
+        <p>A: Keep track of the field offsets as computed using the offsetof() macro (see question 2.14). If structp is
+            a pointer to an instance of the structure, and field f is an int having offset offsetf, f&#39;s value can be
+            set indirectly with</p>
+        <p><code>*(int *)((char *)structp + offsetf) = value;</code></p>
+        <h2 id="bit-fields-in-c">Bit Fields in C</h2>
+        <p>In C, we can specify size (in bits) of structure and union members. The idea is to use memory efficiently
+            when we know that the value of a field or group of fields will never exceed a limit or is withing a small
+            range.</p>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span> </span>
+        
+        <span class="hljs-comment">// Space optimized representation of the date </span>
+        <span class="hljs-keyword">struct</span> date { 
+            <span class="hljs-comment">// d has value between 1 and 31, so 5 bits </span>
+            <span class="hljs-comment">// are sufficient </span>
+            <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> d : <span class="hljs-number">5</span>; 
+        
+            <span class="hljs-comment">// m has value between 1 and 12, so 4 bits </span>
+            <span class="hljs-comment">// are sufficient </span>
+            <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> m : <span class="hljs-number">4</span>; 
+        
+            <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> y; 
+        }; 
+        
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span> 
+        </span>{ 
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Size of date is %lu bytes\n"</span>, <span class="hljs-keyword">sizeof</span>(<span class="hljs-keyword">struct</span> date)); 
+            <span class="hljs-keyword">struct</span> date dt = { <span class="hljs-number">31</span>, <span class="hljs-number">12</span>, <span class="hljs-number">2014</span> }; 
+            <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Date is %d/%d/%d"</span>, dt.d, dt.m, dt.y); 
+            <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; 
+        }
+        </code></pre>
+        <h3 id="facts-about-bit-fields-in-c-">Facts about bit fields in C.</h3>
+        <ul>
+            <li>
+                <p>A special unnamed bit field of size 0 is used to force alignment on next boundary. For example
+                    consider the following program.</p>
+            </li>
+            <li>
+                <p>We cannot have pointers to bit field members as they may not start at a byte boundary.</p>
+            </li>
+            <li>
+                <p>Array of bit fields is not allowed.</p>
+            </li>
+        </ul>
+        <h2 id="is-there-a-quick-way-to-determine-endianness-of-your-machine-">Is there a quick way to determine
+            endianness of your machine?</h2>
+        <pre><code class="lang-C"><span class="hljs-meta">#<span class="hljs-meta-keyword">include</span> <span class="hljs-meta-string">&lt;stdio.h&gt;</span> </span>
+        <span class="hljs-function"><span class="hljs-keyword">int</span> <span class="hljs-title">main</span><span class="hljs-params">()</span>  
+        </span>{ 
+           <span class="hljs-keyword">unsigned</span> <span class="hljs-keyword">int</span> i = <span class="hljs-number">1</span>; 
+           <span class="hljs-keyword">char</span> *c = (<span class="hljs-keyword">char</span>*)&amp;i; 
+           <span class="hljs-keyword">if</span> (*c)     
+               <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Little endian"</span>); 
+           <span class="hljs-keyword">else</span>
+               <span class="hljs-built_in">printf</span>(<span class="hljs-string">"Big endian"</span>); 
+           getchar(); 
+           <span class="hljs-keyword">return</span> <span class="hljs-number">0</span>; 
+        }
+        </code></pre>
+        <h2
+            id="the-behavior-of-code-which-contains-multiple-ambiguous-side-effects-has-always-been-undefined-loosely-speaking-by-multiple-ambiguous-side-effects-we-mean-any-combination-of-increment-decrement-and-assignment-operators-etc-in-a-single-expression-which-causes-the-same-object-either-to-be-modified-twice-or-modified-and-then-inspected-">
+            The behavior of code which contains multiple, ambiguous side effects has always been undefined. (Loosely
+            speaking, by ``multiple, ambiguous side effects&#39;&#39; we mean any combination of increment, decrement,
+            and assignment operators (++, --, =, +=, -=, etc.) in a single expression which causes the same object
+            either to be modified twice or modified and then inspected.</h2>
+        <p><strong>Example:</strong></p>
+        <pre><code class="lang-C"><span class="hljs-attribute">int i</span> = 3;
+        <span class="hljs-attribute">i</span> = i++;
+        </code></pre>
+        <p>on several compilers. Some give i the value 3, and some gave 4. </p>
+        <h2 id="short-circuiting-behavior-in-c">short-circuiting behavior in C</h2>
+        <p><code>while((c = getchar()) != EOF &amp;&amp; c != &#39;\n&#39;)</code></p>
+        <p>the right-hand side is not evaluated if the left-hand side determines the outcome (i.e. is true for || or
+            false for &amp;&amp;). Therefore, left-to-right evaluation is guaranteed, as it also is for the comma
+            operator . Furthermore, all of these operators (along with ?:) introduce an extra internal sequence point .
+        </p>
+        <h4 id="note-">Note:</h4>
+        <p><strong><code>printf(&quot;%d %d&quot;, f1(), f2());</code> call f2 first? I thought the comma operator
+                guaranteed left-to-right evaluation.</strong></p>
+        <p>The comma operator does guarantee left-to-right evaluation, but the commas separating the arguments in a
+            function call are not comma operators. The order of evaluation of the arguments to a function call is
+            unspecified.</p>
+        <h2 id="sequence-point">sequence point</h2>
+        <p>A sequence point is a point in time at which the dust has settled and all side effects which have been seen
+            so far are guaranteed to be complete. The sequence points listed in the C standard are:</p>
+        <ul>
+            <li>at the end of the evaluation of a full expression (a full expression is an expression statement, or any
+                other expression which is not a subexpression within any larger expression);</li>
+            <li>at the ||, &amp;&amp;, ?:, and comma operators; and</li>
+            <li>at a function call (after the evaluation of all the arguments, and just before the actual call).</li>
+        </ul>
+        <h2
+            id="how-can-i-avoid-these-undefined-evaluation-order-difficulties-if-i-don-t-feel-like-learning-the-complicated-rules-">
+            How can I avoid these undefined evaluation order difficulties if I don&#39;t feel like learning the
+            complicated rules?</h2>
+        <p>A: The easiest answer is that if you steer clear of expressions which don&#39;t have reasonably obvious
+            interpretations, for the most part you&#39;ll steer clear of the undefined ones, too. (Of course, reasonably
+            obvious&#39;&#39; means different things to different people. This answer works as long as you agree that
+            a[i] = i++ and i = i++ are not reasonably obvious.&#39;&#39;)</p>
+        <p>To be a bit more precise, here are some simpler rules which, though slightly more conservative than the ones
+            in the Standard, will help to make sure that your code is ``reasonably obvious&#39;&#39; and equally
+            understandable to both the compiler and your fellow programmers:</p>
+        <ul>
+            <li>Make sure that each expression modifies at most one object. </li>
+            <li>If an object (as defined above) appears more than once in an expression, and is the object modified in
+                the expression, make sure that all appearances of the object which fetch its value participate in the
+                computation of the new value which is stored. </li>
+        </ul>
+        <h2 id="why-doesn-t-this-code-int-a-1000-b-1000-long-int-c-a-b-work-">Why doesn&#39;t this code
+            <code>int a = 1000, b = 1000; long int c = a * b;</code> work?</h2>
+        <p>Under <code>C</code>&#39;s integral promotion rules, the multiplication is carried out using int arithmetic,
+            and the result may overflow or be truncated before being promoted and assigned to the long int left-hand
+            side. Use an explicit cast on at least one of the operands to force long arithmetic:</p>
+        <pre><code>`<span class="hljs-keyword">long</span> <span class="hljs-keyword">int</span> c = (<span class="hljs-keyword">long</span> <span class="hljs-keyword">int</span>)a * b;`
+        </code></pre>
+        <p>or perhaps</p>
+        <pre><code>`<span class="hljs-keyword">long</span> <span class="hljs-keyword">int</span> c = (<span class="hljs-keyword">long</span> <span class="hljs-keyword">int</span>)a * (<span class="hljs-keyword">long</span> <span class="hljs-keyword">int</span>)b;`
+        </code></pre>
+        <p>(both forms are equivalent).</p>
+        <p>Notice that the expression (long int)(a * b) would not have the desired effect. An explicit cast of this form
+            (i.e. applied to the result of the multiplication) is equivalent to the implicit conversion which would
+            occur anyway when the value is assigned to the long int left-hand side, and like the implicit conversion, it
+            happens too late, after the damage has been done.</p>
+        <h2
+            id="if-i-have-a-struct-in-c-c-is-there-no-way-to-safely-read-write-it-to-a-file-that-is-cross-platform-compiler-compatible-">
+            If I have a struct in C / C++, is there no way to safely read/write it to a file that is
+            cross-platform/compiler compatible?</h2>
+        <p>If you have the opportunity to design the struct yourself, it should be possible. The basic idea is that you
+            should design it so that there would be no need to insert pad bytes into it. the second trick is that you
+            must handle differences in endianess.</p>
+        <p>I&#39;ll describe how to construct the struct using scalars, but the you should be able to use nested
+            structs, as long as you would apply the same design for each included struct.</p>
+        <p>First, a basic fact in C and C++ is that the alignment of a type can not exceed the size of the type. If it
+            would, then it would not be possible to allocate memory using malloc(N*sizeof(the_type)).</p>
+        <p>Layout the struct, starting with the largest types.</p>
+        <pre><code class="lang-C"> <span class="hljs-keyword">struct</span>
+         {
+           <span class="hljs-keyword">uint64_t</span> alpha;
+           <span class="hljs-keyword">uint32_t</span> beta;
+           <span class="hljs-keyword">uint32_t</span> gamma;
+           <span class="hljs-keyword">uint8_t</span>  delta;
+        </code></pre>
+        <p>Next, pad out the struct manually, so that in the end you will match up the largest type:</p>
+        <pre><code class="lang-C++">   <span class="hljs-keyword">uint8_t</span>  pad8[<span class="hljs-number">3</span>];    <span class="hljs-comment">// Match uint32_t</span>
+           <span class="hljs-keyword">uint32_t</span> pad32;      <span class="hljs-comment">// Even number of uint32_t</span>
+         }
+        </code></pre>
+        <p>Next step is to decide if the struct should be stored in little or big endian format. The best way is to
+            &quot;swap&quot; all the element in situ before writing or after reading the struct, if the storage format
+            does not match the endianess of the host system.</p>
+        <h2 id="to-do-">TO DO:</h2>
+
+    </div>
+
+</body>
+
+</html>

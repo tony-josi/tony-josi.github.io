@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="shortcut icon" type="image/png" href="../fav.png" />
+
+    <meta charset="UTF-8">
+    <title>ARM ASSEMBLY NOTES</title>
+    <p style="padding-left: 60px; padding-right: 60px;"><a href="ARM_Assembly.html">Bootstrapped Page </a></p>
+    
+</head>
+
+<body>
+
+    
+
+    <div style="padding-left: 60px; padding-right: 60px;">
+
+        <h1 id="assembly-and-isa-notes">Assembly and ISA Notes</h1>
+        <blockquote>
+            <p>ARM Cortex-M0+ Device</p>
+        </blockquote>
+        <ul>
+            <li><a href="#assembly-and-isa-notes">Assembly and ISA Notes</a>
+                <ul>
+                    <li><a href="#about-arm-and-thumb-mode">About ARM and Thumb Mode</a></li>
+                    <li><a href="#subroutines">Subroutines</a>
+                        <ul>
+                            <li><a href="#transferring-control-from-calling-program-to-a-subroutine">Transferring
+                                    control from calling program to a subroutine</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#branch-instructions">Branch Instructions</a>
+                        <ul>
+                            <li><a href="#bl-directive">BL directive</a></li>
+                            <li><a href="#blx-instruction">BLX instruction</a></li>
+                            <li><a href="#bx-instruction">BX instruction</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#program-status-register">Program Status Register</a></li>
+                    <li><a href="#link-register">Link register</a>
+                        <ul>
+                            <li><a href="#the-condition-flags">The condition flags</a></li>
+                        </ul>
+                    </li>
+                    <li><a href="#export-and-global"><code>EXPORT</code> and <code>GLOBAL</code></a></li>
+                    <li><a href="#push-and-pop">PUSH and POP</a></li>
+                    <li><a href="#mov-and-mvn">MOV and MVN</a></li>
+                    <li><a href="#ldr--str">LDR &amp; STR</a></li>
+                    <li><a href="#ands-orrs-eors-bics">ANDS ORRS EORS BICS</a></li>
+                    <li><a href="#asr-lsl-lsr-and-ror">ASR, LSL, LSR, and ROR</a></li>
+                    <li><a href="#adds">ADDS</a></li>
+                    <li><a href="#sxt-and-uxt">SXT and UXT</a></li>
+                    <li><a href="#bne">BNE</a></li>
+                    <li><a href="#bmi">BMI</a></li>
+                    <li><a href="#bpl">BPL</a></li>
+                    <li><a href="#bcc">BCC</a></li>
+                    <li><a href="#beq">BEQ</a></li>
+                    <li><a href="#accessing-variables-in-c">Accessing variables in C</a></li>
+                    <li><a href="#link-register-1">Link Register</a></li>
+                    <li><a href="#push-and-pop-1">PUSH and POP</a></li>
+                </ul>
+            </li>
+        </ul>
+        <h2 id="about-arm-and-thumb-mode">About ARM and Thumb Mode</h2>
+        <p>ARM and Thumb are two different instruction sets supported by ARM cores with a “T” in their
+            name. For instance, ARM7 TDMI supports Thumb mode. ARM instructions are 32 bits wide, and
+            Thumb instructions are 16 wide. Thumb mode allows for code to be smaller, and can potentially be
+            faster if the target has slow memory. </p>
+        <h2 id="subroutines">Subroutines</h2>
+        <h4 id="transferring-control-from-calling-program-to-a-subroutine">Transferring control from calling program to
+            a subroutine</h4>
+        <p>and back</p>
+        <ul>
+            <li>Necessary to save the return address, then branch to the subroutine.</li>
+            <li>This can be accomplished in ARM using the branch and link instruction bl -&gt; <code>bl subr_name</code>
+            </li>
+            <li>To transfer control back to the calling program, can use the branch and exchange instruction bx -&gt;
+                <code>bx lr</code></li>
+        </ul>
+        <p>Alternatively, you can pop the lr register into the pc</p>
+        <h2 id="branch-instructions">Branch Instructions</h2>
+        <h4 id="bl-directive">BL directive</h4>
+        <p>The format of the BL directive is:</p>
+        <p><code>bl{Condition} Destination Address</code></p>
+        <p>BL is another jump instruction, but before jumping, it saves the current contents of the PC in register R14,
+            so it can be executed by reloading the contents of the R14 to the PC to return to the command after the jump
+            instruction. This directive is a basic but commonly used means of implementing subroutine invocation. The
+            following directives:</p>
+        <p>BL label; When the program unconditionally jumps to the label label at the time of execution, the current PC
+            value is saved to R14 </p>
+        <h4 id="blx-instruction">BLX instruction</h4>
+        <p>The format of the BLX directive is:</p>
+        <p><code>BLX Destination Address</code></p>
+        <p>The BLX instruction jumps from the arm instruction set to the destination address specified in the
+            instruction and switches the processor&#39;s working state to the thumb state, which simultaneously saves
+            the current contents of the PC to the register R14. Therefore, when the subroutine uses the thumb
+            instruction set, and the caller uses the arm instruction set, the subroutine&#39;s call and the
+            processor&#39;s working state can be toggled through the BLX instruction.</p>
+        <p>At the same time, the return of the subroutine can be done by copying the register R14 value to the PC.</p>
+        <h4 id="bx-instruction">BX instruction</h4>
+        <p>The format of BX instruction is:</p>
+        <p><code>bx{Condition} Destination Address</code></p>
+        <p>The BX instruction jumps to the target address specified in the instruction, and the instruction at the
+            destination address can be either an arm instruction or a thumb command. </p>
+        <h2 id="program-status-register">Program Status Register</h2>
+        <p>The Program Status Register (PSR) combines:</p>
+        <ul>
+            <li>
+                <p>Application Program Status Register (APSR)</p>
+            </li>
+            <li>
+                <p>Interrupt Program Status Register (IPSR)</p>
+            </li>
+            <li>
+                <p>Execution Program Status Register (EPSR).</p>
+            </li>
+        </ul>
+        <h2 id="link-register">Link register</h2>
+        <p>A link register is a special-purpose register which holds the address to return to when a function call
+            completes.</p>
+        <h3 id="the-condition-flags">The condition flags</h3>
+        <p>The APSR contains the following condition flags:</p>
+        <p>N Set to 1 when the result of the operation was negative, cleared to 0 otherwise.</p>
+        <p>Z Set to 1 when the result of the operation was zero, cleared to 0 otherwise.</p>
+        <p>C Set to 1 when the operation resulted in a carry, cleared to 0 otherwise.</p>
+        <p>V Set to 1 when the operation caused overflow, cleared to 0 otherwise.</p>
+        <h2 id="-export-and-global-"><code>EXPORT</code> and <code>GLOBAL</code></h2>
+        <p>Specifies exports using this syntax:</p>
+        <p><code>EXPORT|GLOBAL sym{[type]}</code></p>
+        <p>sym is the symbol to be exported. [type], if specified, can be either [DATA] to indicate that the symbol
+            points to data or [FUNC] to indicate that the symbol points to code. GLOBAL is a synonym for EXPORT.</p>
+        <h2 id="push-and-pop">PUSH and POP</h2>
+        <p>Push registers onto, and pop registers off a full-descending stack.</p>
+        <p>Syntax</p>
+        <pre><code class="lang-s"><span class="hljs-keyword">PUSH </span>reglist
+<span class="hljs-keyword">POP </span>reglist
+</code></pre>
+        <p>where:</p>
+        <p>reglist Is a non-empty list of registers, enclosed in braces. It can contain register ranges.</p>
+        <p>It must be comma separated if it contains more than one register or register range.
+            Operation</p>
+        <p>PUSH stores registers on the stack, with the lowest numbered register using the lowest memory
+            address and the highest numbered register using the highest memory address.
+            POP loads registers from the stack, with the lowest numbered register using the lowest memory
+            address and the highest numbered register using the highest memory address.</p>
+        <p>PUSH uses the value in the SP register minus four as the highest memory address, POP uses the
+            value in the SP register as the lowest memory address, implementing a full-descending stack.
+            On completion, PUSH updates the SP register to point to the location of the lowest store value,</p>
+        <p>POP updates the SP register to point to the location above the highest location loaded.</p>
+        <p>If a POP instruction includes PC in its reglist, a branch to this location is performed when the</p>
+        <p>POP instruction has completed. Bit[0] of the value read for the PC is used to update the APSR T-bit. This bit
+            must be 1 to ensure correct operation.</p>
+        <h2 id="mov-and-mvn">MOV and MVN</h2>
+        <p><code>MOVS Rd, #imm</code></p>
+        <p>where:</p>
+        <p>S Is an optional suffix. If S is specified, the condition code flags are updated on the
+            result of the operation, see Conditional execution on page 3-9.</p>
+        <p>Rd Is the destination register.</p>
+        <p>The MOVS instruction performs the same operation as the MOV instruction, but also updates the N
+            and Z flags.</p>
+        <h2 id="ldr-str">LDR &amp; STR</h2>
+        <p>Load and Store with register offset.</p>
+        <p>Syntax</p>
+        <pre><code class="lang-s">LDR Rt, [Rn, <span class="hljs-keyword">Rm</span>]
+LDR&lt;B|<span class="hljs-keyword">H</span>&gt; Rt, [Rn, <span class="hljs-keyword">Rm</span>]
+LDR&lt;SB|<span class="hljs-keyword">SH</span>&gt; Rt, [Rn, <span class="hljs-keyword">Rm</span>]
+STR Rt, [Rn, <span class="hljs-keyword">Rm</span>]
+STR&lt;B|<span class="hljs-keyword">H</span>&gt; Rt, [Rn, <span class="hljs-keyword">Rm</span>]
+</code></pre>
+        <p>where:</p>
+        <p>Rt Is the register to load or store.</p>
+        <p>Rn Is the register on which the memory address is based.</p>
+        <p>Rm Is a register containing a value to be used as the offset.</p>
+        <h2 id="ands-orrs-eors-bics">ANDS ORRS EORS BICS</h2>
+        <pre><code class="lang-s"><span class="hljs-keyword">ANDS</span> {Rd,} <span class="hljs-keyword">Rn</span>, Rm
+<span class="hljs-keyword">ORRS</span> {Rd,} <span class="hljs-keyword">Rn</span>, Rm
+<span class="hljs-keyword">EORS</span> {Rd,} <span class="hljs-keyword">Rn</span>, Rm
+<span class="hljs-keyword">BICS</span> {Rd,} <span class="hljs-keyword">Rn</span>, Rm
+</code></pre>
+        <p>where:</p>
+        <p>Rd Is the destination register.</p>
+        <p>Rn Is the register holding the first operand and is the same as the destination register.</p>
+        <p>Rm Second register.</p>
+        <p>Operation</p>
+        <p>The AND, EOR, and ORR instructions perform bitwise AND, exclusive OR, and inclusive OR operations on the
+            values in Rn and Rm.</p>
+        <p>The BIC instruction performs an AND operation on the bits in Rn with the logical negation of the
+            corresponding bits in the value of Rm.</p>
+        <p>The condition code flags are updated on the result of the operation.</p>
+        <h2 id="asr-lsl-lsr-and-ror">ASR, LSL, LSR, and ROR</h2>
+        <p>Arithmetic Shift Right, Logical Shift Left, Logical Shift Right, and Rotate Right.
+            Syntax</p>
+        <pre><code class="lang-s"><span class="hljs-keyword">ASRS</span> {Rd,} <span class="hljs-keyword">Rm</span>, Rs
+<span class="hljs-keyword">ASRS</span> {Rd,} <span class="hljs-keyword">Rm</span>, <span class="hljs-comment">#imm</span>
+<span class="hljs-keyword">LSLS</span> {Rd,} <span class="hljs-keyword">Rm</span>, Rs
+<span class="hljs-keyword">LSLS</span> {Rd,} <span class="hljs-keyword">Rm</span>, <span class="hljs-comment">#imm</span>
+<span class="hljs-keyword">LSRS</span> {Rd,} <span class="hljs-keyword">Rm</span>, Rs
+<span class="hljs-keyword">LSRS</span> {Rd,} <span class="hljs-keyword">Rm</span>, <span class="hljs-comment">#imm</span>
+<span class="hljs-keyword">RORS</span> {Rd,} <span class="hljs-keyword">Rm</span>, Rs
+</code></pre>
+        <p>where:</p>
+        <p>Rd Is the destination register. If Rd is omitted, it is assumed to take the same value as Rm.</p>
+        <p>Rm Is the register holding the value to be shifted.</p>
+        <p>Rs Is the register holding the shift length to apply to the value in Rm.</p>
+        <p>imm Is the shift length. The range of shift length depends on the instruction:</p>
+        <p>ASR shift length from 1 to 32</p>
+        <p>LSL shift length from 0 to 31</p>
+        <p>LSR shift length from 1 to 32.</p>
+        <h2 id="adds">ADDS</h2>
+        <p><code>ADD{S} {Rd,} Rn, &lt;Rm|#imm&gt;</code></p>
+        <p>Where:</p>
+        <p>S Causes an ADD or SUB instruction to update flags</p>
+        <p>When the optional Rd register specifier is omitted, it is assumed to take the same value as Rn, for
+            example ADDS R1,R2 is identical to ADDS R1,R1,R2.</p>
+        <h2 id="sxt-and-uxt">SXT and UXT</h2>
+        <p>Sign extend and Zero extend.</p>
+        <p>Suppose an integer register is 32 bits. When a value is loaded from memory with fewer than 32 bits, the
+            remaining bits must be assigned.</p>
+        <p>Sign extension is used for signed loads of bytes (8 bits using the lb instruction) and halfwords (16 bits
+            using the lh instruction). Sign extension replicates the most significant bit loaded into the remaining
+            bits.</p>
+        <p>Zero extension is used for unsigned loads of bytes (lbu) and halfwords (lhu). Zeroes are filled in the
+            remaining bits.</p>
+        <p>Syntax</p>
+        <pre><code class="lang-s"><span class="hljs-keyword">SXTB </span>Rd, Rm
+<span class="hljs-keyword">SXTH </span>Rd, Rm
+<span class="hljs-keyword">UXTB </span>Rd, Rm
+<span class="hljs-keyword">UXTH </span>Rd, Rm
+</code></pre>
+        <p>where:</p>
+        <p><code>Rd</code> Is the destination register.</p>
+        <p><code>Rm</code> Is the register holding the value to be extended.
+            Operation</p>
+        <p>These instructions extract bits from the resulting value:</p>
+        <ul>
+            <li>SXTB extracts bits[7:0] and sign extends to 32 bits</li>
+            <li>UXTB extracts bits[7:0] and zero extends to 32 bits</li>
+            <li>SXTH extracts bits[15:0] and sign extends to 32 bits</li>
+            <li>UXTH extracts bits[15:0] and zero extends to 32 bits.</li>
+        </ul>
+        <p>Restrictions</p>
+        <p>In these instructions, Rd and Rm must only specify R0-R7.</p>
+        <h2 id="bne">BNE</h2>
+        <p>BNE (short for &quot;Branch if Not Equal&quot;) is the mnemonic for a machine language instruction which
+            branches, or &quot;jumps&quot;, to the address specified if, and only if the zero flag is clear. </p>
+        <h2 id="bmi">BMI</h2>
+        <p>BMI (short for &quot;Branch if MInus&quot;) is the mnemonic for a machine language instruction which
+            branches, or &quot;jumps&quot;, to the address specified if, and only if the negative flag is set. </p>
+        <h2 id="bpl">BPL</h2>
+        <p>BPL (short for &quot;Branch if PLus&quot;) is the mnemonic for a machine language instruction which branches,
+            or &quot;jumps&quot;, to the address specified if, and only if the negative flag is clear.</p>
+        <h2 id="bcc">BCC</h2>
+        <p>BCC (short for &quot;Branch if Carry is Clear&quot;) is the mnemonic for a machine language instruction which
+            branches, or &quot;jumps&quot;, to the address specified if, and only if the carry flag is clear. </p>
+        <h2 id="beq">BEQ</h2>
+        <p>BEQ (short for &quot;Branch if EQual&quot;) is the mnemonic for a machine language instruction which
+            branches, or &quot;jumps&quot;, to the address specified if, and only if the zero flag is set.</p>
+        <h2 id="accessing-variables-in-c">Accessing variables in C</h2>
+        <p><a
+                href="http://www.eng.auburn.edu/~nelsovp/courses/elec2220/slides/ARM%20prog%20model%202%20addressing.pdf">more</a>
+        </p>
+        <pre><code class="lang-C">int p, k; //<span class="hljs-built_in">signed</span> <span class="hljs-built_in">integer</span> (<span class="hljs-number">32</span>-<span class="hljs-built_in">bit</span>) variables*
+int w[<span class="hljs-number">10</span>]; //<span class="hljs-keyword">array</span> <span class="hljs-keyword">of</span> <span class="hljs-number">10</span> (<span class="hljs-number">32</span>-<span class="hljs-built_in">bit</span>) integers
+p = k; //copy k <span class="hljs-keyword">to</span> p
+</code></pre>
+        <pre><code class="lang-s">ldr r0,=k ;r0 = address <span class="hljs-keyword">of</span> <span class="hljs-built_in">variable</span> k
+ldr r1,[r0] ;<span class="hljs-built_in">read</span> <span class="hljs-built_in">value</span> <span class="hljs-keyword">of</span> k <span class="hljs-built_in">from</span> memory <span class="hljs-keyword">and</span> <span class="hljs-built_in">put</span> -&gt; r1
+ldr r0,=p ;r0 = address <span class="hljs-keyword">of</span> p
+str r1,[r0] ;<span class="hljs-built_in">write</span> <span class="hljs-built_in">value</span> <span class="hljs-keyword">in</span> r1 <span class="hljs-built_in">to</span> <span class="hljs-built_in">variable</span> <span class="hljs-keyword">at</span> memory address p
+</code></pre>
+        <h2 id="link-register">Link Register</h2>
+        <p>A link register is a special-purpose register which holds the address to return to when a function call
+            completes. This is more efficient than the more traditional scheme of storing return addressed on a call
+            stack, sometimes called a machine stack. The link register does not require the writes and reads of the
+            memory containing the stack which can save a considerable percentage of execution time with repeated calls
+            of small subroutines.</p>
+        <h2 id="push-and-pop">PUSH and POP</h2>
+        <p>Push registers onto, and pop registers off a full-descending stack.</p>
+        <p>Syntax</p>
+        <pre><code class="lang-s"><span class="hljs-keyword">PUSH </span>reglist
+<span class="hljs-keyword">POP </span>reglist
+</code></pre>
+        <p>Examples</p>
+        <pre><code class="lang-s"><span class="hljs-keyword">PUSH </span>{<span class="hljs-built_in">R0</span>,<span class="hljs-built_in">R4</span>-<span class="hljs-built_in">R7</span>} <span class="hljs-comment">; Push R0,R4,R5,R6,R7 onto the stack</span>
+<span class="hljs-keyword">PUSH </span>{<span class="hljs-built_in">R2</span>,<span class="hljs-built_in">LR</span>} <span class="hljs-comment">; Push R2 and the link-register onto the stack</span>
+<span class="hljs-keyword">POP </span>{<span class="hljs-built_in">R0</span>,<span class="hljs-built_in">R6</span>,<span class="hljs-built_in">PC</span>} <span class="hljs-comment">; Pop r0,r6 and PC from the stack, then branch to</span>
+<span class="hljs-comment">; the new PC.</span>
+</code></pre>
+
+
+
+        <h1 id="assembly---nasm">Assembly - NASM</h1>
+        <h2 id="section"><code>$</code></h2>
+        <p><code>$</code> is the address of the current position before emitting the bytes (if any) for the line it
+            appears on.
+        </p>
+        <p><code>$ - msg</code> is like doing <code>here - msg</code>, i.e. the distance in bytes between the current
+            position
+            (at the end of the string) and the start of the string.</p>
+        <h2 id="section-1"><code>$$</code></h2>
+        <p><code>$$</code> refers to the address of the 1st line (where our section started).</p>
+        <h2 id="data">Data</h2>
+        <ul>
+            <li>DB - Define Byte. 8 bits<br /></li>
+            <li>DW - Define Word. Generally 2 bytes on a typical x86 32-bit system<br /></li>
+            <li>DD - Define double word. Generally 4 bytes on a typical x86 32-bit system</li>
+        </ul>
+        <h2 id="what-does-the-h-suffix-mean">What does the 'h' suffix mean?</h2>
+        <p>In x86 assembly, what does an h suffix on numbers represent?</p>
+        <p>For example:</p>
+        <p><code>sub CX, 13h</code></p>
+        <p><strong>&quot;H&quot; for &quot;Hexadecimal&quot;</strong></p>
+        <h2 id="registers">Registers</h2>
+        <p>Modern (i.e 386 and beyond) x86 processors have eight 32-bit general purpose registers, as depicted in Figure
+            1. The
+            register names are mostly historical. For example, EAX used to be called the accumulator since it was used
+            by a
+            number of arithmetic operations, and ECX was known as the counter since it was used to hold a loop index.
+            Whereas
+            most of the registers have lost their special purposes in the modern instruction set, by convention, two are
+            reserved for special purposes — the stack pointer (ESP) and the base pointer (EBP).</p>
+        <p>For the EAX, EBX, ECX, and EDX registers, subsections may be used. For example, the least significant 2 bytes
+            of EAX
+            can be treated as a 16-bit register called AX. The least significant byte of AX can be used as a single
+            8-bit
+            register called AL, while the most significant byte of AX can be used as a single 8-bit register called AH.
+            These
+            names refer to the same physical register. When a two-byte quantity is placed into DX, the update affects
+            the value
+            of DH, DL, and EDX. These sub-registers are mainly hold-overs from older, 16-bit versions of the instruction
+            set.
+            However, they are sometimes convenient when dealing with data that are smaller than 32-bits (e.g. 1-byte
+            ASCII
+            characters).</p>
+        <p>When referring to registers in assembly language, the names are not case-sensitive. For example, the names
+            EAX and
+            eax refer to the same register.</p>
+        <p>AX is the 16 lower bits of EAX. AH is the 8 high bits of AX (i.e. the bits 8-15 of EAX) and AL is the least
+            significant byte (bits 0-7) of EAX as well as AX.</p>
+        <p>Example (Hexadecimal digits):</p>
+        <p>EAX: 12 34 56 78<br />AX: 56 78<br />AH: 56<br />AL: 78</p>
+        <h2 id="int-x86-instruction">INT (x86 instruction)</h2>
+        <p>INT is an assembly language instruction for x86 processors that generates a software interrupt. It takes the
+            interrupt number formatted as a byte value.[1]</p>
+        <p>When written in assembly language, the instruction is written like this:</p>
+        <p><code>INT X</code></p>
+        <p>where X is the software interrupt that should be generated (0-255).</p>
+        <p>Depending on the context, compiler, or assembler, a software interrupt number is often given as a hexadecimal
+            value,
+            sometimes with a prefix 0x or the suffix h. For example, INT 13H will generate the software interrupt 0x13
+            (19 in
+            decimal), causing the function pointed to by the 20th vector in the interrupt table to be executed, which is
+            typically a DOS API call.</p>
+        <h2 id="int-10h">INT 10H</h2>
+        <p>INT 10h, INT 10H or INT 16 is shorthand for BIOS interrupt call 10hex, the 17th interrupt vector in an
+            x86-based
+            computer system. The BIOS typically sets up a real mode interrupt handler at this vector that provides video
+            services. Such services include setting the video mode, character and string output, and graphics primitives
+            (reading and writing pixels in graphics mode).</p>
+        <p>To use this call, load AH with the number of the desired subfunction, load other required parameters in other
+            registers, and make the call. INT 10h is fairly slow, so many programs bypass this BIOS routine and access
+            the
+            display hardware directly. Setting the video mode, which is done infrequently, can be accomplished by using
+            the
+            BIOS, while drawing graphics on the screen in a game needs to be done quickly, so direct access to video RAM
+            is more
+            appropriate than making a BIOS call for every pixel.</p>
+        <h2 id="defining-strings">Defining Strings</h2>
+        <p>The convention is to declare strings as null-terminating, which means we always declare the last byte of the
+            string
+            as 0, as follows:</p>
+        <pre class="asm"><code>my_string:
+    db ’Booting OS’,0</code></pre>
+        <p>When later iterating through a string, perhaps to print each of its characters in turn, we can easily
+            determine when
+            we have reached the end.</p>
+        <h2 id="function-calls">Function Calls</h2>
+        <p>At the CPU level a function is nothing more than a jump to the address of a useful routine then a jump back
+            again to
+            the instruction immediately following the first jump.</p>
+        <p>The caller code could store the correct return address (i.e. the address immediately after the call) in some
+            well-known location, then the called code could jump back to that stored address. The CPU keeps track of the
+            current
+            instruction being executed in the special register ip (instruction pointer), which, sadly, we cannot access
+            directly. However, the CPU provides a pair of instructions, call and ret, which do exactly what we want:
+            call
+            behaves like jmp but additionally, before actually jumping, pushes the return address on to the stack; ret
+            then pops
+            the return address off the stack and jumps to it.</p>
+        <p>When we call a function, such as a print function, within our assembly program, internally that function may
+            alter
+            the values of several registers to perform its job (indeed, with registers being a scarce resource, it will
+            almost
+            certainly do this), so when our program returns from the function call it may not be safe to assume, say,
+            the value
+            we stored in dx will still be there.</p>
+        <p>It is often sensible (and polite), therefore, for a function immediately to push any registers it plans to
+            alter onto
+            the stack and then pop them off again (i.e. restore the registers’ original values) immediately before it
+            returns.
+            Since a function may use many of the general purpose registers, the CPU implements two convenient
+            instructions,
+            <code>pusha</code> and <code>popa</code>, that conveniently push and pop all registers to and from the stack
+            respectively.</p>
+        <p>Examlmple:</p>
+        <pre class="asm"><code>some_function:
+    pusha
+    mov bx, 10 add bx, 20 mov ah, 0x0e int 0x10 popa
+    ret</code></pre>
+        <h2 id="include-files">Include Files</h2>
+        <p>After slaving away even on the seemingly simplest of assembly routines, you will likely want to reuse your
+            code in
+            multiple programs. nasm allows you to include external files literally as follows:</p>
+        <pre class="asm"><code>%include &quot;my_print_function.asm&quot; ; this will simply get replaced by 
+; the contents of the file
+...
+mov al, ’H’ ; Store ’H’ in al so our function will print it. 
+call my_print_function
+</code></pre>
+        <p><strong>IMP: remember to include subroutines below the hang ie, jmp $</strong></p>
+
+    </div>
+
+</body>
+
+</html>
