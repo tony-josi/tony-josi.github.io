@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="shortcut icon" type="image/png" href="../../index_images/tj.png" />
+
+    <meta charset="UTF-8">
+    <title>RSA proof of correctness</title>
+
+</head>
+
+<body>
+    <div style="padding-left: 60px; padding-right: 60px;">
+
+
+        <pre><code>
+    ██████╗ ███████╗ █████╗ 
+    ██╔══██╗██╔════╝██╔══██╗
+    ██████╔╝███████╗███████║
+    ██╔══██╗╚════██║██╔══██║
+    ██║  ██║███████║██║  ██║
+    ╚═╝  ╚═╝╚══════╝╚═╝  ╚═╝
+    </code></pre>
+        <h2 id="about-rsa">About RSA</h2>
+        <p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem">(refer)</a></p>
+        <p><a href="https://github.com/tony-josi/rsa">RSA Implementation in C++</a></p>
+        <p><a href="https://en.wikipedia.org/wiki/RSA_(cryptosystem">RSA (Rivest–Shamir–Adleman)</a>) is one of the
+            commonly
+            used <a href="https://en.wikipedia.org/wiki/Public-key_cryptography">asymmetric cryptography algorithm</a> .
+        </p>
+        <h3 id="operation">Operation</h3>
+        <p>The RSA algorithm involves four steps: key generation, key distribution, encryption, and decryption.</p>
+        <h2 id="rsa-proof-of-correctness">RSA Proof of correctness</h2>
+        <p>Before establishing the proof of correctness, there are two theorems that are essential in undertstanding it:
+        </p>
+        <ol>
+            <li>Fermat&#39;s little theorem</li>
+            <li>Chinese remainder theorem</li>
+        </ol>
+        <h3 id="fermat-s-little-theorem">Fermat&#39;s little theorem</h3>
+        <p>Fermat&#39;s little theorem states that if p is a prime number, then for any integer a, the number ap − a is
+            an
+            integer multiple of p.</p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_00.svg?raw=true" alt="fermats"></p>
+        <h3 id="chinese-remainder-theorem">Chinese remainder theorem</h3>
+        <p>In number theory, the Chinese remainder theorem states that if one knows the remainders of the Euclidean
+            division of
+            an integer n by several integers, then one can determine uniquely the remainder of the division of n by the
+            product
+            of these integers, under the condition that the divisors are pairwise coprime.</p>
+        <p>If the remainders are same then:</p>
+        <p>Theorem: <strong><em>If, x = y (mod p) &amp; x = y (mod q) with p and q coprime. Then x = y (mod
+                    pq).</em></strong>
+        </p>
+        <p>Proof: </p>
+        <pre><code>x = y (<span class="hljs-built_in">mod</span> p)
+    x = y + kp
+    x - y = kp
+    
+    p divides (x - y)
+    
+    Similarly,
+    
+    x = y (<span class="hljs-built_in">mod</span> q)
+    x = y + kq
+    x - y = kq
+    
+    q divides (x - y)
+    
+    =&gt; kp = kq = x - y
+    
+    kq = x - y
+    
+    Muliply with p on both sides,
+    
+    kpq = (x - y)p
+    
+    Take <span class="hljs-built_in">mod</span> pq,
+    
+    <span class="hljs-number">0</span> = (x - y)p <span class="hljs-built_in">mod</span> pq
+    
+    =&gt; <span class="hljs-number">0</span> = (x - y) <span class="hljs-built_in">mod</span> pq
+    
+    =&gt; x = y <span class="hljs-built_in">mod</span> pq
+    
+    The same can be arrived from kp = x - y .
+    </code></pre>
+        <h3 id="rsa-proof">RSA Proof</h3>
+        <p>We need to prove that,</p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_02.gif?raw=true" alt="rsa">
+            --------------- (1)
+        </p>
+        <p>where <strong>m</strong> can be any integer, <strong>p and q</strong> are distinct prime numbers and
+            <strong>e and
+                d</strong> are positive integers satisfying,</p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_05.gif?raw=true" alt="rsa">
+            --------------- (2).
+        </p>
+        <p>According to the Chinese remainder theorem (CRT) equation (1) is valid if, </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_03.gif?raw=true" alt="rsa">
+            --------------- (3)
+            and </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_04.gif?raw=true" alt="rsa">
+            --------------- (4)
+            are valid.</p>
+        <p>From equation (2) </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_06.gif?raw=true" alt="rsa">
+            --------------- (5)
+        </p>
+        <p>where m and n are some integers, because <code>ed - 1</code> is a multiple of the lcm of
+            <code>(p-1, q-1)</code>, and
+            lcm of <code>(p-1, q-1)</code> will be <code>m(p - 1) = n(q - 1)</code>.</p>
+        <p>Equation (3) can be written as, </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_07.gif?raw=true" alt="rsa">
+            --------------- (6),
+        </p>
+        <p>which in turn can be written as </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_08.gif?raw=true" alt="rsa">
+            --------------- (7),
+        </p>
+        <p>which can be further reduced using the <strong>Fermats Little theorem</strong> to, </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_09.gif?raw=true" alt="rsa">
+            --------------- (8),
+        </p>
+        <p>which is <strong>valid</strong>.</p>
+        <p>Similarly equation (4) can be written as, </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_10.gif?raw=true" alt="rsa">
+            --------------- (9),
+        </p>
+        <p>which in turn can be written as </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_11.gif?raw=true" alt="rsa">
+            --------------- (10),
+        </p>
+        <p>which can be further reduced using the <strong>Fermats Little theorem</strong> to, </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_12.gif?raw=true" alt="rsa">
+            --------------- (11),
+        </p>
+        <p>which is also <strong>valid</strong>.</p>
+        <p><strong>Hence as both equation (3) and (4) are valid, according to CRT equation 1 is valid.</strong> Hence
+            correctness of RSA is proved.</p>
+        <h2 id="rsa-optimizing-the-decryption-algorithm">RSA optimizing the decryption algorithm</h2>
+        <p>The textbook RSA decryption algorithm is as follows:</p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_13.gif?raw=true" alt="rsa">
+            --------------- (12),
+        </p>
+        <p>where c is the cipher text, d is the private/decryption key, m is the original message. But as c, d, and pq
+            will be
+            very large the decryption process will take long time to execute.</p>
+        <p>To optimize the calculation of equation 12, by using the CRT we can reduce it to, </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_14.gif?raw=true" alt="rsa">
+            --------------- (13)
+        </p>
+        <p>which can be further reduced to </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_15.gif?raw=true" alt="rsa">
+            --------------- (14)
+        </p>
+        <p>by using the <strong>Fermats Little theorem</strong>.</p>
+
+</body>
+
+</html>
