@@ -41,7 +41,8 @@
         <p>Fermat&#39;s little theorem states that if p is a prime number, then for any integer a, the number ap − a is
             an
             integer multiple of p.</p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_00.svg?raw=true" alt="fermats"></p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_00.svg?raw=true"
+                alt="fermats"></p>
         <h3 id="chinese-remainder-theorem">Chinese remainder theorem</h3>
         <p>In number theory, the Chinese remainder theorem states that if one knows the remainders of the Euclidean
             division of
@@ -87,52 +88,65 @@
     </code></pre>
         <h3 id="rsa-proof">RSA Proof</h3>
         <p>We need to prove that,</p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_02.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_02.gif?raw=true"
+                alt="rsa">
             --------------- (1)
         </p>
         <p>where <strong>m</strong> can be any integer, <strong>p and q</strong> are distinct prime numbers and
             <strong>e and
-                d</strong> are positive integers satisfying,</p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_05.gif?raw=true" alt="rsa">
+                d</strong> are positive integers satisfying,
+        </p>
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_05.gif?raw=true"
+                alt="rsa">
             --------------- (2).
         </p>
         <p>According to the Chinese remainder theorem (CRT) equation (1) is valid if, </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_03.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_03.gif?raw=true"
+                alt="rsa">
             --------------- (3)
             and </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_04.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_04.gif?raw=true"
+                alt="rsa">
             --------------- (4)
             are valid.</p>
         <p>From equation (2) </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_06.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_06.gif?raw=true"
+                alt="rsa">
             --------------- (5)
         </p>
         <p>where m and n are some integers, because <code>ed - 1</code> is a multiple of the lcm of
             <code>(p-1, q-1)</code>, and
-            lcm of <code>(p-1, q-1)</code> will be <code>m(p - 1) = n(q - 1)</code>.</p>
+            lcm of <code>(p-1, q-1)</code> will be <code>m(p - 1) = n(q - 1)</code>.
+        </p>
         <p>Equation (3) can be written as, </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_07.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_07.gif?raw=true"
+                alt="rsa">
             --------------- (6),
         </p>
         <p>which in turn can be written as </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_08.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_08.gif?raw=true"
+                alt="rsa">
             --------------- (7),
         </p>
         <p>which can be further reduced using the <strong>Fermats Little theorem</strong> to, </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_09.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_09.gif?raw=true"
+                alt="rsa">
             --------------- (8),
         </p>
         <p>which is <strong>valid</strong>.</p>
         <p>Similarly equation (4) can be written as, </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_10.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_10.gif?raw=true"
+                alt="rsa">
             --------------- (9),
         </p>
         <p>which in turn can be written as </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_11.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_11.gif?raw=true"
+                alt="rsa">
             --------------- (10),
         </p>
         <p>which can be further reduced using the <strong>Fermats Little theorem</strong> to, </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_12.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_12.gif?raw=true"
+                alt="rsa">
             --------------- (11),
         </p>
         <p>which is also <strong>valid</strong>.</p>
@@ -140,21 +154,365 @@
             correctness of RSA is proved.</p>
         <h2 id="rsa-optimizing-the-decryption-algorithm">RSA optimizing the decryption algorithm</h2>
         <p>The textbook RSA decryption algorithm is as follows:</p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_13.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_13.gif?raw=true"
+                alt="rsa">
             --------------- (12),
         </p>
         <p>where c is the cipher text, d is the private/decryption key, m is the original message. But as c, d, and pq
             will be
             very large the decryption process will take long time to execute.</p>
         <p>To optimize the calculation of equation 12, by using the CRT we can reduce it to, </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_14.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_14.gif?raw=true"
+                alt="rsa">
             --------------- (13)
         </p>
         <p>which can be further reduced to </p>
-        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_15.gif?raw=true" alt="rsa">
+        <p><img src="https://github.com/tony-josi/tony-josi.github.io/blob/master/Articles/RSA_Proof/res/readme_images/rsa_15.gif?raw=true"
+                alt="rsa">
             --------------- (14)
         </p>
         <p>by using the <strong>Fermats Little theorem</strong>.</p>
+
+        <h2>RSA Sample Implementation wrt. above discussion</h2>
+
+        <p><a href="https://github.com/tony-josi/big_int">(refer big-int library)</a></p>
+
+        <!-- HTML generated using hilite.me -->
+        <div
+            style="background: #ffffff; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
+            <table>
+                <tr>
+                    <td>
+                        <pre style="margin: 0; line-height: 125%">  1
+  2
+  3
+  4
+  5
+  6
+  7
+  8
+  9
+ 10
+ 11
+ 12
+ 13
+ 14
+ 15
+ 16
+ 17
+ 18
+ 19
+ 20
+ 21
+ 22
+ 23
+ 24
+ 25
+ 26
+ 27
+ 28
+ 29
+ 30
+ 31
+ 32
+ 33
+ 34
+ 35
+ 36
+ 37
+ 38
+ 39
+ 40
+ 41
+ 42
+ 43
+ 44
+ 45
+ 46
+ 47
+ 48
+ 49
+ 50
+ 51
+ 52
+ 53
+ 54
+ 55
+ 56
+ 57
+ 58
+ 59
+ 60
+ 61
+ 62
+ 63
+ 64
+ 65
+ 66
+ 67
+ 68
+ 69
+ 70
+ 71
+ 72
+ 73
+ 74
+ 75
+ 76
+ 77
+ 78
+ 79
+ 80
+ 81
+ 82
+ 83
+ 84
+ 85
+ 86
+ 87
+ 88
+ 89
+ 90
+ 91
+ 92
+ 93
+ 94
+ 95
+ 96
+ 97
+ 98
+ 99
+100
+101
+102
+103
+104
+105
+106
+107
+108
+109
+110
+111
+112
+113
+114
+115
+116
+117
+118
+119
+120
+121
+122
+123
+124
+125
+126
+127
+128
+129
+130
+131
+132
+133
+134
+135
+136
+137
+138
+139
+140
+141
+142
+143
+144
+145
+146
+147
+148
+149
+150
+151
+152
+153
+154
+155
+156
+157
+158
+159
+160
+161</pre>
+                    </td>
+                    <td>
+                        <pre style="margin: 0; line-height: 125%"><span style="color: #888888">/** </span>
+<span style="color: #888888"> *  @file   rsa.cc</span>
+<span style="color: #888888"> *  @brief  Soruce file for the RSA library</span>
+<span style="color: #888888"> *</span>
+<span style="color: #888888"> *  This file contains the implementation of the RSA library</span>
+<span style="color: #888888"> *</span>
+<span style="color: #888888"> *  @author         Tony Josi   https://github.com/tony-josi/rsa</span>
+<span style="color: #888888"> *  @copyright      Copyright (C) 2021 Tony Josi</span>
+<span style="color: #888888"> *  @bug            No known bugs.</span>
+<span style="color: #888888"> */</span>
+
+<span style="color: #557799">#include &lt;stdexcept&gt;</span>
+<span style="color: #557799">#include &lt;stdint.h&gt;</span>
+
+<span style="color: #557799">#include &quot;big_int.hpp&quot;</span>
+
+<span style="color: #008800; font-weight: bold">class</span> <span style="color: #BB0066; font-weight: bold">rsa</span> {
+
+<span style="color: #997700; font-weight: bold">private:</span>
+    <span style="color: #333399; font-weight: bold">size_t</span>          bit_size;
+    bi<span style="color: #333333">::</span>big_int     p;
+    bi<span style="color: #333333">::</span>big_int     q;
+    bi<span style="color: #333333">::</span>big_int     p_minus_1;
+    bi<span style="color: #333333">::</span>big_int     q_minus_1;
+    bi<span style="color: #333333">::</span>big_int     pq;
+    bi<span style="color: #333333">::</span>big_int     p_minus_1q_minus_1;
+    bi<span style="color: #333333">::</span>big_int     e;
+    bi<span style="color: #333333">::</span>big_int     d;
+    bi<span style="color: #333333">::</span>big_int     smaller_prime;
+    bi<span style="color: #333333">::</span>big_int     reduced_d;
+
+<span style="color: #997700; font-weight: bold">public:</span>
+
+    <span style="color: #888888">/*  bit_size                                ==&gt; RSA bitsize</span>
+<span style="color: #888888">        miller_rabin_rounds                     ==&gt; Maximum number of Rabin Miller iterations to be done </span>
+<span style="color: #888888">                                                    on the candidate random number to check its a prime    </span>
+<span style="color: #888888">        max_number_of_threads_for_miller_rabin  ==&gt; Maximum number of threads to use while finding random</span>
+<span style="color: #888888">                                                    prime numbers. -1 means use maximum possible number of </span>
+<span style="color: #888888">                                                    threads [std::thread::hardware_concurrency()].</span>
+<span style="color: #888888">    */</span>
+    rsa(<span style="color: #333399; font-weight: bold">size_t</span> bit_size, <span style="color: #333399; font-weight: bold">int</span> miller_rabin_rounds <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">20</span>, <span style="color: #333399; font-weight: bold">int</span> max_number_of_threads_for_miller_rabin <span style="color: #333333">=</span> <span style="color: #333333">-</span><span style="color: #0000DD; font-weight: bold">1</span>);
+
+    <span style="color: #333399; font-weight: bold">int</span>             <span style="color: #0066BB; font-weight: bold">rsa_encrypt</span>(bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>plain, bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>cipher);
+    <span style="color: #333399; font-weight: bold">int</span>             <span style="color: #0066BB; font-weight: bold">rsa_decrypt_textbook_method</span>(bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>cipher, bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>decipher);
+    <span style="color: #333399; font-weight: bold">int</span>             <span style="color: #0066BB; font-weight: bold">rsa_decrypt</span>(bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>cipher, bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>decipher);
+    bi<span style="color: #333333">::</span>big_int     get_public_key(); 
+    bi<span style="color: #333333">::</span>big_int     get_private_key(); 
+    bi<span style="color: #333333">::</span>big_int     get_modulus();
+
+};
+
+constexpr <span style="color: #333399; font-weight: bold">uint32_t</span> DEFAULT_32_BIT_PUBLIC_KEY <span style="color: #333333">=</span> <span style="color: #005588; font-weight: bold">0x10001</span>;
+
+rsa<span style="color: #333333">::</span>rsa(<span style="color: #333399; font-weight: bold">size_t</span> bit_size_arg, <span style="color: #333399; font-weight: bold">int</span> miller_rabin_rounds, <span style="color: #333399; font-weight: bold">int</span> max_number_of_threads_for_miller_rabin) {
+
+    <span style="color: #333399; font-weight: bold">int</span> ret_val <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+    
+    <span style="color: #008800; font-weight: bold">if</span> (bit_size_arg <span style="color: #333333">&lt;</span> <span style="color: #0000DD; font-weight: bold">64</span> <span style="color: #333333">||</span> bit_size_arg <span style="color: #333333">%</span> <span style="color: #0000DD; font-weight: bold">2</span> <span style="color: #333333">!=</span> <span style="color: #0000DD; font-weight: bold">0</span>) {
+        <span style="color: #008800; font-weight: bold">throw</span> std<span style="color: #333333">::</span>invalid_argument(<span style="background-color: #fff0f0">&quot;Invalid bit size for RSA, must be greater than or equal to 64 and even&quot;</span>);
+    }
+    bit_size_arg <span style="color: #333333">/=</span> <span style="color: #0000DD; font-weight: bold">2</span>;
+    bit_size <span style="color: #333333">=</span> bit_size_arg;
+    
+    <span style="color: #888888">/* Create 2 random primes with RSA bitsize bits. */</span>
+    <span style="color: #333399; font-weight: bold">int</span> pq_comp_res;
+    <span style="color: #008800; font-weight: bold">do</span> {
+        ret_val <span style="color: #333333">+=</span> p.big_int_get_random_unsigned_prime_rabin_miller_threaded(<span style="color: #008800; font-weight: bold">static_cast</span><span style="color: #333333">&lt;</span><span style="color: #333399; font-weight: bold">int</span><span style="color: #333333">&gt;</span>(bit_size_arg), \
+        miller_rabin_rounds, max_number_of_threads_for_miller_rabin);
+        ret_val <span style="color: #333333">+=</span> q.big_int_get_random_unsigned_prime_rabin_miller_threaded(<span style="color: #008800; font-weight: bold">static_cast</span><span style="color: #333333">&lt;</span><span style="color: #333399; font-weight: bold">int</span><span style="color: #333333">&gt;</span>(bit_size_arg), \
+        miller_rabin_rounds, max_number_of_threads_for_miller_rabin);
+    } <span style="color: #008800; font-weight: bold">while</span>((pq_comp_res <span style="color: #333333">=</span> p.big_int_unsigned_compare(q)) <span style="color: #333333">==</span> <span style="color: #0000DD; font-weight: bold">0</span>); <span style="color: #888888">/* Continue until we have distinct primes p, q. */</span>
+
+    ret_val <span style="color: #333333">+=</span> p.big_int_multiply(q, pq);
+
+    bi<span style="color: #333333">::</span>big_int bi_1;
+    ret_val <span style="color: #333333">+=</span> bi_1.big_int_from_base_type(<span style="color: #0000DD; font-weight: bold">1</span>, <span style="color: #007020">false</span>);
+
+    <span style="color: #888888">/* Calculate p-1 and q-1 */</span>
+    ret_val <span style="color: #333333">+=</span> p.big_int_unsigned_sub(bi_1, p_minus_1);
+    ret_val <span style="color: #333333">+=</span> q.big_int_unsigned_sub(bi_1, q_minus_1);
+    ret_val <span style="color: #333333">+=</span> p_minus_1.big_int_multiply(q_minus_1, p_minus_1q_minus_1);
+
+    <span style="color: #888888">/* Initialise public key, [uses DEFAULT_32_BIT_PUBLIC_KEY as the default public key, hence the minimum 64 bits key size restrictions.] */</span>
+    ret_val <span style="color: #333333">+=</span> e.big_int_from_base_type(DEFAULT_32_BIT_PUBLIC_KEY, <span style="color: #007020">false</span>);
+
+    <span style="color: #008800; font-weight: bold">if</span> (e.big_int_unsigned_compare(p_minus_1q_minus_1) <span style="color: #333333">&gt;=</span> <span style="color: #0000DD; font-weight: bold">0</span>) {
+        <span style="color: #008800; font-weight: bold">throw</span> std<span style="color: #333333">::</span>invalid_argument(<span style="background-color: #fff0f0">&quot;Error initializing RSA&quot;</span>);
+    }
+
+    <span style="color: #888888">/* Calculate the private key as the modular inverse of the </span>
+<span style="color: #888888">       public key in (p-1)(q-1). */</span>
+    ret_val <span style="color: #333333">+=</span> e.big_int_modular_inverse_extended_euclidean_algorithm(p_minus_1q_minus_1, d);
+
+    <span style="color: #888888">/* Store the smaller prime among p &amp; q and private key modulo smaller prime</span>
+<span style="color: #888888">       for faster/efficient decryption. [Fermat&#39;s Little theorem]. */</span>
+    <span style="color: #008800; font-weight: bold">if</span> (pq_comp_res <span style="color: #333333">&gt;</span> <span style="color: #0000DD; font-weight: bold">0</span>) {
+        smaller_prime <span style="color: #333333">=</span> q;
+        ret_val <span style="color: #333333">+=</span> d.big_int_modulus(q_minus_1, reduced_d);
+    } <span style="color: #008800; font-weight: bold">else</span> {
+        smaller_prime <span style="color: #333333">=</span> p;
+        ret_val <span style="color: #333333">+=</span> d.big_int_modulus(p_minus_1, reduced_d);
+    }
+
+    <span style="color: #888888">/* Throw if error. */</span>
+    <span style="color: #008800; font-weight: bold">if</span> (ret_val <span style="color: #333333">!=</span> <span style="color: #0000DD; font-weight: bold">0</span>) {
+        <span style="color: #008800; font-weight: bold">throw</span> std<span style="color: #333333">::</span>invalid_argument(<span style="background-color: #fff0f0">&quot;Error initializing RSA&quot;</span>);
+    }
+
+}
+
+bi<span style="color: #333333">::</span>big_int rsa<span style="color: #333333">::</span>get_private_key() {
+    <span style="color: #008800; font-weight: bold">return</span> d;
+}
+
+bi<span style="color: #333333">::</span>big_int rsa<span style="color: #333333">::</span>get_public_key() {
+    <span style="color: #008800; font-weight: bold">return</span> e;
+}
+
+bi<span style="color: #333333">::</span>big_int rsa<span style="color: #333333">::</span>get_modulus() {
+    <span style="color: #008800; font-weight: bold">return</span> pq;
+}
+
+<span style="color: #333399; font-weight: bold">int</span> rsa<span style="color: #333333">::</span>rsa_encrypt(bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>plain, bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>cipher) {
+
+    <span style="color: #008800; font-weight: bold">if</span> (plain.big_int_get_num_of_bits() <span style="color: #333333">&gt;</span> bit_size) {
+        <span style="color: #008800; font-weight: bold">throw</span> std<span style="color: #333333">::</span>invalid_argument(<span style="background-color: #fff0f0">&quot;Plain text too long&quot;</span>);
+    }
+
+    <span style="color: #888888">/* c  = m ^ e mod pq = m ^ e mod p = m ^ e mod q     [Chinese remainder theorem].</span>
+<span style="color: #888888">        refer ==&gt; https://tony-josi.github.io/Articles/RSA_Proof/rsa_proof.html */</span>
+    <span style="color: #008800; font-weight: bold">return</span> plain.big_int_fast_modular_exponentiation(e, smaller_prime, cipher);
+}
+
+<span style="color: #333399; font-weight: bold">int</span> rsa<span style="color: #333333">::</span>rsa_decrypt_textbook_method(bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>cipher, bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>decipher) {
+
+    <span style="color: #008800; font-weight: bold">if</span> (cipher.big_int_get_num_of_bits() <span style="color: #333333">&gt;</span> bit_size) {
+        <span style="color: #008800; font-weight: bold">throw</span> std<span style="color: #333333">::</span>invalid_argument(<span style="background-color: #fff0f0">&quot;Cipher text too long&quot;</span>);
+    }
+
+    <span style="color: #888888">/* m  = c ^ d mod pq = c ^ d mod p = c ^ d mod q     [Chinese remainder theorem].</span>
+<span style="color: #888888">        refer ==&gt; https://tony-josi.github.io/Articles/RSA_Proof/rsa_proof.html */</span>
+    <span style="color: #008800; font-weight: bold">return</span> cipher.big_int_fast_modular_exponentiation(d, smaller_prime, decipher);
+}
+
+<span style="color: #333399; font-weight: bold">int</span> rsa<span style="color: #333333">::</span>rsa_decrypt(bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>cipher, bi<span style="color: #333333">::</span>big_int <span style="color: #333333">&amp;</span>decipher) {
+
+    <span style="color: #008800; font-weight: bold">if</span> (cipher.big_int_get_num_of_bits() <span style="color: #333333">&gt;</span> bit_size) {
+        <span style="color: #008800; font-weight: bold">throw</span> std<span style="color: #333333">::</span>invalid_argument(<span style="background-color: #fff0f0">&quot;Cipher text too long&quot;</span>);
+    }
+
+    <span style="color: #888888">/* Refer ==&gt; RSA optimizing the decryption algorithm</span>
+<span style="color: #888888">       from https://tony-josi.github.io/Articles/RSA_Proof/rsa_proof.html */</span>
+
+    <span style="color: #333399; font-weight: bold">int</span> ret_val <span style="color: #333333">=</span> <span style="color: #0000DD; font-weight: bold">0</span>;
+    bi<span style="color: #333333">::</span>big_int reduced_cipher_text;
+    ret_val <span style="color: #333333">+=</span> cipher.big_int_modulus(smaller_prime, reduced_cipher_text);
+
+    ret_val <span style="color: #333333">+=</span> reduced_cipher_text.big_int_fast_modular_exponentiation(reduced_d, smaller_prime, decipher);
+    <span style="color: #008800; font-weight: bold">return</span> ret_val;
+
+}
+</pre>
+                    </td>
+                </tr>
+            </table>
+        </div>
+
 
 </body>
 
