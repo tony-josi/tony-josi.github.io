@@ -202,17 +202,35 @@
 
                 <td width="20%" valign="top">
 
-                    <h2 class="www_subsection">LinkedIn</h2>
+                    
                     <section>
 
+                        <h2 class="www_subsection">LinkedIn</h2>
+
                         <div>
-                            <iframe src="./linkedin_badge.html" style="border:none;height:300px;" title="LinkedIn"></iframe>
+
+                            <div id="display" style="width: 100%;float: left;">
+
+                                <script>
+                                function load_anotherpage() {
+                                    document.getElementById("display").innerHTML =
+                                    '<embed type="text/html" src="linkedin_badge.html" width="100%" height="300" >';
+                                }
+                                
+                                load_anotherpage();
+                                </script>
+
+                            </div>
+
                         </div>
 
                     </section>
 
-                    <h2 class="www_subsection">Contact</h2>
+                    
                     <section>
+
+                        <h2 class="www_subsection_contact">Contact</h2>
+                        
                         <address>
                             <p>
                                 <a href="https://mailhide.io/e/42LwS">Email</a> <br>
