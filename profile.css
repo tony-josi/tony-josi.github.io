@@ -1,19 +1,19 @@
 html {
 	background-color: #fff;
         color: #373737;
-	font-family: 'Courier New', sans-serif;
-        font-size: 97%;
+	font-family: 'Helvetica', sans-serif;
+        font-size: 87%;
 }
 
 .main_header  { font-family: 'Helvetica', 'Arial', sans-serif;
 	font-size: 43pt; 
-	background-color: #FAFAFA;
+	background-color: #f1f1f1;
 	text-align: center;}
 
 	.www_subsection {
 		border-width: 1px;
-		border-style: solid none solid none;
-		border-color: rgb(235, 235, 235);
+		border-style: dashed none dashed none;
+		border-color: rgb(205, 205, 205);
 		text-align: center;
 		vertical-align: middle;
 		font-family: 'Helvetica', 'Arial', sans-serif;
@@ -24,8 +24,8 @@ html {
 
 	.www_subsection_contact {
 		border-width: 1px;
-		border-style: none none solid none;
-		border-color: rgb(235, 235, 235);
+		border-style: none none dashed none;
+		border-color: rgb(205, 205, 205);
 		text-align: center;
 		vertical-align: middle;
 		font-family: 'Helvetica', 'Arial', sans-serif;
@@ -90,24 +90,24 @@ small {
 	border-radius: 0px;
     overflow: auto;
     padding: 1%;
-    border: 2px solid rgb(235, 235, 235);
+    border: 2px dashed rgb(235, 235, 235);
     box-sizing: border-box;
-    box-shadow: 2px 3px rgb(246, 246, 246);
+    /* box-shadow: 2px 3px rgb(246, 246, 246); */
   }
 ::selection {
-	background-color: #fdd835;
+	background-color: #a1bceb;
 	color: #373737;
 }
 @media (prefers-color-scheme: light) {
 	html {
-		background-color: #373737;
-		color: #fff;
+		background-color: #ffffff;
+		color: #000000;
 	}
 	a {
-        	color: #6ab7ff;
+        	color: #007ef3;
 	}
 	footer {
-        	color: #a4a4a4;
+        	color: #cecece;
 	}
 	::selection {
 		background-color: #fbc02d;
